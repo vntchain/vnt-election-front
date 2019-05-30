@@ -1,0 +1,33 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 625%;
+}
+
+body {
+  font-family: "Microsoft YaHei", "微软雅黑", "PingFangSC-Regular", sans-serif;
+  min-width: 1.2rem;
+  background: #f3f3f3;
+}
+
+:global{
+  .ant-tooltip{
+    max-width: 4rem;
+  }
+  .ant-tooltip-content {
+    .ant-tooltip-arrow {
+      border: none;
+    }
+    .ant-tooltip-inner {
+      background: #fff;
+      color: #333;
+    }
+  }
+}

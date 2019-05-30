@@ -1,0 +1,22 @@
+@media screen and (min-width: 1201px) {
+  .container{
+    box-sizing: content-box;
+    margin: 0 auto;
+    width: 12rem;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+  .container{
+    box-sizing: content-box;
+    margin: 0 .3rem;
+    //overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container{
+    margin: 0 .15rem;
+    overflow: hidden;
+  }
+}

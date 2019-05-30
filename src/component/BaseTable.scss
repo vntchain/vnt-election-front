@@ -1,0 +1,44 @@
+@import "./base";
+
+.table {
+  @include antdTable;
+}
+
+.tabTable {
+  @include antdTable;
+  :global {
+    .ant-spin-container {
+      padding: 0 0.2rem;
+    }
+  }
+}
+
+.revTable {
+  @include antdRevTable;
+}
+
+.revTable4C {
+  @include antdRevTable2C;
+}
+
+.confirmButton {
+  color: #333;
+  font-size: 0.14rem;
+  height: 0.32rem;
+  width: 0.64rem;
+  line-height: 0.32rem;
+
+  &:first-letter {
+    letter-spacing: 0;
+  }
+}
+
+:global{
+  .ant-pagination.ant-table-pagination{
+    margin: 0;
+    padding: .16rem .16rem;
+    background: #fff;
+    width: 100%;
+    text-align: right;
+  }
+}

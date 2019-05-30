@@ -1,0 +1,125 @@
+$main-width: 12rem;
+$theme-blue-color: #225cab;
+$color-light-4: #e6e6e6;
+
+@mixin stylelessUl {
+  margin: 0;
+  padding: 0;
+  li {
+    list-style: none;
+  }
+}
+
+@mixin stylelessAnchor {
+  text-decoration: none;
+}
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  * html & {
+    height: 1px;
+  }
+}
+
+@mixin main-content {
+  @include clearfix;
+  width: $main-width;
+  margin: 0 auto;
+}
+
+// antd button style
+@mixin antdBtn {
+  :global {
+    .ant-btn-primary {
+      font-size: 0.16rem;
+    }
+  }
+}
+
+// antd table style
+@mixin antdTable {
+  :global {
+    .ant-table {
+      background-color: #fff;
+    }
+    .ant-table-thead > tr > th {
+      background-color: #fff;
+    }
+  }
+}
+
+// antd reverse table style
+@mixin antdRevTable {
+  :global {
+    td {
+      background-color: #fff;
+    }
+    tr > th,
+    tr > td {
+      &:first-child {
+        color: rgba(0, 0, 0, 0.85);
+      }
+    }
+    .ant-table-thead > tr > th {
+      &:last-child {
+        color: rgba(0, 0, 0, 0.65);
+      }
+      background-color: #fff;
+    }
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
+      &:first-child {
+        background-color: $color-light-4;
+      }
+    }
+    tr > th,
+    tr > td {
+      &:first-child {
+        width: 10%;
+      }
+    }
+  }
+}
+
+// antd reverse table style (2 adjacent)
+@mixin antdRevTable2C {
+  :global {
+    td {
+      background-color: #fff;
+    }
+    tr > th {
+      &:nth-child(even) {
+        color: rgba(0, 0, 0, 0.65);
+      }
+    }
+    tr > td {
+      &:nth-child(odd) {
+        color: rgba(0, 0, 0, 0.85);
+      }
+    }
+    .ant-table-thead > tr > th {
+      background-color: #fff;
+    }
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
+      &:nth-child(odd) {
+        background-color: $color-light-4;
+      }
+    }
+    tr > th,
+    tr > td {
+      &:nth-child(odd) {
+        width: 15%;
+      }
+      &:nth-child(even) {
+        width: 35%;
+      }
+    }
+  }
+}
