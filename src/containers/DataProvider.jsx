@@ -2,38 +2,43 @@ import React, { Fragment, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-const mapStateToProps = state => {
-  return state
+const mapStateToProps = ({ nodes }) => {
+  return {
+    nodes
+  }
 }
 
 function RPDataProvider(props) {
   const {
     options: { path, ns, field }
   } = props
+  //console.log(props) //eslint-disable-line
   // ns为模块名，field为模块中的字段，根据字段名判断更新哪个属性--- state--ns--field
   const [context, setContext] = useState(props[props.options.ns][field])
-  useEffect(() => {
-    props.dispatch({
-      type: 'dataRelayNew/fetchData',
-      payload: { path, ns, field }
-    })
-
-    const requirePolling = props.options.polling && props.options.polling > 0
-    let polling = null
-    if (requirePolling) {
-      polling = setInterval(() => {
-        props.dispatch({
-          type: 'dataRelayNew/fetchData',
-          payload: { path, ns, method: props.method || 'get', field }
-        })
-      }, props.options.polling * 1000)
-    }
-    return () => {
-      if (polling) {
-        clearInterval(polling)
+  useEffect(
+    () => {
+      props.dispatch({
+        type: 'dataRelayNew/fetchData',
+        payload: { path, ns, field }
+      })
+      const requirePolling = props.options.polling && props.options.polling > 0
+      let polling = null
+      if (requirePolling) {
+        polling = setInterval(() => {
+          props.dispatch({
+            type: 'dataRelayNew/fetchData',
+            payload: { path, ns, method: props.method || 'get', field }
+          })
+        }, props.options.polling * 1000)
       }
-    }
-  }, [])
+      return () => {
+        if (polling) {
+          clearInterval(polling)
+        }
+      }
+    },
+    [props.options.path]
+  )
 
   useEffect(
     () => {

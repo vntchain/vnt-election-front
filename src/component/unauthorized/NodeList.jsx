@@ -17,7 +17,7 @@ function NodeListUnauthorized(props) {
             <NodeListTable
               columns={columns}
               data={genTableData(context.data, currentIndex)}
-              count={context.count}
+              count={context.count + 1}
               currentIndex={currentIndex}
               flipPage={flipPage}
               tableType="list"

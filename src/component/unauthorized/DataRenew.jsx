@@ -19,7 +19,9 @@ const mapStateToProps = ({ pageIndex: { nodePageIndex } }) => {
 }
 
 function DataRenew(props) {
-  const currentIndex = props.nodePageIndex
+  const { locationIndex, filterParam, nodePageIndex: reduxPageIndex } = props
+  const currentIndex = locationIndex || reduxPageIndex
+  console.log(props,currentIndex) //eslint-disable-line
   return (
     <DataProvider
       options={{
@@ -40,7 +42,7 @@ function DataRenew(props) {
           redirectBase={r.unauthorized}
           context={data}
           currentIndex={currentIndex}
-          filterParam={''}
+          filterParam={filterParam}
         />
       )}
     />

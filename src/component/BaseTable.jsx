@@ -35,7 +35,7 @@ function BaseTable(props) {
           ? false
           : {
               position: 'bottom',
-              pageSize: pageSize,
+              pageSize: currentIndex === 1 ? pageSize + 1 : pageSize,
               total: props.data.length === 0 ? 0 : props.count,
               showQuickJumper: {
                 goButton: (

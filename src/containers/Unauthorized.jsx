@@ -7,10 +7,13 @@ import MessageConfirm from 'component/MessageConfirm'
 import Margin from 'component/layout/Margin'
 import DataRenew from 'component/unauthorized/DataRenew'
 
+import { getLocationDetail } from 'utils/tools'
+
 import styles from './Unauthorized.scss'
 
 function Unauthorized() {
   const [show, setShow] = useState(false)
+  const { index, filterParam } = getLocationDetail()
   const loginTooltip = (
     <div className={styles.tooltip}>
       <FormattedMessage id="login2" />
@@ -37,7 +40,7 @@ function Unauthorized() {
       </div>
       <Margin />
       <div className={styles.nodesTable}>
-        <DataRenew />
+        <DataRenew locationIndex={index} filterParam={filterParam} />
       </div>
       <MessageConfirm
         id="login3"

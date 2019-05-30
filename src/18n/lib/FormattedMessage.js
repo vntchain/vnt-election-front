@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { Consumer } from './context'
 
 function FormattedMessage(props) {
-  const { id, plain } = props
+  const { id, label } = props
   return (
     <Consumer>
       {value => {
-        return plain ? value.messages[id] : <span>{value.messages[id]}</span>
+        return label ? <span>{value.messages[id]}</span> : value.messages[id]
       }}
     </Consumer>
   )

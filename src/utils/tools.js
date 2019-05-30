@@ -9,7 +9,7 @@ export const getBaseParams = (currentIndex, pageSize) =>
 // 解析出url的pathname中的参数，/txs/block=1228046/2 , 得到 {2, 'block=1228046'}
 export const getLocationDetail = () => {
   const arr = location.pathname.split('/').filter(t => t) // 之所以filter，是因为split得到的数组第一个元素为空
-  const currentIndex = isNaN(parseInt(arr[arr.length - 1]))
+  const index = isNaN(parseInt(arr[arr.length - 1]))
     ? 1
     : parseInt(arr[arr.length - 1])
   let filterParam = ''
@@ -19,5 +19,5 @@ export const getLocationDetail = () => {
   ) {
     filterParam = `&${arr[1]}`
   }
-  return { currentIndex, filterParam }
+  return { index, filterParam }
 }
