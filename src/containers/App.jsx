@@ -7,12 +7,12 @@ import zhMessages from '@translate/locale/zh'
 import enMessages from '@translate/locale/en'
 
 import Header from 'component/layout/Header'
-import Rule from 'component/layout/Rule'
 import Margin from 'component/layout/Margin'
 
 import Home from 'containers/Home'
 import Unauthorized from 'containers/Unauthorized'
 import requireAuth from 'containers/requireAuth'
+import RuleDetail from 'containers/RuleDetail'
 
 import r from 'constants/routes'
 
@@ -26,6 +26,8 @@ class App extends Component {
     super(props)
   }
 
+  componentDidMount() {}
+
   render() {
     const { language } = this.props.international
     return (
@@ -33,11 +35,10 @@ class App extends Component {
         <Fragment>
           <Header />
           <Margin size="superLarge" />
-          <Rule />
-          <Margin />
           <div>
             <Route exact path={r.home} component={requireAuth(Home)} />
             <Route path={r.unauthorized} component={Unauthorized} />
+            <Route path={r.ruleDetail} component={RuleDetail} />
           </div>
           <Margin size="superLarge" />
         </Fragment>

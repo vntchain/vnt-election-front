@@ -1,4 +1,5 @@
 export default {
   home: '/',
-  unauthorized: '/unauthorized'
+  unauthorized: '/unauthorized',
+  ruleDetail: '/rules'
 }

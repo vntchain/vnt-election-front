@@ -17,8 +17,9 @@
     "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^4.0.0",
     "redux-sirius": "^0.1.12",
-    "vnt": "^0.0.1",
-    "whatwg-fetch": "2.0.3"
+    "whatwg-fetch": "2.0.3",
+    "vnt": "git+https://github.com/vntchain/vnt.js.git",
+    "vnt-kit": "git+https://github.com/vntchain/vnt-kit.js.git"
   },
   "scripts": {
     "start": "node scripts/start.js",

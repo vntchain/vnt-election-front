@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-
+import { walletState } from 'constants/config'
 import r from 'constants/routes'
 
 function requireAuth(WrappedComponent) {
@@ -12,7 +12,7 @@ function requireAuth(WrappedComponent) {
   }
   return connect(mapStateToProps)(function(props) {
     // 在此处检测是否有登录，即调用钱包插件提供的api检测,检测到已授权了则需要取地址
-    if (!props.auth.authStatus) {
+    if (props.auth.authStatus !== walletState.authorized) {
       props.dispatch(push(r.unauthorized))
     }
     return props.auth.authStatus ? <WrappedComponent /> : null

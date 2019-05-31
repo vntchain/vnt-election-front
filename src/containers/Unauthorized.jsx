@@ -5,6 +5,7 @@ import { Icon, Tooltip } from 'antd'
 
 import MessageConfirm from 'component/MessageConfirm'
 import Margin from 'component/layout/Margin'
+import Rule from 'component/layout/Rule'
 import DataRenew from 'component/unauthorized/DataRenew'
 
 import { getLocationDetail } from 'utils/tools'
@@ -30,6 +31,8 @@ function Unauthorized() {
 
   return (
     <CommonPadding>
+      <Rule />
+      <Margin />
       <div className={styles.loginHint}>
         <span className={styles.button} onClick={handleClick}>
           <FormattedMessage id="login1" />

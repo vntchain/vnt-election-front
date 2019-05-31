@@ -11,6 +11,7 @@ export default {
   rule3: '3. 投票24h后可以重新投票。',
   rule4:
     '4. 投票不会有直接的收益，但投票是为了VNT社区共同的利益，请重视您手中的选票，共同推动VNT生态的发展。',
+  rule5: '更多',
 
   // pagination confirm Buttom
   confirmPage: '确定',

@@ -1,6 +1,7 @@
+import { walletState } from 'constants/config'
 export default {
   state: {
-    authStatus: false,
+    authStatus: walletState.uninstalled,
     accountAddr: '',
     proxyAddr: ''
   }
