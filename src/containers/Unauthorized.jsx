@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
-import CommonPadding from 'component/layout/CommonPadding'
+import React, { useState, Fragment } from 'react'
 import { FormattedMessage } from '@translate'
 import { Icon, Tooltip } from 'antd'
 
 import MessageConfirm from 'component/MessageConfirm'
 import Margin from 'component/layout/Margin'
-import Rule from 'component/layout/Rule'
 import DataRenew from 'component/unauthorized/DataRenew'
 
 import { getLocationDetail } from 'utils/tools'
@@ -30,9 +28,7 @@ function Unauthorized() {
   }
 
   return (
-    <CommonPadding>
-      <Rule />
-      <Margin />
+    <Fragment>
       <div className={styles.loginHint}>
         <span className={styles.button} onClick={handleClick}>
           <FormattedMessage id="login1" />
@@ -50,7 +46,7 @@ function Unauthorized() {
         visible={show}
         onCancel={() => setShow(false)}
       />
-    </CommonPadding>
+    </Fragment>
   )
 }
 

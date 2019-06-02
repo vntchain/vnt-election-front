@@ -44,7 +44,7 @@ const genTableData = (data, current) => {
         ranking: i + 1 + (current - 1) * pageSize,
         isSuper: item.IsSuper
       },
-      location: item.Location || '',
+      location: item.City || '',
       home: item.Home || '',
       name: { name: item.Vname, address: item.Address },
       votes: item.Votes,

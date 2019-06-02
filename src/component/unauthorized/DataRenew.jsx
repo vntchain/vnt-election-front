@@ -21,7 +21,7 @@ const mapStateToProps = ({ pageIndex: { nodePageIndex } }) => {
 function DataRenew(props) {
   const { locationIndex, filterParam, nodePageIndex: reduxPageIndex } = props
   const currentIndex = locationIndex || reduxPageIndex
-  console.log(props,currentIndex) //eslint-disable-line
+  // console.log(props,currentIndex) //eslint-disable-line
   return (
     <DataProvider
       options={{

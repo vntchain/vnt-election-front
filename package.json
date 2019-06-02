@@ -6,6 +6,7 @@
     "antd": "^3.19.1",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
+    "date-fns": "^1.30.1",
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
     "history": "^4.7.2",
@@ -17,9 +18,9 @@
     "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^4.0.0",
     "redux-sirius": "^0.1.12",
-    "whatwg-fetch": "2.0.3",
     "vnt": "git+https://github.com/vntchain/vnt.js.git",
-    "vnt-kit": "git+https://github.com/vntchain/vnt-kit.js.git"
+    "vnt-kit": "git+https://github.com/vntchain/vnt-kit.js.git",
+    "whatwg-fetch": "2.0.3"
   },
   "scripts": {
     "start": "node scripts/start.js",
