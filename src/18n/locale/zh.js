@@ -34,9 +34,9 @@ export default {
   // home页面
   acctText: '我的地址： ',
   htitle1: '我的VNT余额',
-  htitle2: '抵押VNT: ',
+  htitle2: '抵押VNT ',
   htitle3: '票数',
-  htitle4: '预计票数',
+  htitle4: '预计票数 ',
   htitle5: '解抵押VNT: ',
   htitle6: '委托他人投票',
   htitle7: '设置您的代理人',
@@ -47,6 +47,7 @@ export default {
   htitle12: '代理',
   htitle13: '抵押',
   htitle14: '解抵押',
+  htitle15: '抵押VNT: ',
 
   htooltip1: '您的投票正由他人代理。',
   htooltip2:
@@ -54,5 +55,14 @@ export default {
   htooltip3: '投票后方能生效',
   htooltip4: '委托他人代您投票',
   htooltip5:
-    '接收他人委托，代他人投票。成为代理后，您的投票票数 = 代理的票数 + 您自己的票数'
+    '接收他人委托，代他人投票。成为代理后，您的投票票数 = 代理的票数 + 您自己的票数',
+  // 各类消息提示模态框
+  modal1: '抵押VNT数量应为大于0的整数！',
+  modal2: '抵押VNT余额不足！',
+  modal3: '请抵押VNT后投票！',
+  modal4: '最多可以给30个不同节点投票！',
+  modal5: '您的代理会代您投票，所以设置代理前，请先抵押VNT！',
+  modal6: '已代理他人投票，请先关闭代理！',
+  modal7: '抱歉！对方没有开启代理投票功能！',
+  modal8: '已委托他人代投，请先取消委托！'
 }

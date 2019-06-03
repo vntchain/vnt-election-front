@@ -1,0 +1,13 @@
+[
+  {"name":"registerWitness","inputs":[{"name":"nodeUrl","type":"bytes"},{"name":"website","type":"bytes"},{"name":"nodeName","type":"bytes"}],"outputs":[],"type":"function"},
+  {"name":"unregisterWitness","inputs":[],"outputs":[],"type":"function"},
+  {"name":"voteWitnesses","inputs":[{"name":"candidate","type":"address[]"}],"outputs":[],"type":"function"},
+  {"name":"cancelVote","inputs":[],"outputs":[],"type":"function"},
+  {"name":"startProxy","inputs":[],"outputs":[],"type":"function"},
+  {"name":"stopProxy","inputs":[],"outputs":[],"type":"function"},
+  {"name":"cancelProxy","inputs":[],"outputs":[],"type":"function"},
+  {"name":"setProxy","inputs":[{"name":"proxy","type":"address"}],"outputs":[],"type":"function"},
+  {"name":"stake","inputs":[{"name":"stakeCount","type":"uint256"}],"outputs":[],"type":"function"},
+  {"name":"unStake","inputs":[],"outputs":[],"type":"function"},
+  {"name":"extractOwnBounty","inputs":[],"outputs":[],"type":"function"}
+]

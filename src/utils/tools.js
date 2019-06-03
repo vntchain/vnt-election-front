@@ -21,3 +21,10 @@ export const getLocationDetail = () => {
   }
   return { index, filterParam }
 }
+
+// 根据抵押的VNT计算票数
+export const calcVotes = stake => {
+  const deltaT = Date.now() - 1546272000000 //ms的单位
+  const weeks = Math.floor(deltaT / (7 * 24 * 3600 * 1000)) / 52
+  return Math.floor(stake * Math.pow(2, weeks))
+}
