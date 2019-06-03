@@ -11,6 +11,7 @@ export default axios.create({
 })
 
 export const rpcInstance = axios.create({
-  baseURL: rpc,
-  timeout: 30000
+  baseURL: sessionStorage.getItem('rpc') || rpc,
+  timeout: 30000,
+  headers: { 'Content-Type': 'application/json' }
 })

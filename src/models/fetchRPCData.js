@@ -8,7 +8,6 @@ export default {
   effects: ({ takeEvery }) => ({
     getRPCdata: takeEvery(function*({ payload }) {
       const { addr, method, field } = payload
-      // "0xb0432eB09079F4A5a7Fe4E8Dd5879b14356E27c2"
       const postData = {
         jsonrpc: '2.0',
         method: method, // 'core_getBalance' ,
@@ -23,7 +22,9 @@ export default {
         }
       })
       try {
-        const res = yield call(rpcInstance.post, postData)
+        let res = yield call(rpcInstance.post, '/', postData)
+        res = res.data
+        console.log(res) //eslint-disable-line
         let err = null
         let data = null
         // 含有error ,则不会返回 result字段，若result字段为null，则无数据，否则有数据
@@ -43,6 +44,7 @@ export default {
           payload: result
         })
       } catch (e) {
+        console.log(e) //eslint-disable-line
         throw new Error(e)
       }
     })

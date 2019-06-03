@@ -1,5 +1,5 @@
 import { effects } from 'redux-sirius'
-
+import { walletState } from 'constants/config'
 const { put } = effects
 
 export default {
@@ -34,16 +34,29 @@ export default {
           resolve({ err, coinbase })
         )
       })
-
       try {
         const res = yield getAcct
-        yield put({
-          type: 'account/setAccountAddr',
-          payload: {
-            err: res.err ? res.err : null,
-            addr: res.coinbase
-          }
-        })
+        console.log(res) // eslint-disable-line
+        if (!res.err) {
+          yield put({
+            type: 'account/setAccountAddr',
+            payload: {
+              err: res.err ? res.err : null,
+              addr: res.coinbase
+            }
+          })
+          yield put({
+            type: 'auth/setAuthStatus',
+            payload: walletState.authorized
+          })
+        } else {
+          yield put({
+            type: 'account/setAccountAddr',
+            payload: {
+              err: res.err
+            }
+          })
+        }
       } catch (e) {
         throw new Error(e)
       }
