@@ -25,6 +25,7 @@
   .wrap {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 0;
   }
   .item3 {
     position: relative;
@@ -86,14 +87,97 @@
       outline: none;
       &.freeze {
         background: $theme-blue-color;
+        cursor: pointer;
       }
       &.unfreeze {
         background: $theme-green-color;
+        cursor: pointer;
       }
       &.disable {
         background: $color-disable;
         text-align: center;
         line-height: 0.8rem;
+      }
+    }
+  }
+}
+
+.proxy {
+  height: 0.8rem;
+  background: $color-bg-1;
+  padding: 0 0.2rem;
+  border-radius: $border-radius-1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $font-darkcolor-1;
+  font-size: 0.16rem;
+  font-weight: bold;
+
+  .proxyTooltip {
+    margin-left: 0.06rem;
+    color: #fff;
+    :global {
+      .anticon-question-circle > svg {
+        fill: $tooltip-bg-1;
+      }
+    }
+  }
+
+  .setProxyAddr {
+    display: flex;
+    align-items: center;
+    > span {
+      flex-shrink: 0;
+    }
+
+    :global {
+      .ant-input {
+        height: 0.44rem;
+        width: 4.4rem;
+        border: none;
+        outline: none;
+        background: #f3f3f3;
+        padding: 0.05rem 0.1rem;
+        border-radius: $border-radius-1;
+        box-shadow: none;
+      }
+      .ant-btn {
+        height: 0.44rem;
+        margin-left: 0.2rem;
+        border: none;
+        &:first-letter {
+          letter-spacing: 0;
+        }
+      }
+    }
+  }
+
+  .proxyVotes {
+    margin-left: 0.1rem;
+    color: $font-lightcolor-1;
+    font-weight: normal;
+  }
+
+  .switchProxy {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    > span {
+      margin-left: 0.1rem;
+    }
+    :global {
+      .ant-switch {
+        height: 0.3rem;
+        width: 0.6rem;
+        &::after {
+          height: 0.24rem;
+          width: 0.24rem;
+          top: 2px;
+        }
+      }
+      .ant-switch-checked {
+        background-color: $theme-green-color;
       }
     }
   }

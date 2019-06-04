@@ -28,3 +28,15 @@ export const calcVotes = stake => {
   const weeks = Math.floor(deltaT / (7 * 24 * 3600 * 1000)) / 52
   return Math.floor(stake * Math.pow(2, weeks))
 }
+
+// 123456789 => 123,456,789
+export const sliceNum = num => {
+  const result = []
+  let str = '' + num
+  while (str.length > 3) {
+    result.unshift(str.slice(-3))
+    str = str.slice(0, str.length - 3)
+  }
+  result.unshift(str)
+  return result.join(',')
+}
