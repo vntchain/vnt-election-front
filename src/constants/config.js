@@ -9,3 +9,10 @@ export const walletState = {
   unauthorized: 'unauthorized',
   authorized: 'authorized'
 }
+
+export const txSteps = {
+  waitConfirm: 'waitConfirmTx',
+  denied: 'cancelledTx',
+  succeed: 'successfulTx',
+  failed: 'failedTx'
+}

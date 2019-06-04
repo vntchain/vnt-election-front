@@ -1,6 +1,7 @@
 import { effects } from 'redux-sirius'
 import { walletState } from 'constants/config'
 import abi from 'utils/abi.json'
+import { txSteps } from 'constants/config'
 const { put, select } = effects
 
 export default {
@@ -99,26 +100,36 @@ export default {
       yield put({
         type: 'account/setSendResult',
         payload: {
-          isLoading: true
+          isLoading: true,
+          step: txSteps.waitConfirm
         }
       })
       try {
         const resp = yield promise
+        console.log(resp) // eslint-disable-line
+        let step
+        if (typeof resp.err === 'string' || resp.err) {
+          step = txSteps.denied
+        } else {
+          step = txSteps.succeed
+        }
         yield put({
           type: 'account/setSendResult',
           payload: {
-            err: resp.err ? resp.err.message : null,
+            err: resp.err,
             txHash: resp.res,
-            isLoading: false
+            isLoading: false,
+            step
           }
         })
       } catch (e) {
         yield put({
           type: 'account/setSendResult',
           payload: {
-            err: e.message,
+            err: e,
             txHash: null,
-            isLoading: false
+            isLoading: false,
+            step: txSteps.failed
           }
         })
       }

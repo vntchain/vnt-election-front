@@ -11,35 +11,38 @@ const mapStateToProps = ({ account: { accountAddr } }) => {
 }
 
 function Authorized(props) {
-  useEffect(() => {
-    if (props.accountAddr.addr) {
-      const addr = props.accountAddr.addr
-      props.dispatch({
-        type: 'fetchRPCData/getRPCdata',
-        payload: {
-          addr,
-          method: 'core_getBalance',
-          field: 'balance'
-        }
-      })
-      props.dispatch({
-        type: 'fetchRPCData/getRPCdata',
-        payload: {
-          addr,
-          method: 'core_getStake',
-          field: 'stake'
-        }
-      })
-      props.dispatch({
-        type: 'fetchRPCData/getRPCdata',
-        payload: {
-          addr,
-          method: 'core_getVoter',
-          field: 'myVotes'
-        }
-      })
-    }
-  }, [])
+  useEffect(
+    () => {
+      if (props.accountAddr.addr) {
+        const addr = props.accountAddr.addr
+        props.dispatch({
+          type: 'fetchRPCData/getRPCdata',
+          payload: {
+            addr,
+            method: 'core_getBalance',
+            field: 'balance'
+          }
+        })
+        props.dispatch({
+          type: 'fetchRPCData/getRPCdata',
+          payload: {
+            addr,
+            method: 'core_getStake',
+            field: 'stake'
+          }
+        })
+        props.dispatch({
+          type: 'fetchRPCData/getRPCdata',
+          payload: {
+            addr,
+            method: 'core_getVoter',
+            field: 'myVotes'
+          }
+        })
+      }
+    },
+    [props.accountAddr.addr]
+  )
 
   return (
     <Fragment>

@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import VNT from 'vnt'
 import { rpc } from 'constants/config'
@@ -7,6 +7,8 @@ import { Tooltip, Icon, Switch, Input, Button } from 'antd'
 import { format } from 'date-fns'
 import { calcVotes, sliceNum } from 'utils/tools'
 import Margin from 'component/layout/Margin'
+import TxMessageModal from 'component/TxMessageModal'
+import { txSteps } from 'constants/config'
 
 import MessageConfirm from 'component/MessageConfirm'
 
@@ -15,18 +17,19 @@ import styles from './Authorized.scss'
 const vnt = new VNT(new VNT.providers.HttpProvider(rpc))
 
 const mapStateToProps = ({
-  account: { balance, stake, myVotes, proxiedVotes }
+  account: { balance, stake, myVotes, proxiedVotes, sendResult }
 }) => {
   return {
     balance,
     stake,
     myVotes,
-    proxiedVotes
+    proxiedVotes,
+    sendResult
   }
 }
 
 function AcctDetail(props) {
-  const { balance, stake, myVotes, proxiedVotes } = props
+  const { balance, stake, myVotes, proxiedVotes, sendResult } = props
   const balanceDecimal =
     balance && balance.data ? parseInt(balance.data) / Math.pow(10, 18) : 0
   const voteDetail =
@@ -66,6 +69,9 @@ function AcctDetail(props) {
   const [model1, showModel1] = useState(false)
   const [addrErr, setAddrErr] = useState(false)
   const [settedProxyAddr, changeSettedProxyAddr] = useState('')
+  const [showTxModal, setShowTxModal] = useState(
+    sendResult && sendResult.step === txSteps.waitConfirmTx ? true : false
+  )
 
   const validateInput = e => {
     if (e.target.value && !vnt.isAddress(e.target.value)) {
@@ -163,6 +169,25 @@ function AcctDetail(props) {
       })
     }
   }
+
+  console.log('测试函数组件数据更新是否引起装载和卸载') //eslint-disable-line
+
+  useEffect(() => {
+    if (details.useProxy && details.proxyAddr) {
+      props.dispatch({
+        type: 'fetchRPCData/getRPCdata',
+        payload: {
+          addr: details.proxyAddr,
+          method: 'core_getVoter',
+          field: 'proxiedVotes'
+        }
+      })
+      props.dispatch({
+        type: 'account/setProxyAddr',
+        payload: details.proxyAddr
+      })
+    }
+  }, [])
 
   return (
     <Fragment>
@@ -272,78 +297,90 @@ function AcctDetail(props) {
         />
       </div>
       <Margin />
-      <div className={styles.proxy}>
-        <div>
-          <FormattedMessage id="htitle6" />
-          <Tooltip
-            title={<FormattedMessage id="htooltip4" />}
-            placement="bottomLeft"
-          >
-            <span className={styles.proxyTooltip}>
-              <Icon type="question-circle" theme="filled" />
-            </span>
-          </Tooltip>
-        </div>
-        <div>
-          {details.useProxy ? (
-            <div>
-              <FormattedMessage id="htitle16" />
-              {` ${details.proxyAddr} `}
-            </div>
-          ) : (
-            <div className={styles.setProxyAddr}>
-              <span>
-                <FormattedMessage id="htitle7" />
+      <div>
+        <div className={styles.proxy}>
+          <div>
+            <FormattedMessage id="htitle6" />
+            <Tooltip
+              title={<FormattedMessage id="htooltip4" />}
+              placement="bottomLeft"
+            >
+              <span className={styles.proxyTooltip}>
+                <Icon type="question-circle" theme="filled" />
               </span>
-              <Input
-                onBlur={validateInput}
-                onChange={handleInputProxyAddr}
-                value={settedProxyAddr}
-                placeholder={props.intl.messages['htitle18']}
-              />
-              <Button
-                disabled={!approveSetProxyAddr()}
-                onClick={handleSetProxyAddr}
-                type="primary"
-              >
-                <FormattedMessage id="htitle17" />
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-      <Margin />
-      <div className={styles.proxy}>
-        <div>
-          <FormattedMessage id="htitle8" />
-          <Tooltip
-            title={<FormattedMessage id="htooltip5" />}
-            placement="bottomLeft"
-          >
-            <span className={styles.proxyTooltip}>
-              <Icon type="question-circle" theme="filled" />
-            </span>
-          </Tooltip>
-          <span className={styles.proxyVotes}>
-            {`( ${props.intl.messages['htitle9']} ${sliceNum(
-              details.proxyVotes
-            )} )`}
-          </span>
-        </div>
-        <div className={styles.switchProxy}>
-          <Switch
-            defaultChecked={details.isProxy}
-            onChange={handleChangeSwitch}
-          />
-          <span>
-            {details.isProxy ? (
-              <FormattedMessage id="htitle11" />
+            </Tooltip>
+          </div>
+          <div>
+            {details.useProxy ? (
+              <div>
+                <FormattedMessage id="htitle16" />
+                {` ${details.proxyAddr} `}
+              </div>
             ) : (
-              <FormattedMessage id="htitle10" />
+              <div className={styles.setProxyAddr}>
+                <span>
+                  <FormattedMessage id="htitle7" />
+                </span>
+                <Input
+                  onBlur={validateInput}
+                  onChange={handleInputProxyAddr}
+                  value={settedProxyAddr}
+                  placeholder={props.intl.messages['htitle18']}
+                />
+                <Button
+                  disabled={!approveSetProxyAddr()}
+                  onClick={handleSetProxyAddr}
+                  type="primary"
+                >
+                  <FormattedMessage id="htitle17" />
+                </Button>
+              </div>
             )}
-          </span>
+          </div>
+        </div>
+        <Margin />
+        <div className={styles.proxy}>
+          <div>
+            <FormattedMessage id="htitle8" />
+            <Tooltip
+              title={<FormattedMessage id="htooltip5" />}
+              placement="bottomLeft"
+            >
+              <span className={styles.proxyTooltip}>
+                <Icon type="question-circle" theme="filled" />
+              </span>
+            </Tooltip>
+            <span className={styles.proxyVotes}>
+              {`( ${props.intl.messages['htitle9']} ${sliceNum(
+                details.proxyVotes
+              )} )`}
+            </span>
+          </div>
+          <div className={styles.switchProxy}>
+            <Switch
+              defaultChecked={details.isProxy}
+              onChange={handleChangeSwitch}
+            />
+            <span>
+              {details.isProxy ? (
+                <FormattedMessage id="htitle11" />
+              ) : (
+                <FormattedMessage id="htitle10" />
+              )}
+            </span>
+          </div>
         </div>
       </div>
+      <TxMessageModal
+        visible={showTxModal}
+        step={(sendResult && sendResult.step) || txSteps.waitConfirm}
+        showClose={
+          sendResult &&
+          sendResult.step &&
+          sendResult.step !== txSteps.waitConfirmTx
+        }
+        onCancel={() => setShowTxModal(false)}
+      />
     </Fragment>
   )
 }

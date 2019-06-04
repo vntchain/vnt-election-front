@@ -66,5 +66,16 @@ export default {
   modal5: '您的代理会代您投票，所以设置代理前，请先抵押VNT！',
   modal6: '已代理他人投票，请先关闭代理！',
   modal7: '抱歉！对方没有开启代理投票功能！',
-  modal8: '已委托他人代投，请先取消委托！'
+  modal8: '已委托他人代投，请先取消委托！',
+
+  // 交易过程中模态窗的提示语
+  txModalTitle1: '请确认操作',
+  txModalTitle2: '操作被拒绝',
+  txModalTitle3: '交易成功',
+  txModalTitle4: '交易失败',
+
+  txModalMessage1: '请在打开的VNT Wallet中签名确认',
+  txModalMessage2: '您在VNT Wallet中拒绝了这次签名请求！',
+  txModalMessage3: '您的交易发送成功',
+  txModalMessage4: '您的交易发送失败'
 }
