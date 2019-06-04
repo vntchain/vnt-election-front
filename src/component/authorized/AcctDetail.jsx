@@ -1,14 +1,12 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import VNT from 'vnt'
-import { rpc } from 'constants/config'
+import { rpc, txActions } from 'constants/config'
 import { FormattedMessage, injectIntl } from '@translate'
 import { Tooltip, Icon, Switch, Input, Button } from 'antd'
 import { format } from 'date-fns'
 import { calcVotes, sliceNum } from 'utils/tools'
 import Margin from 'component/layout/Margin'
-import TxMessageModal from 'component/TxMessageModal'
-import { txSteps } from 'constants/config'
 
 import MessageConfirm from 'component/MessageConfirm'
 
@@ -17,19 +15,18 @@ import styles from './Authorized.scss'
 const vnt = new VNT(new VNT.providers.HttpProvider(rpc))
 
 const mapStateToProps = ({
-  account: { balance, stake, myVotes, proxiedVotes, sendResult }
+  account: { balance, stake, myVotes, proxiedVotes }
 }) => {
   return {
     balance,
     stake,
     myVotes,
-    proxiedVotes,
-    sendResult
+    proxiedVotes
   }
 }
 
 function AcctDetail(props) {
-  const { balance, stake, myVotes, proxiedVotes, sendResult } = props
+  const { balance, stake, myVotes, proxiedVotes } = props
   const balanceDecimal =
     balance && balance.data ? parseInt(balance.data) / Math.pow(10, 18) : 0
   const voteDetail =
@@ -69,9 +66,6 @@ function AcctDetail(props) {
   const [model1, showModel1] = useState(false)
   const [addrErr, setAddrErr] = useState(false)
   const [settedProxyAddr, changeSettedProxyAddr] = useState('')
-  const [showTxModal, setShowTxModal] = useState(
-    sendResult && sendResult.step === txSteps.waitConfirmTx ? true : false
-  )
 
   const validateInput = e => {
     if (e.target.value && !vnt.isAddress(e.target.value)) {
@@ -97,7 +91,7 @@ function AcctDetail(props) {
     props.dispatch({
       type: 'account/sendTx',
       payload: {
-        funcName: 'setProxy',
+        funcName: txActions.setProxy,
         needInput: true,
         inputData: [settedProxyAddr]
       }
@@ -129,7 +123,7 @@ function AcctDetail(props) {
       props.dispatch({
         type: 'account/sendTx',
         payload: {
-          funcName: 'stake',
+          funcName: txActions.stake,
           needInput: true,
           inputData: [amount]
         }
@@ -371,16 +365,6 @@ function AcctDetail(props) {
           </div>
         </div>
       </div>
-      <TxMessageModal
-        visible={showTxModal}
-        step={(sendResult && sendResult.step) || txSteps.waitConfirm}
-        showClose={
-          sendResult &&
-          sendResult.step &&
-          sendResult.step !== txSteps.waitConfirmTx
-        }
-        onCancel={() => setShowTxModal(false)}
-      />
     </Fragment>
   )
 }

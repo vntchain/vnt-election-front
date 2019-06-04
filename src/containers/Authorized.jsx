@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import AcctAddr from 'component/authorized/AcctAddr'
 import AcctDetail from 'component/authorized/AcctDetail'
 import Margin from 'component/layout/Margin'
+import MessageModal from 'component/authorized/MessageModal'
 
 const mapStateToProps = ({ account: { accountAddr } }) => {
   return {
@@ -49,6 +50,7 @@ function Authorized(props) {
       <AcctAddr />
       <Margin />
       <AcctDetail />
+      <MessageModal />
     </Fragment>
   )
 }

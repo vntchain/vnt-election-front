@@ -113,6 +113,9 @@ export default {
         } else {
           step = txSteps.succeed
         }
+        if (resp.res) {
+          //有交易hash，代表成功，则需要进行一些操作
+        }
         yield put({
           type: 'account/setSendResult',
           payload: {
@@ -133,6 +136,10 @@ export default {
           }
         })
       }
+    }),
+    manualFreshData: takeLatest(function*({ payload }) {
+      const { funcName, data } = payload
+      yield console.log(funcName , data) //eslint-disable-line
     })
   })
 }

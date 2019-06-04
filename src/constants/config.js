@@ -16,3 +16,14 @@ export const txSteps = {
   succeed: 'successfulTx',
   failed: 'failedTx'
 }
+
+export const txActions = {
+  stake: 'stake',
+  unStake: 'unStake',
+  setProxy: 'setProxy', //设置委托人
+  cancelProxy: 'cancelProxy', // 取消委托
+  startProxy: 'startProxy', //开启代理
+  stopProxy: 'stopProxy', //关闭代理
+  vote: 'voteWitnesses', //投票
+  cancelVote: 'cancelVote' // 取消投票
+}
