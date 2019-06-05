@@ -12,8 +12,7 @@ const mapStateToProps = ({ account: { sendResult } }) => {
 function ProvideModalData(props) {
   const { sendResult } = props
 
-  console.log('进入Modal......') //eslint-disable-line
-  const [showTxModal, setShowTxModal] = useState(null)
+  const [showTxModal, setShowTxModal] = useState(false)
 
   useEffect(
     () => {

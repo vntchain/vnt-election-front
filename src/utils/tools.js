@@ -40,3 +40,8 @@ export const sliceNum = num => {
   result.unshift(str)
   return result.join(',')
 }
+
+// 计算是否超过一天 true表示还在一天内
+export const lessThanOneDay = oldTime => {
+  return Date.now() - oldTime < 86400000
+}

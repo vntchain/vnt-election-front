@@ -51,6 +51,7 @@ export default {
   htitle16: '您的代理人： ',
   htitle17: '确定',
   htitle18: '请输入代理人地址',
+  htitle19: '取消委托',
 
   htooltip1: '您的投票正由他人代理。',
   htooltip2:

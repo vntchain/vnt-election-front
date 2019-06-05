@@ -1,4 +1,13 @@
 @import "./base";
+.modal {
+  :global {
+    .ant-modal-body {
+      font-size: 0.2rem;
+      min-height: 0.6rem;
+    }
+  }
+}
+
 .txMessageModal {
   :global {
     .ant-modal-body {
@@ -25,5 +34,15 @@
   p {
     text-align: center;
     font-size: 0.2rem;
+  }
+}
+
+.countDown {
+  line-height: 1;
+  :global {
+    .ant-statistic-content {
+      font-size: 0.14rem;
+      color: #fff;
+    }
   }
 }

@@ -5,7 +5,7 @@ import { Modal, Icon } from 'antd'
 
 import { txSteps } from 'constants/config'
 
-import styles from './TxMessageModal.scss'
+import styles from './Common.scss'
 
 export default function TxMessageModal(props) {
   let iconType, title, message, showBody

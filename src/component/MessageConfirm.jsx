@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from '@translate'
 import { Modal } from 'antd'
 
-import styles from './MessageConfirm.scss'
+import styles from './Common.scss'
 
 export default function MessageConfirm(props) {
   return (
