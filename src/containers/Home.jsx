@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Authorized from 'containers/Authorized'
-import Unauthorized from 'containers/Unauthorized'
+import Authorized from 'component/home/Authorized'
+import Unauthorized from 'component/home/Unauthorized'
 import CommonPadding from 'component/layout/CommonPadding'
 import Margin from 'component/layout/Margin'
-import Rule from 'component/layout/Rule'
+import Rule from 'component/home/Rule'
 import { walletState } from 'constants/config'
+import VoteDetailProvider from 'component/authorized/VoteDetailProvider'
+import NodeList from 'component/home/NodeList'
 
 const mapStateToProps = ({ auth: { authStatus } }) => {
   return {
@@ -14,6 +16,7 @@ const mapStateToProps = ({ auth: { authStatus } }) => {
 }
 
 function Home(props) {
+  console.log(props) //eslint-disable-line
   return (
     <CommonPadding>
       <Rule />
@@ -23,6 +26,8 @@ function Home(props) {
       ) : (
         <Unauthorized />
       )}
+      <Margin />
+      <VoteDetailProvider render={data => <NodeList voteDetail={data} />} />
     </CommonPadding>
   )
 }

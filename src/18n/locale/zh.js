@@ -29,6 +29,7 @@ export default {
   nodeColumn5: '票数',
   nodeColumn6: '得票率',
   nodeColumn7: '确认投票',
+  nodeVoteBtn: '投票',
   nodeText: '------ 排名前19的节点，为VNT超级节点 ------',
 
   // home页面
@@ -78,5 +79,8 @@ export default {
   txModalMessage1: '请在打开的VNT Wallet中签名确认',
   txModalMessage2: '您在VNT Wallet中拒绝了这次签名请求！',
   txModalMessage3: '您的交易发送成功',
-  txModalMessage4: '您的交易发送失败'
+  txModalMessage4: '您的交易发送失败',
+
+  // vote对应的message
+  voteMessage1: '当前正在使用代理，无法投票'
 }
