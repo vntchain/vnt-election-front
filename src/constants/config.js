@@ -4,6 +4,8 @@ export const pageSize = 40
 export const rpc = 'http://47.102.157.204:8880'
 export const chainId = 2
 
+export const maximumVoteNum = 30
+
 export const walletState = {
   uninstalled: 'uninstalled',
   unauthorized: 'unauthorized',

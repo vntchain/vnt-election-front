@@ -7,9 +7,10 @@ import { Spin } from 'antd'
 import { pageSize, pollingInterval } from 'constants/config'
 import { connect } from 'react-redux'
 import apis from 'constants/apis'
-import { walletState } from 'constants/config'
+import { walletState, maximumVoteNum, txActions } from 'constants/config'
 import { getBaseParams, lessThanOneDay, getBasePath } from 'utils/tools'
 import CountDown from 'component/CountDown'
+import MessageConfirm from 'component/MessageConfirm'
 
 import styles from './NodeList.scss'
 
@@ -68,7 +69,11 @@ class NodeList extends React.Component {
     super(props)
     this.state = {
       currentPage: 1,
-      candidates: {}
+      candidates: {},
+      messageDetail: {
+        showMessageModal: false,
+        id: ''
+      }
     }
   }
 
@@ -146,23 +151,78 @@ class NodeList extends React.Component {
   clickDisabledVoteBtn = (useProxy, lastVoteInOneDay) => {
     if (useProxy) {
       // 弹出modal框，显示的内容是 '正在使用代理，无法投票'
+      this.setState({
+        messageDetail: {
+          showMessageModal: true,
+          id: 'modal8'
+        }
+      })
     } else if (lastVoteInOneDay) {
       // 弹出modal框，显示的内容是 '24h内已经设置代理或者投票，无法投票'
+      this.setState({
+        messageDetail: {
+          showMessageModal: true,
+          id: 'modal9'
+        }
+      })
     }
   }
 
   clickVoteBtn = (addr, prevCheckedStatus) => {
-    // 拿到id和前一次的状态，需要去寻找修改对应id的checkStatus ,同时更改candidate
     console.log(addr, prevCheckedStatus) // eslint-disable-line
+    let newCandidates = this.state.candidates
+    if (
+      Object.keys(newCandidates).length === maximumVoteNum &&
+      !newCandidates.hasOwnProperty(addr)
+    ) {
+      // 弹窗提示已经达到最大数量，需要取消后再勾选
+      this.setState({
+        messageDetail: {
+          showMessageModal: true,
+          id: 'modal4'
+        }
+      })
+      return
+    }
+    if (prevCheckedStatus) {
+      delete newCandidates[addr]
+    } else {
+      newCandidates[addr] = {
+        useProxy: false,
+        checked: true,
+        lastVoteInOneDay: false
+      }
+    }
+    this.setState({ candidates: newCandidates })
   }
 
   clickConfirmVoteBtn = () => {
-    // 点击确认投票按钮，此时需要发送投票或者取消投票
-    // 当长度为0时，调用取消投票接口，当长度为>0时，走投票接口
+    // 需要先检查抵押VNT的数量，若数量为0，提示需要抵押VNT后投票
+    const selected = Object.keys(this.state.candidates)
+    if (selected.length > 0) {
+      // 走投票接口
+    } else {
+      // 走取消投票接口
+      this.props.dispatch({
+        type: 'account/sendTx',
+        payload: {
+          funcName: txActions.cancelVote,
+          needInput: false
+        }
+      })
+    }
   }
 
   onCountDownFinish = () => {
     this.forceUpdate()
+  }
+
+  cancelMessageModal = () => {
+    const newMessageDetail = {
+      showMessageModal: false,
+      id: ''
+    }
+    this.setState({ messageDetail: newMessageDetail })
   }
 
   render() {
@@ -210,8 +270,8 @@ class NodeList extends React.Component {
           : `${styles['voteBtn']}`
         btnDom = (
           <button
-            className={`${styles['voteBtn']} ${styles['checked']}`}
-            onClick={() => this.clickVoteBtn(record.id, checked)}
+            className={classNames}
+            onClick={() => this.clickVoteBtn(record.key, checked)}
           >
             <FormattedMessage id="nodeVoteBtn" />
           </button>
@@ -235,7 +295,7 @@ class NodeList extends React.Component {
             onClick={() => this.clickDisabledVoteBtn(true, false)}
           >
             <FormattedMessage id="nodeColumn7" label={true} />
-            <span>{`(${candidates.length}/30)`}</span>
+            <span>{`(${candidates.length}/${maximumVoteNum})`}</span>
           </div>
         )
       } else if (lessThanOneDay(lastVoteTime)) {
@@ -255,7 +315,9 @@ class NodeList extends React.Component {
             onClick={this.clickConfirmVoteBtn}
           >
             <FormattedMessage id="nodeColumn7" label={true} />
-            <span>{`(${candidates.length}/30)`}</span>
+            <span>{`(${
+              Object.keys(this.state.candidates).length
+            }/${maximumVoteNum})`}</span>
           </button>
         )
       }
@@ -375,6 +437,11 @@ class NodeList extends React.Component {
                 tableType="list"
               />
             )}
+            <MessageConfirm
+              id={this.state.messageDetail.id}
+              visible={this.state.messageDetail.showMessageModal}
+              onCancel={this.cancelMessageModal}
+            />
           </div>
         </Spin>
       </div>

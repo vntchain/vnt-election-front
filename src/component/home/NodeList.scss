@@ -1,3 +1,48 @@
+@import "../base";
+
 .tableWithCount {
   min-height: 4rem;
+}
+
+.voteBtn {
+  padding: 0.1rem 0.26rem;
+  background: #fff;
+  color: $theme-blue-color;
+  border-color: $theme-blue-color;
+  cursor: pointer;
+  &.checked {
+    background: $theme-blue-color;
+    color: #fff;
+  }
+  &.disabled {
+    color: $font-darkcolor-1;
+    border-color: $color-disable;
+  }
+  &.disabled.checked {
+    background: $color-disable;
+    color: #fff;
+  }
+}
+
+.confirmVoteBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.06rem 0.12rem;
+  color: #fff;
+  background: #f32020;
+  border: none;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+    font-weight: bold;
+  }
+  &.disable {
+    background: $color-disable;
+    color: $font-darkcolor-1;
+  }
+  &.countDown {
+    background: $color-disable;
+    color: $font-darkcolor-1;
+  }
 }
