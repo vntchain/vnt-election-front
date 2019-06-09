@@ -227,7 +227,7 @@ class NodeList extends React.Component {
 
   render() {
     const nodeList = this.props.nodes
-    console.log('currentpage-----: ',this.state,this.props) //eslint-disable-line
+    //console.log('currentpage-----: ',this.state,this.props) //eslint-disable-line
     const finishFetching = nodeList && nodeList.hasOwnProperty('data')
 
     const renderVoteBtn = (value, record, index) => {

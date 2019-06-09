@@ -24,43 +24,19 @@ const mapStateToProps = ({ account: { balance, stake, myVotes } }) => {
 }
 
 function AcctDetail(props) {
-  const { balance, stake, myVotes } = props
-  const balanceDecimal =
-    balance && balance.data ? parseInt(balance.data) / Math.pow(10, 18) : 0
-  const hasVoted =
-    myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp ? true : false
-  const hasStaked =
-    stake && stake.data && stake.data.lastStakeTimeStamp ? true : false
-  const lastVoteTime = hasVoted ? myVotes.data.lastVoteTimeStamp * 1000 : 0
-  const lastStakeTime = hasStaked ? stake.data.lastStakeTimeStamp * 1000 : 0
-
-  const details = {
-    balance: balanceDecimal,
-    stake: (stake && stake.data && stake.data.stakeCount) || 0,
-    // 上次抵押时间
-    stakeTime: lastStakeTime,
-    // 票数
-    votes: (myVotes && myVotes.data && myVotes.data.lastVoteCount) || 0,
-    // 是否使用代理来帮我投票
-    useProxy:
-      myVotes &&
-      myVotes.data &&
-      myVotes.data.proxy &&
-      parseInt(myVotes.data.proxy)
-        ? true
-        : false,
-    //上次投票(或者设置代理)时间
-    voteTime: format(new Date(lastVoteTime), 'YYYY/MM/DD'),
-    //是否开启了代理功能
-    isProxy: (myVotes && myVotes.data && myVotes.data.isProxy) || false
-  }
-  //使用了代理，代理人的地址
-  details.proxyAddr = details.useProxy ? myVotes.data.proxy : null
-  //作为代理给别人投的票数
-  details.proxyVotes = details.isProxy ? myVotes.data.proxyVoteCount : 0
-  // 投给了谁,使用了代理，则取代理的
-  //const voteDetail = details.useProxy ? proxiedVotes.voteCandidates : myVotes.voteCandidates
-
+  const [details, setDetails] = useState({
+    balance: 0,
+    stake: 0,
+    hasStaked: false,
+    lastStakeTime: 0,
+    votes: 0,
+    hasVoted: false,
+    lastVoteTime: 0,
+    useProxy: false,
+    proxyAddr: null,
+    isProxy: false,
+    proxyVotes: 0
+  })
   const [showEstimation, setShowEstimation] = useState(false)
   const [estimatedVotes, setEstimatedVotes] = useState(0)
   const [amount, setAmount] = useState('')
@@ -133,7 +109,7 @@ function AcctDetail(props) {
   }
 
   const handleFreeze = () => {
-    if (parseInt(amount) == amount && parseInt(amount) > 0) {
+    if (parseInt(amount, 10) == amount && parseInt(amount, 10) > 0) {
       // 是整数,发送交易，显示模态框
       props.dispatch({
         type: 'account/sendTx',
@@ -141,7 +117,8 @@ function AcctDetail(props) {
           funcName: txActions.stake,
           needInput: true,
           inputData: [amount]
-        }
+        },
+        callback: () => handleTxSuccessResult(txActions.stake, amount)
       })
     } else {
       showMessageModal(true)
@@ -187,6 +164,85 @@ function AcctDetail(props) {
     }
   }
 
+  const handleTxSuccessResult = (funcName, amount = '', proxyAddr = null) => {
+    switch (funcName) {
+      case txActions.stake: {
+        // 此处最好再判断一下amount是否非法
+        if (isNaN(amount)) {
+          throw new Error('invalid amount!')
+        }
+        const deltaVnt = parseInt(amount, 10)
+        const newBalance = details.balance - deltaVnt
+        const newStake = details.stake + deltaVnt
+        const newVotes = calcVotes(newStake)
+        setDetails(
+          Object.assign({}, details, {
+            balance: newBalance,
+            stake: newStake,
+            votes: newVotes
+          })
+        )
+        props.dispatch({
+          type: 'stakedVNT/setStake',
+          payload: newStake
+        })
+        break
+      }
+      case txActions.unStake: {
+        const newBalance = details.balance + details.stake
+        setDetails(
+          Object.assign({}, details, {
+            balance: newBalance,
+            stake: 0,
+            votes: 0
+          })
+        )
+        props.dispatch({
+          type: 'stakedVNT/setStake',
+          payload: 0
+        })
+        break
+      }
+      case txActions.setProxy: {
+        setDetails(
+          Object.assign({}, details, {
+            proxyAddr: proxyAddr,
+            useProxy: true,
+            lastVoteTime: Date.now()
+          })
+        )
+        break
+      }
+      case txActions.cancelProxy: {
+        setDetails(
+          Object.assign({}, details, {
+            proxyAddr: null,
+            useProxy: false
+          })
+        )
+        break
+      }
+      case txActions.startProxy: {
+        setDetails(
+          Object.assign({}, details, {
+            isProxy: true
+          })
+        )
+        break
+      }
+      case txActions.stopProxy: {
+        setDetails(
+          Object.assign({}, details, {
+            isProxy: false
+          })
+        )
+        break
+      }
+      default:
+        throw new Error('undefined actions!')
+    }
+  }
+
   useEffect(
     () => {
       console.log('测试函数组件useEffect是不是每次更新props都进入') //eslint-disable-line
@@ -215,7 +271,60 @@ function AcctDetail(props) {
     [details.isProxy]
   )
 
-  console.log('重新渲染页面了吗？？') // eslint-disable-line
+  useEffect(
+    () => {
+      console.log('计算details: ', props) //eslint-disable-line
+      const { balance, myVotes, stake } = props
+      const newDetails = {}
+      // 余额
+      newDetails.balance =
+        balance && balance.data
+          ? parseInt(balance.data, 16) / Math.pow(10, 18)
+          : 0
+      // 抵押VNT的数量
+      newDetails.stake = (stake && stake.data && stake.data.stakeCount) || 0
+      // 是否产生过抵押
+      newDetails.hasStaked =
+        stake && stake.data && stake.data.lastStakeTimeStamp ? true : false
+      // 上次抵押时间
+      newDetails.lastStakeTime = newDetails.hasStaked
+        ? stake.data.lastStakeTimeStamp * 1000
+        : 0
+      // 票数
+      newDetails.votes =
+        (myVotes && myVotes.data && myVotes.data.lastVoteCount) || 0
+      // 是否投过票
+      newDetails.hasVoted =
+        myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp ? true : false
+      // 上次投票时间
+      newDetails.lastVoteTime = newDetails.hasVoted
+        ? myVotes.data.lastVoteTimeStamp * 1000
+        : 0
+      // 是否使用代理
+      newDetails.useProxy =
+        myVotes &&
+        myVotes.data &&
+        myVotes.data.proxy &&
+        parseInt(myVotes.data.proxy, 16)
+          ? true
+          : false
+      // 代理地址
+      newDetails.proxyAddr = newDetails.useProxy ? myVotes.data.proxy : null
+      // 是否开启代理，即帮别人投票的功能
+      newDetails.isProxy =
+        (myVotes && myVotes.data && myVotes.data.isProxy) || false
+      // 帮别人投票的票数
+      newDetails.proxyVotes =
+        myVotes && myVotes.data && myVotes.data.proxyVoteCount
+      setDetails(newDetails)
+      props.dispatch({
+        type: 'stakedVNT/setStake',
+        payload: newDetails.stake
+      })
+    },
+    [props.balance, props.stake, props.myVotes]
+  )
+
   const forceUpdate = useState(0)[1]
   const onCountDownFinish = () => {
     // 倒计时结束，强制渲染
@@ -257,7 +366,8 @@ function AcctDetail(props) {
             </p>
             <h5>
               <FormattedMessage id="htitle3" />
-              {hasVoted && ` (${details.voteTime}) `}
+              {details.hasVoted &&
+                ` (${format(new Date(details.lastVoteTime), 'YYYY/MM/DD')}) `}
               <Tooltip
                 title={<FormattedMessage id="htooltip2" />}
                 placement="bottom"
@@ -314,7 +424,7 @@ function AcctDetail(props) {
               <div className={`${styles['disable']} ${styles['action']}`}>
                 <FormattedMessage id="htitle14" label={true} />
               </div>
-            ) : hasStaked && lessThanOneDay(details.lastStakeTime) ? (
+            ) : details.hasStaked && lessThanOneDay(details.lastStakeTime) ? (
               <div className={`${styles['countDown']} ${styles['action']}`}>
                 <FormattedMessage id="htitle14" label={true} />
                 <CountDown
@@ -372,7 +482,7 @@ function AcctDetail(props) {
                   value={settedProxyAddr}
                   placeholder={props.intl.messages['htitle18']}
                 />
-                {hasVoted && lessThanOneDay(details.lastVoteTime) ? (
+                {details.hasVoted && lessThanOneDay(details.lastVoteTime) ? (
                   <div className={styles.btnCountDown}>
                     <FormattedMessage id="htitle17" label={true} />
                     <CountDown
@@ -406,9 +516,9 @@ function AcctDetail(props) {
               </span>
             </Tooltip>
             <span className={styles.proxyVotes}>
-              {`( ${props.intl.messages['htitle9']} ${sliceNum(
-                details.proxyVotes
-              )} )`}
+              {`( ${props.intl.messages['htitle9']} ${
+                details.isProxy ? sliceNum(details.proxyVotes) : 0
+              } )`}
             </span>
           </div>
           <div className={styles.switchProxy}>

@@ -32,12 +32,12 @@ function VoteDetailProvider(props) {
         proxiedVotes && proxiedVotes.data ? proxiedVotes.data : null
       if (
         !myVoteDetail ||
-        (parseInt(myVoteDetail.proxy) && !proxiedVoteDetail)
+        (parseInt(myVoteDetail.proxy, 16) && !proxiedVoteDetail)
       ) {
         return
       }
       const initState = {}
-      if (!parseInt(myVoteDetail.proxy)) {
+      if (!parseInt(myVoteDetail.proxy, 16)) {
         // 未使用代理
         initState.candidates = myVoteDetail.voteCandidates
         initState.useProxy = false
