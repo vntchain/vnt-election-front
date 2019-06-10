@@ -10,6 +10,7 @@
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
     "history": "^4.7.2",
+    "marked": "^0.6.2",
     "normalize.css": "^8.0.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

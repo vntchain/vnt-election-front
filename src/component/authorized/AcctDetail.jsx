@@ -11,6 +11,8 @@ import CountDown from 'component/CountDown'
 
 import MessageConfirm from 'component/MessageConfirm'
 
+import { rpcInstance } from 'utils/axios'
+
 import styles from './Authorized.scss'
 
 const vnt = new VNT(new VNT.providers.HttpProvider(rpc))
@@ -44,7 +46,6 @@ function AcctDetail(props) {
   const [modalID, setModalID] = useState('')
   const [addrErr, setAddrErr] = useState(false)
   const [settedProxyAddr, changeSettedProxyAddr] = useState('')
-  const [switchStatus, changeSwitchStatus] = useState(false)
 
   const validateInput = e => {
     if (e.target.value && !vnt.isAddress(e.target.value)) {
@@ -64,28 +65,55 @@ function AcctDetail(props) {
     changeSettedProxyAddr(e.target.value.trim())
   }
 
-  const handleSetProxyAddr = e => {
-    console.log(e) //eslint-disable-line
-    //发送设置委托人的交易
-    props.dispatch({
-      type: 'account/sendTx',
-      payload: {
-        funcName: txActions.setProxy,
-        needInput: true,
-        inputData: [settedProxyAddr]
+  const handleSetProxyAddr = async () => {
+    console.log('设置委托人') //eslint-disable-line
+    if (details.isProxy) {
+      showMessageModal(true)
+      setModalID('modal6')
+    } else if (details.stake === 0) {
+      showMessageModal(true)
+      setModalID('modal5')
+    } else {
+      // 拿到地址 去查询账户信息
+      try {
+        const res = await rpcInstance.post('/', {
+          jsonrpc: '2.0',
+          method: 'core_getVoter', // 'core_getBalance' ,
+          params: [settedProxyAddr],
+          id: 1
+        })
+        if (res && !res.result.isProxy) {
+          showMessageModal(true)
+          setModalID('modal7')
+        } else {
+          //发送设置委托人的交易
+          props.dispatch({
+            type: 'account/sendTx',
+            payload: {
+              funcName: txActions.setProxy,
+              needInput: true,
+              inputData: [settedProxyAddr]
+            },
+            callback: () =>
+              handleTxSuccessResult(txActions.setProxy, '', settedProxyAddr)
+          })
+        }
+      } catch (e) {
+        throw new Error('get proxyVotes detail error!')
       }
-    })
+    }
   }
 
-  const handleCancelProxy = e => {
-    console.log(e) //eslint-disable-line
+  const handleCancelProxy = () => {
+    console.log('cancel proxy ') //eslint-disable-line
     // 取消委托，任何时候都可以进行操作
     props.dispatch({
       type: 'account/sendTx',
       payload: {
         funcName: txActions.cancelProxy,
         needInput: false
-      }
+      },
+      callback: () => handleTxSuccessResult(txActions.cancelProxy)
     })
   }
 
@@ -124,6 +152,9 @@ function AcctDetail(props) {
       showMessageModal(true)
       setModalID('modal1')
     }
+    setAmount('')
+    setEstimatedVotes(0)
+    setShowEstimation(false)
   }
 
   const handleUnfreeze = () => {
@@ -133,13 +164,13 @@ function AcctDetail(props) {
       payload: {
         funcName: txActions.unStake,
         needInput: false
-      }
+      },
+      callback: () => handleTxSuccessResult(txActions.unStake)
     })
   }
 
   const handleChangeSwitch = checked => {
     console.log(checked) //eslint-disable-line
-    changeSwitchStatus(checked)
     if (checked) {
       if (details.useProxy) {
         showMessageModal(true)
@@ -150,7 +181,8 @@ function AcctDetail(props) {
           payload: {
             funcName: txActions.startProxy,
             needInput: false
-          }
+          },
+          callback: () => handleTxSuccessResult(txActions.startProxy)
         })
       }
     } else {
@@ -159,12 +191,14 @@ function AcctDetail(props) {
         payload: {
           funcName: txActions.stopProxy,
           needInput: false
-        }
+        },
+        callback: () => handleTxSuccessResult(txActions.stopProxy)
       })
     }
   }
 
   const handleTxSuccessResult = (funcName, amount = '', proxyAddr = null) => {
+    console.log('处理成功的回调....') //eslint-disable-line
     switch (funcName) {
       case txActions.stake: {
         // 此处最好再判断一下amount是否非法
@@ -179,11 +213,13 @@ function AcctDetail(props) {
           Object.assign({}, details, {
             balance: newBalance,
             stake: newStake,
-            votes: newVotes
+            votes: newVotes,
+            hasStaked: true,
+            lastStakeTime: Date.now()
           })
         )
         props.dispatch({
-          type: 'stakedVNT/setStake',
+          type: 'calculatedDetails/setStake',
           payload: newStake
         })
         break
@@ -198,7 +234,7 @@ function AcctDetail(props) {
           })
         )
         props.dispatch({
-          type: 'stakedVNT/setStake',
+          type: 'calculatedDetails/setStake',
           payload: 0
         })
         break
@@ -263,13 +299,6 @@ function AcctDetail(props) {
     },
     [details.useProxy, details.proxyAddr]
   )
-  useEffect(
-    () => {
-      // 监听isProxy的变化？去改变开关的状态
-      changeSwitchStatus(details.isProxy)
-    },
-    [details.isProxy]
-  )
 
   useEffect(
     () => {
@@ -318,7 +347,7 @@ function AcctDetail(props) {
         myVotes && myVotes.data && myVotes.data.proxyVoteCount
       setDetails(newDetails)
       props.dispatch({
-        type: 'stakedVNT/setStake',
+        type: 'calculatedDetails/setStake',
         payload: newDetails.stake
       })
     },
@@ -331,7 +360,7 @@ function AcctDetail(props) {
     console.log('倒计时结束...') // eslint-disable-line
     forceUpdate()
   }
-
+  console.log('检测state改变对details的影响', details) // eslint-disable-line
   return (
     <Fragment>
       <div className={styles.detail}>
@@ -522,9 +551,9 @@ function AcctDetail(props) {
             </span>
           </div>
           <div className={styles.switchProxy}>
-            <Switch checked={switchStatus} onChange={handleChangeSwitch} />
+            <Switch checked={details.isProxy} onChange={handleChangeSwitch} />
             <span>
-              {switchStatus ? (
+              {details.isProxy ? (
                 <FormattedMessage id="htitle11" />
               ) : (
                 <FormattedMessage id="htitle10" />

@@ -1,10 +1,11 @@
 import React from 'react'
 import CommonPadding from 'component/layout/CommonPadding'
+import MarkdownConverter from 'component/ruleDetail/MdConverter'
+
 export default function RuleDetail() {
   return (
     <CommonPadding>
-      <h2>Rule Detail</h2>
-      <p>text1.....</p>
+      <MarkdownConverter filePath="ruleDetails/ruleDetails.md" />
     </CommonPadding>
   )
 }

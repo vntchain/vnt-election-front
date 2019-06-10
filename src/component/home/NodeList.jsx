@@ -14,10 +14,15 @@ import MessageConfirm from 'component/MessageConfirm'
 
 import styles from './NodeList.scss'
 
-const mapStateToProps = ({ nodes: { nodes }, auth: { authStatus } }) => {
+const mapStateToProps = ({
+  nodes: { nodes },
+  auth: { authStatus },
+  calculatedDetails
+}) => {
   return {
     nodes,
-    authStatus
+    authStatus,
+    calculatedDetails
   }
 }
 
@@ -198,9 +203,28 @@ class NodeList extends React.Component {
 
   clickConfirmVoteBtn = () => {
     // 需要先检查抵押VNT的数量，若数量为0，提示需要抵押VNT后投票
+    if (this.props.calculatedDetails.stake === 0) {
+      this.setState({
+        messageDetail: {
+          showMessageModal: true,
+          id: 'modal3'
+        }
+      })
+      return
+    }
     const selected = Object.keys(this.state.candidates)
+    console.log(selected)  // eslint-disable-line
     if (selected.length > 0) {
       // 走投票接口
+      this.props.dispatch({
+        type: 'account/sendTx',
+        payload: {
+          funcName: txActions.vote,
+          needInput: true,
+          inputData: [selected]
+        },
+        callback: () => this.handleTxSuccessResult(txActions.vote, selected)
+      })
     } else {
       // 走取消投票接口
       this.props.dispatch({
@@ -208,7 +232,8 @@ class NodeList extends React.Component {
         payload: {
           funcName: txActions.cancelVote,
           needInput: false
-        }
+        },
+        callback: () => this.handleTxSuccessResult(txActions.cancelVote)
       })
     }
   }
@@ -223,6 +248,30 @@ class NodeList extends React.Component {
       id: ''
     }
     this.setState({ messageDetail: newMessageDetail })
+  }
+
+  handleTxSuccessResult = (funcName, selected = []) => {
+    switch (funcName) {
+      case txActions.vote: {
+        const result = {}
+        for (let key of selected) {
+          result[key] = {
+            useProxy: false,
+            checked: true,
+            lastVoteInOneDay: lessThanOneDay(Date.now())
+          }
+        }
+        this.setState({ candidates: result })
+        // 还要修改时间戳
+        break
+      }
+      case txActions.cancelVote: {
+        // 取消投票 也是投票
+        break
+      }
+      default:
+        throw new Error('undefined actions!')
+    }
   }
 
   render() {
