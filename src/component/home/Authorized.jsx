@@ -3,15 +3,37 @@ import { connect } from 'react-redux'
 import AcctAddr from 'component/authorized/AcctAddr'
 import AcctDetail from 'component/authorized/AcctDetail'
 import Margin from 'component/layout/Margin'
-import MessageModal from 'component/authorized/MessageModal'
+import VNT from 'vnt'
+import { rpc } from 'constants/config'
+const vnt = new VNT(new VNT.providers.HttpProvider(rpc))
 
-const mapStateToProps = ({ account: { accountAddr } }) => {
+const mapStateToProps = ({ account: { accountAddr, sendResult } }) => {
   return {
-    accountAddr
+    accountAddr,
+    sendResult
+  }
+}
+
+function getTransactionReceipt(tx, cb) {
+  var receipt = vnt.core.getTransactionReceipt(tx)
+  if (!receipt) {
+    setTimeout(function() {
+      getTransactionReceipt(tx, cb)
+    }, 2000)
+  } else {
+    cb(receipt)
   }
 }
 
 function Authorized(props) {
+  const handleReceipt = receipt => {
+    if (receipt.status == '0x1') {
+      // 代表交易成功 此时需要去重新取rpc的数据
+    } else {
+      // 代表交易失败
+    }
+  }
+
   useEffect(
     () => {
       if (props.accountAddr.addr) {
@@ -45,12 +67,21 @@ function Authorized(props) {
     [props.accountAddr.addr]
   )
 
+  useEffect(
+    async () => {
+      const sendResult = props.sendResult
+      if (sendResult.txHash) {
+        getTransactionReceipt(sendResult.txHash, handleReceipt)
+      }
+    },
+    [props.sendResult]
+  )
+
   return (
     <Fragment>
       <AcctAddr />
       <Margin />
       <AcctDetail />
-      <MessageModal />
     </Fragment>
   )
 }

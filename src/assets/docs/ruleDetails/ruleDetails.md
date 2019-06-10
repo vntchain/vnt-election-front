@@ -27,17 +27,17 @@
 
 &nbsp;&nbsp;&nbsp;采用基准年份，使用年为周期。使用相对衰减，就需要使用基准年份，使用相同的基准，计算衰减，可以采用网络上线的年份，比如2018:
 <div align="center">
-  <img src="./images/formula1.jpg" width = "300"  alt="formula1">
+  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula1.png" width = "300"  alt="formula1">
 </div>
 
 &nbsp;&nbsp;&nbsp;支持非周期的倍数衰减。比如，现在是2018年的6月份，票数应该为：
 <div align="center">
-  <img src="./images/formula2.jpg" width = "300"  alt="formula2">
+  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula2.jpeg" width = "300"  alt="formula2">
 </div>
 
 &nbsp;&nbsp;&nbsp;定义**eraTimeStamp**是半衰期的起始年份，设置为2019年1月1日0时0分0秒，即1546272000，单位秒。我们采用52周作为半衰期的周期，即**`52*7*24*3600`**秒，当前时间距起始年份经过的周数除以52则得到半衰期的系数α，公式如下：
 <div align="center">
-  <img src="/src/assets/docs/ruleDetails/images/formula3.jpg" width = "400"  alt="formula3">
+  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula3.jpeg" width = "500"  alt="formula3">
 </div>
 
 <br>

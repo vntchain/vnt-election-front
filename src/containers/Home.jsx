@@ -8,6 +8,7 @@ import Rule from 'component/home/Rule'
 import { walletState } from 'constants/config'
 import VoteDetailProvider from 'component/authorized/VoteDetailProvider'
 import NodeList from 'component/home/NodeList'
+import MessageModal from 'component/authorized/MessageModal'
 
 const mapStateToProps = ({ auth: { authStatus } }) => {
   return {
@@ -17,6 +18,7 @@ const mapStateToProps = ({ auth: { authStatus } }) => {
 
 function Home(props) {
   console.log(props) //eslint-disable-line
+
   return (
     <CommonPadding>
       <Rule />
@@ -28,6 +30,7 @@ function Home(props) {
       )}
       <Margin />
       <VoteDetailProvider render={data => <NodeList voteDetail={data} />} />
+      <MessageModal />
     </CommonPadding>
   )
 }

@@ -17,12 +17,12 @@ import styles from './NodeList.scss'
 const mapStateToProps = ({
   nodes: { nodes },
   auth: { authStatus },
-  calculatedDetails
+  calculatedDetails: { stake }
 }) => {
   return {
     nodes,
     authStatus,
-    calculatedDetails
+    stake
   }
 }
 
@@ -203,7 +203,7 @@ class NodeList extends React.Component {
 
   clickConfirmVoteBtn = () => {
     // 需要先检查抵押VNT的数量，若数量为0，提示需要抵押VNT后投票
-    if (this.props.calculatedDetails.stake === 0) {
+    if (this.props.stake === 0) {
       this.setState({
         messageDetail: {
           showMessageModal: true,

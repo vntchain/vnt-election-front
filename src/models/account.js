@@ -2,13 +2,13 @@ import { effects } from 'redux-sirius'
 import { walletState } from 'constants/config'
 import abi from 'utils/abi.json'
 import { txSteps } from 'constants/config'
-const { put, select, call } = effects
+const { put, select } = effects
 
 export default {
   state: {
     accountAddr: {
       err: null,
-      addr: '0x122369F04f32269598789998de33e3d56E2C507a' // null '0x122369F04f32269598789998de33e3d56E2C507a'
+      addr: null // null '0x122369F04f32269598789998de33e3d56E2C507a'
     },
     proxyAddr: null,
     balance: null, // 余额
@@ -67,7 +67,7 @@ export default {
         throw new Error(e)
       }
     }),
-    sendTx: takeLatest(function*({ payload, callback }) {
+    sendTx: takeLatest(function*({ payload }) {
       const { funcName, inputData, needInput } = payload
       const sendAddr = yield select(
         ({ account: { accountAddr } }) => accountAddr
@@ -88,10 +88,11 @@ export default {
         to: '0x0000000000000000000000000000000000000009',
         data: data,
         chainId: window.vnt.version.network,
-        gasPrice: 30000000000000,
-        gas: 4000000,
+        gasPrice: 30000000000000, // 30000000000000
+        gas: 4000000, // 4000000
         value: 0
       }
+      console.log(options) // eslint-disable-line
       const promise = new Promise(resolve => {
         window.vnt.core.sendTransaction(options, (err, res) => {
           resolve({ err, res })
@@ -115,9 +116,9 @@ export default {
         }
         if (resp.res) {
           //有交易hash，代表成功，则需要进行一些操作
-          if (callback && typeof callback === 'function') {
-            yield call(callback)
-          }
+          // if (callback && typeof callback === 'function') {
+          //   yield call(callback)
+          // }
         }
         yield put({
           type: 'account/setSendResult',

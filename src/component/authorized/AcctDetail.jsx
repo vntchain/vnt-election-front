@@ -295,6 +295,11 @@ function AcctDetail(props) {
           type: 'account/setProxyAddr',
           payload: details.proxyAddr
         })
+      } else {
+        props.dispatch({
+          type: 'account/setProxiedVotes',
+          payload: null
+        })
       }
     },
     [details.useProxy, details.proxyAddr]

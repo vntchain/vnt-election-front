@@ -1,5 +1,5 @@
 export default {
   state: {
-    stake: 0
+    txIsLoading: false
   }
 }
