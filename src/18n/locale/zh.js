@@ -78,6 +78,12 @@ export default {
   txModalTitle4: '交易发送失败',
   txModalTitle5: '交易执行成功',
   txModalTitle6: '交易执行失败',
+  txModalTitle7: '查询交易超时',
+  txModalTitle8: '正在查询，请稍后......',
+  txModalTitle9: '10s未返回结果，是否继续查询？',
+  txModalBtn1: '确定',
+  txModalBtn2: '取消',
+  txModalText: '秒',
 
   txModalMessage1: '请在打开的VNT Wallet中签名确认',
   txModalMessage2: '您在VNT Wallet中拒绝了这次签名请求！',
@@ -85,6 +91,7 @@ export default {
   txModalMessage4: '您的交易发送失败',
   txModalMessage5: '您的交易执行成功',
   txModalMessage6: '您的交易执行失败',
+  txModalMessage7: '查询交易超过10s，停止查询',
 
   // vote对应的message
   voteMessage1: '当前正在使用代理，无法投票'

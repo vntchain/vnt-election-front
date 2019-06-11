@@ -13,35 +13,6 @@
   }
 }
 
-.txMessageModal {
-  :global {
-    .ant-modal-body {
-      height: 4rem;
-      .anticon {
-        font-size: 0.6rem;
-        font-weight: bold;
-        color: $color-dark-1;
-      }
-    }
-  }
-
-  .title {
-    margin: 1rem 0 0.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    > span {
-      margin-left: 0.3rem;
-      font-size: 0.26rem;
-      color: #000;
-    }
-  }
-  p {
-    text-align: center;
-    font-size: 0.2rem;
-  }
-}
-
 .countDown {
   line-height: 1;
   :global {

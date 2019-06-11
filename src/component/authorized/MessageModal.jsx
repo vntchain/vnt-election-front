@@ -40,7 +40,8 @@ function ProvideModalData(props) {
             sendResult.step &&
             (sendResult.step === txSteps.txSuccess ||
               sendResult.step === txSteps.txFailed ||
-              sendResult.step === txSteps.denied)
+              sendResult.step === txSteps.denied ||
+              sendResult.step === txSteps.txTimeout)
           }
           onCancel={clearResult}
         />

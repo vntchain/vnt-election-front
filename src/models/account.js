@@ -8,7 +8,7 @@ export default {
   state: {
     accountAddr: {
       err: null,
-      addr: '0x8fA1A8F9e9802A8DE8b14886d4a2658a8e7B5E0b' // null '0x122369F04f32269598789998de33e3d56E2C507a'
+      addr: null // null '0x122369F04f32269598789998de33e3d56E2C507a'
     },
     proxyAddr: null,
     balance: null, // 余额
@@ -112,7 +112,7 @@ export default {
         if (typeof resp.err === 'string' || resp.err) {
           step = txSteps.denied
         } else {
-          step = txSteps.succeed
+          step = txSteps.query
         }
         if (resp.res) {
           //有交易hash，代表成功，则需要进行一些操作

@@ -2,13 +2,16 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from '@translate'
 import { Modal, Icon } from 'antd'
-
+import TxModalQueryResult from 'component/TxModalQueryResult'
 import { txSteps } from 'constants/config'
 
-import styles from './Common.scss'
+import styles from './Modal.scss'
 
 export default function TxMessageModal(props) {
-  let iconType, title, message, showBody
+  let iconType,
+    title = '',
+    message = '',
+    showBody
   switch (props.step) {
     case txSteps.waitConfirm: {
       iconType = 'info-circle'
@@ -56,6 +59,13 @@ export default function TxMessageModal(props) {
       showBody = true
       break
     }
+    case txSteps.txTimeout: {
+      iconType = 'info-circle'
+      title = 'txModalTitle7'
+      message = 'txModalMessage7'
+      showBody = true
+      break
+    }
     default: {
       showBody = false
       break
@@ -84,7 +94,12 @@ export default function TxMessageModal(props) {
       onCancel={props.onCancel}
       className={styles.txMessageModal}
     >
-      {showBody && modalNormal}
+      {showBody &&
+        (props.step === txSteps.query ? (
+          <TxModalQueryResult onCancel={props.onCancel} />
+        ) : (
+          modalNormal
+        ))}
     </Modal>
   )
 }
