@@ -16,8 +16,6 @@ const mapStateToProps = ({ auth: { authStatus } }) => {
 }
 
 function Home(props) {
-  console.log(props) //eslint-disable-line
-
   return (
     <CommonPadding>
       <Rule />

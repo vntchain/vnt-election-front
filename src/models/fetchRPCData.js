@@ -24,7 +24,6 @@ export default {
       try {
         let res = yield call(rpcInstance.post, '/', postData)
         res = res.data
-        console.log(res) //eslint-disable-line
         let err = null
         let data = null
         // 含有error ,则不会返回 result字段，若result字段为null，则无数据，否则有数据

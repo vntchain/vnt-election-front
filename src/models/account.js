@@ -42,7 +42,6 @@ export default {
       })
       try {
         const res = yield getAcct
-        console.log(res) // eslint-disable-line
         if (!res.err) {
           yield put({
             type: 'account/setAccountAddr',
@@ -80,7 +79,7 @@ export default {
           ? contract.packFunctionData(funcName, inputData)
           : contract.packFunctionData(funcName)
       } catch (e) {
-        console.log(e) //eslint-disable-line
+        // console.log(e) //eslint-disable-line
         throw new Error(e)
       }
       const options = {
@@ -92,7 +91,6 @@ export default {
         gas: 4000000, // 4000000
         value: 0
       }
-      console.log(options) // eslint-disable-line
       const promise = new Promise(resolve => {
         window.vnt.core.sendTransaction(options, (err, res) => {
           resolve({ err, res })
@@ -107,7 +105,6 @@ export default {
       })
       try {
         const resp = yield promise
-        console.log(resp) // eslint-disable-line
         let step
         if (typeof resp.err === 'string' || resp.err) {
           step = txSteps.denied

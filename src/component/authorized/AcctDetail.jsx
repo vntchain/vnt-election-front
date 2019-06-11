@@ -66,7 +66,6 @@ function AcctDetail(props) {
   }
 
   const handleSetProxyAddr = async () => {
-    console.log('设置委托人') //eslint-disable-line
     if (details.isProxy) {
       showMessageModal(true)
       setModalID('modal6')
@@ -107,10 +106,11 @@ function AcctDetail(props) {
         throw new Error('get proxyVotes detail error!')
       }
     }
+    setAddrErr(false)
+    changeSettedProxyAddr('')
   }
 
   const handleCancelProxy = () => {
-    console.log('cancel proxy ') //eslint-disable-line
     // 取消委托，任何时候都可以进行操作
     props.dispatch({
       type: 'account/sendTx',
@@ -175,7 +175,6 @@ function AcctDetail(props) {
   }
 
   const handleChangeSwitch = checked => {
-    console.log(checked) //eslint-disable-line
     if (checked) {
       if (details.useProxy) {
         showMessageModal(true)
@@ -203,7 +202,6 @@ function AcctDetail(props) {
   }
 
   const handleTxSuccessResult = (funcName, amount = '', proxyAddr = null) => {
-    console.log('处理成功的回调....') //eslint-disable-line
     switch (funcName) {
       case txActions.stake: {
         // 此处最好再判断一下amount是否非法
@@ -286,7 +284,6 @@ function AcctDetail(props) {
 
   useEffect(
     () => {
-      console.log('测试函数组件useEffect是不是每次更新props都进入') //eslint-disable-line
       if (details.useProxy && details.proxyAddr) {
         props.dispatch({
           type: 'fetchRPCData/getRPCdata',
@@ -370,7 +367,6 @@ function AcctDetail(props) {
     console.log('倒计时结束...') // eslint-disable-line
     forceUpdate()
   }
-  console.log('检测state改变对details的影响', details) // eslint-disable-line
   return (
     <Fragment>
       <div className={styles.detail}>

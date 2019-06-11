@@ -63,7 +63,6 @@ function TxModalQueryResult(props) {
   const getTransactionReceipt = (tx, cb) => {
     var receipt = vnt.core.getTransactionReceipt(tx)
     if (!receipt && queryResult) {
-      console.log('开始2s轮询。。。。') //eslint-disable-line
       timer = setTimeout(function() {
         getTransactionReceipt(tx, cb)
       }, 2000)

@@ -113,7 +113,6 @@ class NodeList extends React.Component {
       }
     })
     timerID = setInterval(() => {
-      console.log(this.state.currentPage) //eslint-disable-line
       this.props.dispatch({
         type: 'dataRelayNew/fetchData',
         payload: {
@@ -177,7 +176,6 @@ class NodeList extends React.Component {
   }
 
   clickVoteBtn = (addr, prevCheckedStatus) => {
-    console.log(addr, prevCheckedStatus) // eslint-disable-line
     let newCandidates = this.state.candidates
     if (
       Object.keys(newCandidates).length === maximumVoteNum &&
@@ -207,6 +205,14 @@ class NodeList extends React.Component {
   clickConfirmVoteBtn = () => {
     // 需要先检查抵押VNT的数量，若数量为0，提示需要抵押VNT后投票
     if (this.props.stake === 0) {
+      const { candidates } = this.props.voteDetail
+      const result = {}
+      for (let key of candidates) {
+        result[key] = {
+          checked: true
+        }
+      }
+      this.setState({ candidates: result })
       this.setState({
         messageDetail: {
           showMessageModal: true,
@@ -216,7 +222,6 @@ class NodeList extends React.Component {
       return
     }
     const selected = Object.keys(this.state.candidates)
-    console.log(selected)  // eslint-disable-line
     if (selected.length > 0) {
       // 走投票接口
       this.props.dispatch({
@@ -279,7 +284,6 @@ class NodeList extends React.Component {
 
   render() {
     const nodeList = this.props.nodes
-    //console.log('currentpage-----: ',this.state,this.props) //eslint-disable-line
     const finishFetching = nodeList && nodeList.hasOwnProperty('data')
 
     const renderVoteBtn = (value, record, index) => {
