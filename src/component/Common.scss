@@ -3,8 +3,12 @@
 .modal {
   :global {
     .ant-modal-body {
-      font-size: 0.2rem;
+      font-size: 0.16rem;
       min-height: 0.6rem;
+      color: #fff;
+      background: $color-dark-1;
+      border-radius: $border-radius-1;
+      text-align: center;
     }
   }
 }

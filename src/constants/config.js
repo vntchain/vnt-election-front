@@ -6,6 +6,8 @@ export const chainId = 2
 
 export const maximumVoteNum = 30
 
+export const forbiddenActionTime = 86400000 //  86400000 24h 600000 10min
+
 export const walletState = {
   uninstalled: 'uninstalled',
   unauthorized: 'unauthorized',
@@ -15,8 +17,11 @@ export const walletState = {
 export const txSteps = {
   waitConfirm: 'waitConfirmTx',
   denied: 'cancelledTx',
-  succeed: 'successfulTx',
-  failed: 'failedTx'
+  succeed: 'sendTxSuccess',
+  failed: 'sendTxFailed',
+  query: 'queryTxResult',
+  txSuccess: 'txSuccess',
+  txFailed: 'txFailed'
 }
 
 export const txActions = {

@@ -1,3 +1,5 @@
+import { forbiddenActionTime } from 'constants/config'
+
 // 传入 '/txs' 20 ,得到 '/txs?limit=20'
 export const getBasePath = (pathname, pageSize) =>
   `${pathname}?limit=${pageSize}`
@@ -43,5 +45,5 @@ export const sliceNum = num => {
 
 // 计算是否超过一天 true表示还在一天内
 export const lessThanOneDay = oldTime => {
-  return Date.now() - oldTime < 86400000
+  return Date.now() - oldTime < forbiddenActionTime
 }

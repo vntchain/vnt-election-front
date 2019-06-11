@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import VNT from 'vnt'
-import { rpc, txActions } from 'constants/config'
+import { rpc, txActions, forbiddenActionTime } from 'constants/config'
 import { FormattedMessage, injectIntl } from '@translate'
 import { Tooltip, Icon, Switch, Input, Button } from 'antd'
 import { format } from 'date-fns'
@@ -76,13 +76,17 @@ function AcctDetail(props) {
     } else {
       // 拿到地址 去查询账户信息
       try {
-        const res = await rpcInstance.post('/', {
+        let res = await rpcInstance.post('/', {
           jsonrpc: '2.0',
           method: 'core_getVoter', // 'core_getBalance' ,
           params: [settedProxyAddr],
           id: 1
         })
-        if (res && !res.result.isProxy) {
+        res = res.data
+        if (
+          (res && !res.result) ||
+          (res && res.result && !res.result.isProxy)
+        ) {
           showMessageModal(true)
           setModalID('modal7')
         } else {
@@ -99,6 +103,7 @@ function AcctDetail(props) {
           })
         }
       } catch (e) {
+        console.log(e) // eslint-disable-line
         throw new Error('get proxyVotes detail error!')
       }
     }
@@ -464,6 +469,7 @@ function AcctDetail(props) {
                 <CountDown
                   time={details.lastStakeTime}
                   onFinish={onCountDownFinish}
+                  totalCountDownTime={forbiddenActionTime}
                 />
               </div>
             ) : (
@@ -522,6 +528,7 @@ function AcctDetail(props) {
                     <CountDown
                       time={details.lastVoteTime}
                       onFinish={onCountDownFinish}
+                      totalCountDownTime={forbiddenActionTime}
                     />
                   </div>
                 ) : (

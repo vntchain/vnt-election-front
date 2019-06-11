@@ -28,6 +28,7 @@ function ProvideModalData(props) {
       payload: null
     })
   }
+
   return (
     <Fragment>
       {sendResult && (
@@ -37,7 +38,9 @@ function ProvideModalData(props) {
           showClose={
             sendResult &&
             sendResult.step &&
-            sendResult.step !== txSteps.waitConfirmTx
+            (sendResult.step === txSteps.txSuccess ||
+              sendResult.step === txSteps.txFailed ||
+              sendResult.step === txSteps.denied)
           }
           onCancel={clearResult}
         />

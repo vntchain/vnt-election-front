@@ -74,13 +74,17 @@ export default {
   // 交易过程中模态窗的提示语
   txModalTitle1: '请确认操作',
   txModalTitle2: '操作被拒绝',
-  txModalTitle3: '交易成功',
-  txModalTitle4: '交易失败',
+  txModalTitle3: '交易发送成功',
+  txModalTitle4: '交易发送失败',
+  txModalTitle5: '交易执行成功',
+  txModalTitle6: '交易执行失败',
 
   txModalMessage1: '请在打开的VNT Wallet中签名确认',
   txModalMessage2: '您在VNT Wallet中拒绝了这次签名请求！',
   txModalMessage3: '您的交易发送成功',
   txModalMessage4: '您的交易发送失败',
+  txModalMessage5: '您的交易执行成功',
+  txModalMessage6: '您的交易执行失败',
 
   // vote对应的message
   voteMessage1: '当前正在使用代理，无法投票'

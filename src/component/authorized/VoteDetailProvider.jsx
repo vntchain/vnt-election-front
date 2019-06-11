@@ -39,14 +39,14 @@ function VoteDetailProvider(props) {
       const initState = {}
       if (!parseInt(myVoteDetail.proxy, 16)) {
         // 未使用代理
-        initState.candidates = myVoteDetail.voteCandidates
+        initState.candidates = myVoteDetail.voteCandidates || []
         initState.useProxy = false
       } else {
         //使用了代理
-        initState.candidates = proxiedVoteDetail.voteCandidates
+        initState.candidates = proxiedVoteDetail.voteCandidates || []
         initState.useProxy = true
       }
-      initState.lastVoteTime = myVoteDetail.lastVoteTimeStamp * 1000
+      initState.lastVoteTime = myVoteDetail.lastVoteTimeStamp * 1000 || 0
       dispatch({
         type: 'init',
         payload: initState

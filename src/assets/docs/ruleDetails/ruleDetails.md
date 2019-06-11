@@ -37,7 +37,7 @@
 
 &nbsp;&nbsp;&nbsp;定义**eraTimeStamp**是半衰期的起始年份，设置为2019年1月1日0时0分0秒，即1546272000，单位秒。我们采用52周作为半衰期的周期，即**`52*7*24*3600`**秒，当前时间距起始年份经过的周数除以52则得到半衰期的系数α，公式如下：
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula3.jpeg" width = "500"  alt="formula3">
+  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula3.jpeg" width = "350"  alt="formula3">
 </div>
 
 <br>

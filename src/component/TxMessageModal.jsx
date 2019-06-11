@@ -38,11 +38,42 @@ export default function TxMessageModal(props) {
       showBody = true
       break
     }
+    case txSteps.query: {
+      showBody = true
+      break
+    }
+    case txSteps.txSuccess: {
+      iconType = 'check-circle'
+      title = 'txModalTitle5'
+      message = 'txModalMessage5'
+      showBody = true
+      break
+    }
+    case txSteps.txFailed: {
+      iconType = 'close-circle'
+      title = 'txModalTitle6'
+      message = 'txModalMessage6'
+      showBody = true
+      break
+    }
     default: {
       showBody = false
       break
     }
   }
+
+  const modalNormal = (
+    <Fragment>
+      <div className={styles.title}>
+        <Icon type={iconType} />
+        <FormattedMessage id={title} label={true} />
+      </div>
+      <p>
+        <FormattedMessage id={message} />
+      </p>
+    </Fragment>
+  )
+
   return (
     <Modal
       centered
@@ -53,17 +84,7 @@ export default function TxMessageModal(props) {
       onCancel={props.onCancel}
       className={styles.txMessageModal}
     >
-      {showBody && (
-        <Fragment>
-          <div className={styles.title}>
-            <Icon type={iconType} />
-            <FormattedMessage id={title} label={true} />
-          </div>
-          <p>
-            <FormattedMessage id={message} />
-          </p>
-        </Fragment>
-      )}
+      {showBody && modalNormal}
     </Modal>
   )
 }

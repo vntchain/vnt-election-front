@@ -7,7 +7,12 @@ import { Spin } from 'antd'
 import { pageSize, pollingInterval } from 'constants/config'
 import { connect } from 'react-redux'
 import apis from 'constants/apis'
-import { walletState, maximumVoteNum, txActions } from 'constants/config'
+import {
+  walletState,
+  maximumVoteNum,
+  txActions,
+  forbiddenActionTime
+} from 'constants/config'
 import { getBaseParams, lessThanOneDay, getBasePath } from 'utils/tools'
 import CountDown from 'component/CountDown'
 import MessageConfirm from 'component/MessageConfirm'
@@ -84,13 +89,11 @@ class NodeList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.voteDetail !== nextProps.voteDetail) {
-      const { candidates, useProxy, lastVoteTime } = nextProps.voteDetail
+      const { candidates } = nextProps.voteDetail
       const result = {}
       for (let key of candidates) {
         result[key] = {
-          useProxy: useProxy,
-          checked: true,
-          lastVoteInOneDay: lessThanOneDay(lastVoteTime)
+          checked: true
         }
       }
       this.setState({ candidates: result })
@@ -288,15 +291,13 @@ class NodeList extends React.Component {
           }
         }
       }
-      let useProxy = false,
+      let useProxy = this.props.voteDetail.useProxy,
         checked = false,
-        lastVoteInOneDay = false
+        lastVoteInOneDay = lessThanOneDay(this.props.voteDetail.lastVoteTime)
       let btnDom, classNames
       if (this.state.candidates.hasOwnProperty(record.key)) {
         const details = this.state.candidates[record.key]
-        useProxy = details.useProxy
         checked = details.checked
-        lastVoteInOneDay = details.lastVoteInOneDay
       }
 
       if (useProxy || lastVoteInOneDay) {
@@ -304,14 +305,14 @@ class NodeList extends React.Component {
           ? `${styles['voteBtn']} ${styles['disabled']} ${styles['checked']}`
           : `${styles['voteBtn']} ${styles['disabled']}`
         btnDom = (
-          <div
+          <span
             className={classNames}
             onClick={() =>
               this.clickDisabledVoteBtn(useProxy, lastVoteInOneDay)
             }
           >
             <FormattedMessage id="nodeVoteBtn" />
-          </div>
+          </span>
         )
       } else {
         classNames = checked
@@ -354,7 +355,11 @@ class NodeList extends React.Component {
             onClick={() => this.clickDisabledVoteBtn(false, true)}
           >
             <FormattedMessage id="nodeColumn7" label={true} />
-            <CountDown time={lastVoteTime} onFinish={this.onCountDownFinish} />
+            <CountDown
+              time={lastVoteTime}
+              onFinish={this.onCountDownFinish}
+              totalCountDownTime={forbiddenActionTime}
+            />
           </div>
         )
       } else {

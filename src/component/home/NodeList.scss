@@ -8,7 +8,7 @@
   padding: 0.1rem 0.26rem;
   background: #fff;
   color: $theme-blue-color;
-  border-color: $theme-blue-color;
+  border: 1px solid $theme-blue-color;
   cursor: pointer;
   &.checked {
     background: $theme-blue-color;
@@ -37,12 +37,12 @@
     outline: none;
     font-weight: bold;
   }
-  &.disable {
+  &.disabled {
     background: $color-disable;
     color: $font-darkcolor-1;
   }
   &.countDown {
     background: $color-disable;
-    color: $font-darkcolor-1;
+    color: #fff;
   }
 }

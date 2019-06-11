@@ -8,7 +8,7 @@ export default {
   state: {
     accountAddr: {
       err: null,
-      addr: null // null '0x122369F04f32269598789998de33e3d56E2C507a'
+      addr: '0x8fA1A8F9e9802A8DE8b14886d4a2658a8e7B5E0b' // null '0x122369F04f32269598789998de33e3d56E2C507a'
     },
     proxyAddr: null,
     balance: null, // 余额
@@ -126,7 +126,8 @@ export default {
             err: resp.err,
             txHash: resp.res,
             isLoading: false,
-            step
+            step,
+            funcName
           }
         })
       } catch (e) {
