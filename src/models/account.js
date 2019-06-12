@@ -8,7 +8,7 @@ export default {
   state: {
     accountAddr: {
       err: null,
-      addr: null // null '0x122369F04f32269598789998de33e3d56E2C507a'
+      addr: '0x122369F04f32269598789998de33e3d56E2C507a' // null '0x122369F04f32269598789998de33e3d56E2C507a'
     },
     proxyAddr: null,
     balance: null, // 余额

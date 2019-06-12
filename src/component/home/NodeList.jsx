@@ -161,7 +161,7 @@ class NodeList extends React.Component {
       this.setState({
         messageDetail: {
           showMessageModal: true,
-          id: 'modal8'
+          id: 'voteMessage1'
         }
       })
     } else if (lastVoteInOneDay) {

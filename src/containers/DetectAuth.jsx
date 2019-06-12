@@ -30,7 +30,7 @@ function DetectAuth(props) {
     }
     props.dispatch({
       type: 'auth/setAuthStatus',
-      payload: walletState.uninstalled
+      payload: walletState.authorized
     })
   }
 

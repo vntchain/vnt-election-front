@@ -318,23 +318,28 @@ function AcctDetail(props) {
           ? parseInt(balance.data, 16) / Math.pow(10, 18)
           : 0
       // 抵押VNT的数量
-      newDetails.stake = (stake && stake.data && stake.data.stakeCount) || 0
+      newDetails.stake =
+        stake && stake.data && stake.data.stakeCount
+          ? parseInt(stake.data.stakeCount, 16)
+          : 0
       // 是否产生过抵押
       newDetails.hasStaked =
         stake && stake.data && stake.data.lastStakeTimeStamp ? true : false
       // 上次抵押时间
       newDetails.lastStakeTime = newDetails.hasStaked
-        ? stake.data.lastStakeTimeStamp * 1000
+        ? parseInt(stake.data.lastStakeTimeStamp, 16) * 1000
         : 0
       // 票数
       newDetails.votes =
-        (myVotes && myVotes.data && myVotes.data.lastVoteCount) || 0
+        myVotes && myVotes.data && myVotes.data.lastVoteCount
+          ? parseInt(myVotes.data.lastVoteCount, 16)
+          : 0
       // 是否投过票
       newDetails.hasVoted =
         myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp ? true : false
       // 上次投票时间
       newDetails.lastVoteTime = newDetails.hasVoted
-        ? myVotes.data.lastVoteTimeStamp * 1000
+        ? parseInt(myVotes.data.lastVoteTimeStamp, 16) * 1000
         : 0
       // 是否使用代理
       newDetails.useProxy =
@@ -352,6 +357,8 @@ function AcctDetail(props) {
       // 帮别人投票的票数
       newDetails.proxyVotes =
         myVotes && myVotes.data && myVotes.data.proxyVoteCount
+          ? parseInt(myVotes.data.proxyVoteCount, 16)
+          : 0
       setDetails(newDetails)
       props.dispatch({
         type: 'calculatedDetails/setStake',
