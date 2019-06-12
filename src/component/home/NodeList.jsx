@@ -301,8 +301,9 @@ class NodeList extends React.Component {
         lastVoteInOneDay = lessThanOneDay(this.props.voteDetail.lastVoteTime)
       let btnDom, classNames
       if (this.state.candidates.hasOwnProperty(record.key)) {
-        const details = this.state.candidates[record.key]
-        checked = details.checked
+        //const details = this.state.candidates[record.key]
+        //checked = details.checked
+        checked = true
       }
 
       if (useProxy || lastVoteInOneDay) {

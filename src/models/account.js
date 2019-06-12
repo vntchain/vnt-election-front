@@ -81,15 +81,51 @@ export default {
       } catch (e) {
         throw new Error(e)
       }
+      let gasPrice, gas
+      try {
+        let gasPriceResponse, gasResponse
+        // 估算油价
+        const gasPricePromise = new Promise(resolve => {
+          window.vnt.core.getGasPrice((err, res) => {
+            resolve({ err, res })
+          })
+        })
+        // 估算耗油量
+        const gasPromise = new Promise(resolve => {
+          window.vnt.core.estimateGas(
+            {
+              from: sendAddr.addr,
+              to: '0x0000000000000000000000000000000000000009',
+              data: data
+            },
+            (err, res) => {
+              resolve({ err, res })
+            }
+          )
+        })
+        gasPriceResponse = yield gasPricePromise
+        gasResponse = yield gasPromise
+        //console.log('估算燃气1111...',gasPriceResponse, gasResponse) // eslint-disable-line
+        if (gasPriceResponse && gasPriceResponse.res) {
+          gasPrice = gasPriceResponse.res.toNumber()
+        }
+        if (gasResponse && gasResponse.res) {
+          gas = gasResponse.res
+        }
+      } catch (e) {
+        //console.log(e) // eslint-disable-line
+        throw new Error(e)
+      }
       const options = {
         from: sendAddr.addr,
         to: '0x0000000000000000000000000000000000000009',
         data: data,
         chainId: window.vnt.version.network,
-        gasPrice: 30000000000000, // 30000000000000
-        gas: 4000000, // 4000000
+        gasPrice: gasPrice || 30000000000000,
+        gas: gas || 4000000,
         value: 0
       }
+      //console.log(options) // eslint-disable-line
       const promise = new Promise(resolve => {
         window.vnt.core.sendTransaction(options, (err, res) => {
           resolve({ err, res })
