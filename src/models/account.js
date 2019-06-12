@@ -79,7 +79,6 @@ export default {
           ? contract.packFunctionData(funcName, inputData)
           : contract.packFunctionData(funcName)
       } catch (e) {
-        // console.log(e) //eslint-disable-line
         throw new Error(e)
       }
       const options = {

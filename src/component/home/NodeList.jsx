@@ -205,45 +205,46 @@ class NodeList extends React.Component {
   clickConfirmVoteBtn = () => {
     // 需要先检查抵押VNT的数量，若数量为0，提示需要抵押VNT后投票
     if (this.props.stake === 0) {
-      const { candidates } = this.props.voteDetail
-      const result = {}
-      for (let key of candidates) {
-        result[key] = {
-          checked: true
-        }
-      }
-      this.setState({ candidates: result })
       this.setState({
         messageDetail: {
           showMessageModal: true,
           id: 'modal3'
         }
       })
-      return
-    }
-    const selected = Object.keys(this.state.candidates)
-    if (selected.length > 0) {
-      // 走投票接口
-      this.props.dispatch({
-        type: 'account/sendTx',
-        payload: {
-          funcName: txActions.vote,
-          needInput: true,
-          inputData: [selected]
-        },
-        callback: () => this.handleTxSuccessResult(txActions.vote, selected)
-      })
     } else {
-      // 走取消投票接口
-      this.props.dispatch({
-        type: 'account/sendTx',
-        payload: {
-          funcName: txActions.cancelVote,
-          needInput: false
-        },
-        callback: () => this.handleTxSuccessResult(txActions.cancelVote)
-      })
+      const selected = Object.keys(this.state.candidates)
+      if (selected.length > 0) {
+        // 走投票接口
+        this.props.dispatch({
+          type: 'account/sendTx',
+          payload: {
+            funcName: txActions.vote,
+            needInput: true,
+            inputData: [selected]
+          },
+          callback: () => this.handleTxSuccessResult(txActions.vote, selected)
+        })
+      } else {
+        // 走取消投票接口
+        this.props.dispatch({
+          type: 'account/sendTx',
+          payload: {
+            funcName: txActions.cancelVote,
+            needInput: false
+          },
+          callback: () => this.handleTxSuccessResult(txActions.cancelVote)
+        })
+      }
     }
+    // 清掉选中的内容
+    const { candidates } = this.props.voteDetail
+    const result = {}
+    for (let key of candidates) {
+      result[key] = {
+        checked: true
+      }
+    }
+    this.setState({ candidates: result })
   }
 
   onCountDownFinish = () => {

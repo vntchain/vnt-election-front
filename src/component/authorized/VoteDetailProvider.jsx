@@ -46,7 +46,10 @@ function VoteDetailProvider(props) {
         initState.candidates = proxiedVoteDetail.voteCandidates || []
         initState.useProxy = true
       }
-      initState.lastVoteTime = myVoteDetail.lastVoteTimeStamp * 1000 || 0
+      initState.lastVoteTime =
+        myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp
+          ? parseInt(myVoteDetail.lastVoteTimeStamp) * 1000
+          : 0
       dispatch({
         type: 'init',
         payload: initState
