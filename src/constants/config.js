@@ -7,7 +7,8 @@ export const chainId = 2
 export const maximumVoteNum = 30
 
 export const forbiddenActionTime = 86400000 //  86400000 24h 600000 10min
-export const requestTxLimitTime = 10000
+export const requestTxLimitTime = 10000 // 10s
+export const nodeAddrBaseurl = '//hubscan.vnt.link/account/'
 
 export const walletState = {
   uninstalled: 'uninstalled',

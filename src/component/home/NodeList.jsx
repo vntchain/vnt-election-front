@@ -4,7 +4,7 @@ import BaseTable from 'component/BaseTable'
 import { FormattedMessage } from '@translate'
 
 import { Spin } from 'antd'
-import { pageSize, pollingInterval } from 'constants/config'
+import { pageSize, pollingInterval, nodeAddrBaseurl } from 'constants/config'
 import { connect } from 'react-redux'
 import apis from 'constants/apis'
 import {
@@ -423,9 +423,7 @@ class NodeList extends React.Component {
       }
       return {
         children: (
-          <a href={`//hubscan.vnt.link/account/${value.address}`}>
-            {value.name}
-          </a>
+          <a href={`${nodeAddrBaseurl}${value.address}`}>{value.name}</a>
         ),
         props: {}
       }
