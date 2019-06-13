@@ -48,7 +48,8 @@ function AcctDetail(props) {
   const [settedProxyAddr, changeSettedProxyAddr] = useState('')
 
   const validateInput = e => {
-    if (e.target.value && !vnt.isAddress(e.target.value)) {
+    const addr = e.target.value.trim()
+    if (addr && (!vnt.isAddress(addr) || addr.length !== 42)) {
       setAddrErr(true)
     }
   }
@@ -360,12 +361,18 @@ function AcctDetail(props) {
           ? parseInt(myVotes.data.proxyVoteCount)
           : 0
       setDetails(newDetails)
-      props.dispatch({
-        type: 'calculatedDetails/setStake',
-        payload: newDetails.stake
-      })
     },
     [props.balance, props.stake, props.myVotes]
+  )
+
+  useEffect(
+    () => {
+      props.dispatch({
+        type: 'calculatedDetails/setStake',
+        payload: details.stake
+      })
+    },
+    [details.stake]
   )
 
   const forceUpdate = useState(0)[1]

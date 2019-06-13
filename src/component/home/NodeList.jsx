@@ -52,12 +52,19 @@ const genTableData = (data, current) => {
       name: { name: item.Vname.slice(0, 15), address: item.Address },
       votes: item.Votes,
       percentage: item.VotesPercent + '%',
-      currentIndex: current
+      currentIndex: current, // 当前是第几页
+      totalCnt: data.length // 该页原始数据总共有多少条
     })
   })
 
   if (current == 1) {
-    result.splice(19, 0, {
+    let startIndex = 0
+    if (data.length < 19) {
+      startIndex = data.length
+    } else {
+      startIndex = 19
+    }
+    result.splice(startIndex, 0, {
       key: 'text',
       ranking: {
         ranking: <FormattedMessage id="nodeText" />,
@@ -68,7 +75,8 @@ const genTableData = (data, current) => {
       name: { name: '', address: '' },
       votes: '',
       percentage: '',
-      currentIndex: current
+      currentIndex: current,
+      totalCnt: data.length
     })
   }
   return result
@@ -389,14 +397,20 @@ class NodeList extends React.Component {
         children: value,
         props: {}
       }
-      if (record.currentIndex === 1 && index === 19) {
+      if (
+        record.currentIndex === 1 &&
+        (index === 19 || (record.totalCnt === index && record.totalCnt < 19))
+      ) {
         obj.props.colSpan = 0
       }
       return obj
     }
 
     const renderRank = (value, record, index) => {
-      if (record.currentIndex === 1 && index === 19) {
+      if (
+        record.currentIndex === 1 &&
+        (index === 19 || (record.totalCnt === index && record.totalCnt < 19))
+      ) {
         return {
           children: <div style={{ textAlign: 'center' }}>{value.ranking}</div>,
           props: {
@@ -415,7 +429,10 @@ class NodeList extends React.Component {
     }
 
     const renderName = (value, record, index) => {
-      if (record.currentIndex === 1 && index === 19) {
+      if (
+        record.currentIndex === 1 &&
+        (index === 19 || (record.totalCnt === index && record.totalCnt < 19))
+      ) {
         return {
           children: '',
           props: {
@@ -425,7 +442,30 @@ class NodeList extends React.Component {
       }
       return {
         children: (
-          <a href={`${nodeAddrBaseurl}${value.address}`}>{value.name}</a>
+          <a href={`${nodeAddrBaseurl}${value.address}`} target="__blank">
+            {value.name}
+          </a>
+        ),
+        props: {}
+      }
+    }
+    const renderHomePage = (value, record, index) => {
+      if (
+        record.currentIndex === 1 &&
+        (index === 19 || (record.totalCnt === index && record.totalCnt < 19))
+      ) {
+        return {
+          children: '',
+          props: {
+            colSpan: 0
+          }
+        }
+      }
+      return {
+        children: (
+          <a href={`//${value}`} target="__blank">
+            {value}
+          </a>
         ),
         props: {}
       }
@@ -455,7 +495,7 @@ class NodeList extends React.Component {
           title: <FormattedMessage id="nodeColumn4" />,
           dataIndex: 'home',
           key: 'home',
-          render: renderContent
+          render: renderHomePage
         },
         {
           title: <FormattedMessage id="nodeColumn5" />,

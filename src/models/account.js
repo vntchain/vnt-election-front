@@ -58,7 +58,8 @@ export default {
           yield put({
             type: 'account/setAccountAddr',
             payload: {
-              err: res.err
+              err: res.err,
+              addr: null
             }
           })
         }

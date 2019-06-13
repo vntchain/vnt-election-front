@@ -2,18 +2,30 @@ import React, { useEffect, useState, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import VNT from 'vnt'
-import { rpc, txActions, txSteps, requestTxLimitTime } from 'constants/config'
+import {
+  rpc,
+  txActions,
+  txSteps,
+  requestTxLimitTime,
+  pageSize
+} from 'constants/config'
+import { getBaseParams } from 'utils/tools'
 import { FormattedMessage } from '@translate'
 import CountDown from 'component/CountDown'
 import { Button } from 'antd'
+import apis from 'constants/apis'
 const vnt = new VNT(new VNT.providers.HttpProvider(rpc))
 
 import styles from './Modal.scss'
 
-const mapStateToProps = ({ account: { sendResult, accountAddr } }) => {
+const mapStateToProps = ({
+  account: { sendResult, accountAddr },
+  pageIndex: { nodePageIndex }
+}) => {
   return {
     sendResult,
-    accountAddr
+    accountAddr,
+    nodePageIndex
   }
 }
 
@@ -47,6 +59,15 @@ function TxModalQueryResult(props) {
         // 仅需要获取投票
         requestRPCData(props.accountAddr.addr, requestType.vote)
       }
+      // 再次获取最新的节点信息
+      props.dispatch({
+        type: 'dataRelayNew/fetchData',
+        payload: {
+          path: `${apis.nodes}?${getBaseParams(props.nodePageIndex, pageSize)}`,
+          ns: 'nodes',
+          field: 'nodes'
+        }
+      })
     } else {
       // 代表交易失败
       props.dispatch({

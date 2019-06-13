@@ -31,7 +31,7 @@ export default function Rule() {
         </p>
       </div>
       <div className={styles.ruleMore}>
-        <Link to={r.ruleDetail}>
+        <Link to={r.ruleDetail} target="__blank">
           <FormattedMessage id="rule5" />
         </Link>
       </div>
