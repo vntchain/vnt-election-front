@@ -1,9 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import VNT from 'vnt'
 import {
-  rpc,
   txActions,
   txSteps,
   requestTxLimitTime,
@@ -14,7 +12,6 @@ import { FormattedMessage } from '@translate'
 import CountDown from 'component/CountDown'
 import { Button } from 'antd'
 import apis from 'constants/apis'
-const vnt = new VNT(new VNT.providers.HttpProvider(rpc))
 
 import styles from './Modal.scss'
 
@@ -59,6 +56,7 @@ function TxModalQueryResult(props) {
         // 仅需要获取投票
         requestRPCData(props.accountAddr.addr, requestType.vote)
       }
+      console.log('拿到结果了，获取一下最新的节点信息') //eslint-disable-line
       // 再次获取最新的节点信息
       props.dispatch({
         type: 'dataRelayNew/fetchData',
@@ -82,16 +80,17 @@ function TxModalQueryResult(props) {
   }
 
   const getTransactionReceipt = (tx, cb) => {
-    var receipt = vnt.core.getTransactionReceipt(tx)
-    if (!receipt && queryResult) {
-      timer = setTimeout(function() {
-        getTransactionReceipt(tx, cb)
-      }, 2000)
-    } else {
-      clearTimeout(timer)
-      setQueryResult(false)
-      cb(receipt)
-    }
+    window.vnt.core.getTransactionReceipt(tx, (err, receipt) => {
+      if (!receipt && queryResult) {
+        timer = setTimeout(function() {
+          getTransactionReceipt(tx, cb)
+        }, 2000)
+      } else {
+        clearTimeout(timer)
+        setQueryResult(false)
+        cb(receipt)
+      }
+    })
   }
 
   const requestRPCData = (addr, type) => {
@@ -135,9 +134,13 @@ function TxModalQueryResult(props) {
   useEffect(
     () => {
       if (queryResult) {
-        getTransactionReceipt(sendResult.txHash, receipt =>
-          handleReceipt(sendResult.funcName, receipt)
-        )
+        try {
+          getTransactionReceipt(sendResult.txHash, receipt =>
+            handleReceipt(sendResult.funcName, receipt)
+          )
+        } catch (e) {
+          throw new Error(e.message)
+        }
       }
     },
     [queryResult]

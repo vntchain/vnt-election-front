@@ -107,8 +107,8 @@ function AcctDetail(props) {
         throw new Error('get proxyVotes detail error!')
       }
     }
-    setAddrErr(false)
-    changeSettedProxyAddr('')
+    // setAddrErr(false)
+    // changeSettedProxyAddr('')
   }
 
   const handleCancelProxy = () => {
@@ -158,9 +158,9 @@ function AcctDetail(props) {
       showMessageModal(true)
       setModalID('modal1')
     }
-    setAmount('')
-    setEstimatedVotes(0)
-    setShowEstimation(false)
+    // setAmount('')
+    // setEstimatedVotes(0)
+    // setShowEstimation(false)
   }
 
   const handleUnfreeze = () => {
@@ -361,6 +361,12 @@ function AcctDetail(props) {
           ? parseInt(myVotes.data.proxyVoteCount)
           : 0
       setDetails(newDetails)
+      // 此时清空内部状态？？？
+      setAmount('')
+      setEstimatedVotes(0)
+      setShowEstimation(false)
+      setAddrErr(false)
+      changeSettedProxyAddr('')
     },
     [props.balance, props.stake, props.myVotes]
   )

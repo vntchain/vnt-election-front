@@ -4,7 +4,7 @@ import BaseTable from 'component/BaseTable'
 import { FormattedMessage } from '@translate'
 
 import { Spin } from 'antd'
-import { pageSize, pollingInterval, nodeAddrBaseurl } from 'constants/config'
+import { pageSize, pollingInterval } from 'constants/config'
 import { connect } from 'react-redux'
 import apis from 'constants/apis'
 import {
@@ -22,12 +22,14 @@ import styles from './NodeList.scss'
 const mapStateToProps = ({
   nodes: { nodes },
   auth: { authStatus },
-  calculatedDetails: { stake }
+  calculatedDetails: { stake },
+  dataRelayNew: { nodeAddrBaseurl }
 }) => {
   return {
     nodes,
     authStatus,
-    stake
+    stake,
+    nodeAddrBaseurl
   }
 }
 
@@ -121,6 +123,7 @@ class NodeList extends React.Component {
       }
     })
     timerID = setInterval(() => {
+      console.log('定时去取的nodelist') //eslint-disable-line
       this.props.dispatch({
         type: 'dataRelayNew/fetchData',
         payload: {
@@ -245,14 +248,14 @@ class NodeList extends React.Component {
       }
     }
     // 清掉选中的内容
-    const { candidates } = this.props.voteDetail
-    const result = {}
-    for (let key of candidates) {
-      result[key] = {
-        checked: true
-      }
-    }
-    this.setState({ candidates: result })
+    // const { candidates } = this.props.voteDetail
+    // const result = {}
+    // for (let key of candidates) {
+    //   result[key] = {
+    //     checked: true
+    //   }
+    // }
+    // this.setState({ candidates: result })
   }
 
   onCountDownFinish = () => {
@@ -442,7 +445,10 @@ class NodeList extends React.Component {
       }
       return {
         children: (
-          <a href={`${nodeAddrBaseurl}${value.address}`} target="__blank">
+          <a
+            href={`${this.props.nodeAddrBaseurl}${value.address}`}
+            target="__blank"
+          >
             {value.name}
           </a>
         ),

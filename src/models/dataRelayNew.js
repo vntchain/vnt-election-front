@@ -2,23 +2,36 @@ import { effects } from 'redux-sirius'
 
 import axios from 'utils/axios'
 
-const { put, call } = effects
+import { netConfig } from 'constants/config'
+const { put, call, select } = effects
 
 export default {
-  state: {},
-  reducers: {},
+  state: {
+    nodesAxiosBaseUrl: netConfig.testnet.nodesURL,
+    nodeAddrBaseurl: netConfig.testnet.nodeAddr
+  },
+  reducers: {
+    setState: ({ payload }) => {
+      return { ...payload }
+    }
+  },
   effects: ({ takeEvery }) => ({
     fetchData: takeEvery(function*({ payload, callback }) {
       const { path, ns, field } = payload
+      const baseURL = yield select(
+        ({ dataRelayNew: { nodesAxiosBaseUrl } }) => nodesAxiosBaseUrl
+      )
       const method = payload.method || 'get'
       const axiosArgs =
         method === 'post'
           ? {
+              baseURL,
               method,
               url: path,
               data: payload.data
             }
           : {
+              baseURL,
               method,
               url: path
             }

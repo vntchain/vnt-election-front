@@ -10,7 +10,6 @@ import Header from 'component/layout/Header'
 import Margin from 'component/layout/Margin'
 
 import Home from 'containers/Home'
-import DetectAuth from 'containers/DetectAuth'
 import RuleDetail from 'containers/RuleDetail'
 
 import r from 'constants/routes'
@@ -25,8 +24,6 @@ class App extends Component {
     super(props)
   }
 
-  componentDidMount() {}
-
   render() {
     const { language } = this.props.international
     return (
@@ -35,15 +32,7 @@ class App extends Component {
           <Header />
           <Margin size="superLarge" />
           <div>
-            <Route
-              exact
-              path={r.home}
-              render={() => (
-                <DetectAuth>
-                  <Home />
-                </DetectAuth>
-              )}
-            />
+            <Route exact path={r.home} component={Home} />
             <Route path={r.ruleDetail} component={RuleDetail} />
           </div>
           <Margin size="superLarge" />

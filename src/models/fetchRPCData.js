@@ -1,28 +1,25 @@
 import { effects } from 'redux-sirius'
 import { rpcInstance } from 'utils/axios'
-const { put, call } = effects
+const { put, call, select } = effects
 
 export default {
-  state: {},
+  state: {
+    rpc: null, // rpc
+    chainID: 2
+  },
   reducers: {},
   effects: ({ takeEvery }) => ({
     getRPCdata: takeEvery(function*({ payload }) {
       const { addr, method, field } = payload
+      let baseURL = yield select(({ fetchRPCData: { rpc } }) => rpc)
       const postData = {
         jsonrpc: '2.0',
         method: method, // 'core_getBalance' ,
         params: method === 'core_getBalance' ? [addr, 'latest'] : [addr],
         id: 1
       }
-      yield put({
-        type: 'account/setLoadingStatus',
-        payload: {
-          field: field,
-          loadStatus: true
-        }
-      })
       try {
-        let res = yield call(rpcInstance.post, '/', postData)
+        let res = yield call(rpcInstance.post, '/', postData, { baseURL })
         res = res.data
         let err = null
         let data = null
@@ -34,7 +31,7 @@ export default {
         }
         const result = {
           field,
-          loadStatus: false,
+          // loadStatus: false,
           data,
           err
         }
@@ -43,7 +40,7 @@ export default {
           payload: result
         })
       } catch (e) {
-        console.log(e) //eslint-disable-line
+        console.log(e.message) //eslint-disable-line
         throw new Error(e)
       }
     })

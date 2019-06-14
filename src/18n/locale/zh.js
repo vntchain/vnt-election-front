@@ -17,7 +17,7 @@ export default {
   confirmPage: '确定',
 
   // login hint button
-  login1: '登录VNT钱包',
+  login1: '连接VNT钱包',
   login2:
     'VNT Wallet是一个Chrome浏览器的扩展程序，请到Chrome应用商店安装和使用',
   login3: '请到Chrome应用商店安装VNT Wallet插件！若已安装，请刷新页面！',

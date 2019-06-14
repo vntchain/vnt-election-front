@@ -8,7 +8,19 @@ export const maximumVoteNum = 30
 
 export const forbiddenActionTime = 86400000 //  86400000 24h 600000 10min
 export const requestTxLimitTime = 10000 // 10s
-export const nodeAddrBaseurl = '//hubscan.vnt.link/account/'
+
+export const netConfig = {
+  mainnet: {
+    nodesURL: 'http://192.168.9.99:8080/v1',
+    rpcURL: 'http://47.102.157.204:8880',
+    nodeAddr: '//hubscan.vnt.link/account/'
+  },
+  testnet: {
+    nodesURL: 'http://192.168.9.99:8080/v1',
+    rpcURL: 'http://47.102.157.204:8880',
+    nodeAddr: '//hubscan.vnt.link/account/'
+  }
+}
 
 export const walletState = {
   uninstalled: 'uninstalled',

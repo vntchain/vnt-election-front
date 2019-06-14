@@ -36,12 +36,7 @@ function ProvideModalData(props) {
           visible={showTxModal}
           step={(sendResult && sendResult.step) || txSteps.waitConfirm}
           showClose={
-            sendResult &&
-            sendResult.step &&
-            (sendResult.step === txSteps.txSuccess ||
-              sendResult.step === txSteps.txFailed ||
-              sendResult.step === txSteps.denied ||
-              sendResult.step === txSteps.txTimeout)
+            sendResult && sendResult.step && sendResult.step !== txSteps.query
           }
           onCancel={clearResult}
         />

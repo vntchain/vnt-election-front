@@ -1,15 +1,16 @@
 import { effects } from 'redux-sirius'
-import { walletState } from 'constants/config'
 import abi from 'utils/abi.json'
 import { txSteps } from 'constants/config'
 const { put, select } = effects
-
-export default {
-  state: {
-    accountAddr: {
+/** 
+ * {
       err: null,
       addr: null // null '0x122369F04f32269598789998de33e3d56E2C507a'
-    },
+    }
+*/
+export default {
+  state: {
+    accountAddr: null,
     proxyAddr: null,
     balance: null, // 余额
     stake: null, // 抵押
@@ -31,42 +32,17 @@ export default {
         ...state,
         [field]: data
       }
+    },
+    clearState: state => {
+      // 需要获取一个对象中所有的键
+      const newState = state
+      for (let key in newState) {
+        newState[key] = null
+      }
+      return { ...newState }
     }
   },
   effects: ({ takeLatest }) => ({
-    getAcctAddr: takeLatest(function*() {
-      const getAcct = new Promise(resolve => {
-        window.vnt.core.getCoinbase((err, coinbase) =>
-          resolve({ err, coinbase })
-        )
-      })
-      try {
-        const res = yield getAcct
-        if (!res.err) {
-          yield put({
-            type: 'account/setAccountAddr',
-            payload: {
-              err: res.err ? res.err : null,
-              addr: res.coinbase
-            }
-          })
-          yield put({
-            type: 'auth/setAuthStatus',
-            payload: walletState.authorized
-          })
-        } else {
-          yield put({
-            type: 'account/setAccountAddr',
-            payload: {
-              err: res.err,
-              addr: null
-            }
-          })
-        }
-      } catch (e) {
-        throw new Error(e)
-      }
-    }),
     sendTx: takeLatest(function*({ payload }) {
       const { funcName, inputData, needInput } = payload
       const sendAddr = yield select(
