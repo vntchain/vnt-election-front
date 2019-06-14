@@ -1,9 +1,6 @@
 export const pollingInterval = 100
 export const pageSize = 40
 
-export const rpc = 'http://47.102.157.204:8880'
-export const chainId = 2
-
 export const maximumVoteNum = 30
 
 export const forbiddenActionTime = 86400000 //  86400000 24h 600000 10min

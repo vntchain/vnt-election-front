@@ -23,29 +23,35 @@ function Unauthorized(props) {
   )
 
   const startApp = () => {
-    window.vnt.requesetAuthorization(function(err, authorized) {
+    console.log('请求授权') // eslint-disable-line
+    window.vnt.requestAuthorization(function(err, authorized) {
       if (authorized === true) {
         // 已经授权 去拿账号
+        console.log('拿到授权请求账户') // eslint-disable-line
         try {
           window.vnt.core.getCoinbase((err, acct) => {
             // 获取账户详情的回调被调用了 返回始终是 { err: null， acct: ''/'0x....'}
-            props.dispatch({
-              type: 'account/setAccountAddr',
-              payload: {
-                err: null,
-                addr: acct.trim() ? acct.trim() : null
-              }
-            })
-            props.dispatch({
-              type: 'auth/setAuthStatus',
-              payload: acct.trim()
-                ? walletState.authorized
-                : walletState.unauthorized
-            })
+            console.log('err=',err,'acct=',acct) // eslint-disable-line
+            if (!err) {
+              props.dispatch({
+                type: 'account/setAccountAddr',
+                payload: {
+                  err: null,
+                  addr: acct.trim() ? acct.trim() : null
+                }
+              })
+              props.dispatch({
+                type: 'auth/setAuthStatus',
+                payload: acct.trim()
+                  ? walletState.authorized
+                  : walletState.unauthorized
+              })
+            } else {
+              throw new Error(err)
+            }
           })
         } catch (e) {
-          console.log(e.message) // eslint-disable-line
-          throw new Error(e)
+          throw new Error(e.message)
         }
       } else {
         // 没有授权 状态设置为已登录 未授权
@@ -65,7 +71,6 @@ function Unauthorized(props) {
           type: 'fetchRPCData/setRpc',
           payload: window.vnt.currentProvider.host
         })
-        console.log('点击请求授权') //eslint-disable-line
         try {
           startApp()
         } catch (e) {

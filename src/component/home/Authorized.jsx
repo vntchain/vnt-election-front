@@ -64,9 +64,9 @@ function Authorized(props) {
   )
 
   useEffect(() => {
-    if (window.vnt.networkChange) {
+    if (window.vnt.getNetworkUrl) {
       try {
-        window.vnt.networkChange((err, result) => {
+        window.vnt.getNetworkUrl((err, result) => {
           // 需要判断result的值，同时修改nodeslist的后端接口，此时无法直接刷新页面，需要仅内部页面刷新
           if (!err && result) {
             if (result === netConfig.mainnet.rpcURL) {

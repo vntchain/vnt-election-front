@@ -1,7 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
-import VNT from 'vnt'
-import { rpc, txActions, forbiddenActionTime } from 'constants/config'
+import { txActions, forbiddenActionTime } from 'constants/config'
 import { FormattedMessage, injectIntl } from '@translate'
 import { Tooltip, Icon, Switch, Input, Button } from 'antd'
 import { format } from 'date-fns'
@@ -15,13 +14,15 @@ import { rpcInstance } from 'utils/axios'
 
 import styles from './Authorized.scss'
 
-const vnt = new VNT(new VNT.providers.HttpProvider(rpc))
-
-const mapStateToProps = ({ account: { balance, stake, myVotes } }) => {
+const mapStateToProps = ({
+  account: { balance, stake, myVotes },
+  fetchRPCData: { rpc }
+}) => {
   return {
     balance,
     stake,
-    myVotes
+    myVotes,
+    rpc
   }
 }
 
@@ -49,7 +50,7 @@ function AcctDetail(props) {
 
   const validateInput = e => {
     const addr = e.target.value.trim()
-    if (addr && (!vnt.isAddress(addr) || addr.length !== 42)) {
+    if (addr && (!window.vnt.isAddress(addr) || addr.length !== 42)) {
       setAddrErr(true)
     }
   }
@@ -76,12 +77,16 @@ function AcctDetail(props) {
     } else {
       // 拿到地址 去查询账户信息
       try {
-        let res = await rpcInstance.post('/', {
-          jsonrpc: '2.0',
-          method: 'core_getVoter', // 'core_getBalance' ,
-          params: [settedProxyAddr],
-          id: 1
-        })
+        let res = await rpcInstance.post(
+          '/',
+          {
+            jsonrpc: '2.0',
+            method: 'core_getVoter', // 'core_getBalance' ,
+            params: [settedProxyAddr],
+            id: 1
+          },
+          { baseURL: props.rpc }
+        )
         res = res.data
         if (
           (res && !res.result) ||
