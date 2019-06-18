@@ -11,8 +11,8 @@ export default {
     nodeAddrBaseurl: netConfig.testnet.nodeAddr
   },
   reducers: {
-    setState: ({ payload }) => {
-      return { ...payload }
+    setState: (state, { payload }) => {
+      return { ...state, ...payload }
     }
   },
   effects: ({ takeEvery }) => ({

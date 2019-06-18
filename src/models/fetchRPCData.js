@@ -4,10 +4,17 @@ const { put, call, select } = effects
 
 export default {
   state: {
-    rpc: null, // rpc
-    chainID: 2
+    rpc: null,
+    chainId: null
   },
-  reducers: {},
+  reducers: {
+    setState: (state, { payload }) => {
+      return {
+        ...state,
+        ...payload
+      }
+    }
+  },
   effects: ({ takeEvery }) => ({
     getRPCdata: takeEvery(function*({ payload }) {
       const { addr, method, field } = payload
@@ -41,7 +48,7 @@ export default {
         })
       } catch (e) {
         console.log(e.message) //eslint-disable-line
-        throw new Error(e)
+        throw new Error(e.message)
       }
     })
   })

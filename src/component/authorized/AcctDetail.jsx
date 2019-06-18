@@ -418,7 +418,7 @@ function AcctDetail(props) {
                   title={<FormattedMessage id="htooltip1" />}
                   placement="bottom"
                 >
-                  <span>
+                  <span className={styles.votesProxy}>
                     <FormattedMessage id="htitle12" />
                   </span>
                 </Tooltip>

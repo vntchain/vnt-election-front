@@ -8,6 +8,7 @@ function CountDown(props) {
   const { time, onFinish, totalCountDownTime } = props
   const deadline = totalCountDownTime + time
   const format = totalCountDownTime > 60000 ? 'HH:mm:ss' : 's'
+
   return (
     <Statistic.Countdown
       value={deadline}

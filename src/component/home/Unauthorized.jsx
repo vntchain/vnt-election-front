@@ -4,7 +4,7 @@ import { FormattedMessage } from '@translate'
 import { Icon, Tooltip } from 'antd'
 
 import MessageConfirm from 'component/MessageConfirm'
-import { walletState } from 'constants/config'
+import { walletState, netConfig } from 'constants/config'
 
 import styles from './Unauthorized.scss'
 
@@ -22,16 +22,46 @@ function Unauthorized(props) {
     </div>
   )
 
-  const startApp = () => {
-    console.log('请求授权') // eslint-disable-line
+  const checkNetwork = () => {
+    window.vnt.getNetworkUrl((err, result) => {
+      // 需要判断result的值，同时修改nodeslist的后端接口，此时无法直接刷新页面，需要仅内部页面刷新
+      console.log(`network_change: err= ${err}, result=${JSON.stringify(result)}`) //eslint-disable-line
+      if (!err && result) {
+        props.dispatch({
+          type: 'fetchRPCData/setState',
+          payload: {
+            rpc: result.url, //window.vnt.currentProvider.host,
+            chainId: result.chainId //window.vnt.version.network 需要先授权才能取到，不然会报错
+          }
+        })
+        if (result.chainId == 2) {
+          props.dispatch({
+            type: 'dataRelayNew/setState',
+            payload: {
+              nodesAxiosBaseUrl: netConfig.testnet.nodesURL,
+              nodeAddrBaseurl: netConfig.testnet.nodeAddr
+            }
+          })
+        } else if (result.chainId == 1) {
+          props.dispatch({
+            type: 'dataRelayNew/setState',
+            payload: {
+              nodesAxiosBaseUrl: netConfig.mainnet.nodesURL,
+              nodeAddrBaseurl: netConfig.mainnet.nodeAddr
+            }
+          })
+        }
+      }
+    })
+  }
+
+  const getAuth = () => {
     window.vnt.requestAuthorization(function(err, authorized) {
       if (authorized === true) {
         // 已经授权 去拿账号
-        console.log('拿到授权请求账户') // eslint-disable-line
         try {
           window.vnt.core.getCoinbase((err, acct) => {
-            // 获取账户详情的回调被调用了 返回始终是 { err: null， acct: ''/'0x....'}
-            console.log('err=',err,'acct=',acct) // eslint-disable-line
+            console.log('获取账户： err=',err,'acct=',acct) // eslint-disable-line
             if (!err) {
               props.dispatch({
                 type: 'account/setAccountAddr',
@@ -67,12 +97,9 @@ function Unauthorized(props) {
     if (props.authStatus === walletState.uninstalled) {
       // 未安装，点击时则会再次去检测
       if (typeof window.vnt !== 'undefined') {
-        props.dispatch({
-          type: 'fetchRPCData/setRpc',
-          payload: window.vnt.currentProvider.host
-        })
+        checkNetwork()
         try {
-          startApp()
+          getAuth()
         } catch (e) {
           console.log(e.message) //eslint-disable-line
         }
@@ -83,7 +110,7 @@ function Unauthorized(props) {
     } else {
       //若状态是已安装插件未授权
       try {
-        startApp()
+        getAuth()
       } catch (e) {
         throw new Error(e.message) //eslint-disable-line
       }
@@ -91,27 +118,15 @@ function Unauthorized(props) {
   }
 
   useEffect(() => {
-    if (window.setupWalletBridge) {
-      window.initWalletBridge = function() {
-        console.log(window.vnt) //eslint-disable-line
-        props.dispatch({
-          type: 'fetchRPCData/setRpc',
-          payload: window.vnt.currentProvider.host
-        })
-        startApp()
-      }
-    } else if (typeof window.vnt === 'undefined') {
+    if (typeof window.vnt === 'undefined') {
       console.log('未检测到钱包插件') // eslint-disable-line
     } else {
-      props.dispatch({
-        type: 'fetchRPCData/setRpc',
-        payload: window.vnt.currentProvider.host
-      })
-      try {
-        startApp()
-      } catch (e) {
-        throw new Error(e.message) //eslint-disable-line
-      }
+      checkNetwork()
+      // try {
+      //   getAuth()
+      // } catch (e) {
+      //   throw new Error(e.message) //eslint-disable-line
+      // }
     }
   }, [])
 

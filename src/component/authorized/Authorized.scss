@@ -31,9 +31,20 @@
     position: relative;
     width: calc(33.33% - 0.1333rem);
     p {
+      color: $font-darkcolor-1;
       font-size: 0.26rem;
       margin-bottom: 0.1rem;
       font-weight: bold;
+      .votesProxy {
+        cursor: pointer;
+        font-size: 0.12rem;
+        padding: 0.01rem 0.08rem;
+        margin-left: 0.1rem;
+        background: $theme-blue-color;
+        border-radius: 0.02rem;
+        color: #fff;
+        vertical-align: middle;
+      }
     }
     h5 {
       color: $color-dark-1;
@@ -75,6 +86,7 @@
         margin: 0.1rem 0;
         font-size: 0.26rem;
         font-weight: bold;
+        color: $font-darkcolor-1;
       }
     }
     .action {

@@ -33,8 +33,6 @@ const mapStateToProps = ({
   }
 }
 
-let timerID = null
-
 const genTableData = (data, current) => {
   if (!Array.isArray(data) || data.length === 0) {
     return []
@@ -87,6 +85,7 @@ const genTableData = (data, current) => {
 class NodeList extends React.Component {
   constructor(props) {
     super(props)
+    this.timerID = null
     this.state = {
       currentPage: 1,
       candidates: {},
@@ -97,20 +96,8 @@ class NodeList extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.voteDetail !== nextProps.voteDetail) {
-      const { candidates } = nextProps.voteDetail
-      const result = {}
-      for (let key of candidates) {
-        result[key] = {
-          checked: true
-        }
-      }
-      this.setState({ candidates: result })
-    }
-  }
-
-  componentDidMount() {
+  getNodesData = () => {
+    clearInterval(this.timerID)
     this.props.dispatch({
       type: 'dataRelayNew/fetchData',
       payload: {
@@ -122,7 +109,7 @@ class NodeList extends React.Component {
         field: 'nodes'
       }
     })
-    timerID = setInterval(() => {
+    this.timerID = setInterval(() => {
       console.log('定时去取的nodelist') //eslint-disable-line
       this.props.dispatch({
         type: 'dataRelayNew/fetchData',
@@ -138,9 +125,45 @@ class NodeList extends React.Component {
     }, pollingInterval * 1000)
   }
 
+  getNewVotesDetail = voteDetail => {
+    const { candidates } = voteDetail
+    const result = {}
+    for (let key of candidates) {
+      result[key] = {
+        checked: true
+      }
+    }
+    return result
+  }
+
+  componentDidMount() {
+    this.getNodesData()
+    this.setState({
+      candidates: this.getNewVotesDetail(this.props.voteDetail)
+    })
+  }
+
+  componentDidUpdate(prevProps) {
+    //console.log('测试voteDetail更改',prevProps.voteDetail,this.props.voteDetail) // eslint-disable-line
+    //console.log('测试网络更改',prevProps.nodeAddrBaseurl,this.props.nodeAddrBaseurl) // eslint-disable-line
+    if (
+      this.props.authStatus === walletState.authorized &&
+      this.props.voteDetail !== prevProps.voteDetail
+    ) {
+      console.log('vote发生变化',prevProps.voteDetail,this.props.voteDetail ) //eslint-disable-line
+      this.setState({
+        candidates: this.getNewVotesDetail(this.props.voteDetail)
+      })
+    }
+    if (this.props.nodeAddrBaseurl !== prevProps.nodeAddrBaseurl) {
+      console.log('didUpdate 请求数据') //eslint-disable-line
+      this.getNodesData()
+    }
+  }
+
   componentWillUnmount() {
-    if (timerID) {
-      clearInterval(timerID)
+    if (this.timerID) {
+      clearInterval(this.timerID)
     }
   }
 
@@ -422,11 +445,7 @@ class NodeList extends React.Component {
         }
       }
       return {
-        children: (
-          <span style={{ color: value.isSuper ? '#3389ff' : '#ff9603' }}>
-            {value.ranking}
-          </span>
-        ),
+        children: <span style={{ color: '#333' }}>{value.ranking}</span>,
         props: {}
       }
     }

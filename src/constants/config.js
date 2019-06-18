@@ -1,4 +1,4 @@
-export const pollingInterval = 100
+export const pollingInterval = 60 // 60 seconds
 export const pageSize = 40
 
 export const maximumVoteNum = 30
@@ -6,16 +6,30 @@ export const maximumVoteNum = 30
 export const forbiddenActionTime = 86400000 //  86400000 24h 600000 10min
 export const requestTxLimitTime = 10000 // 10s
 
+//console.log(process.env) //eslint-disable-line
+
 export const netConfig = {
   mainnet: {
-    nodesURL: 'http://192.168.9.99:8080/v1',
-    rpcURL: 'http://47.102.157.204:8880',
-    nodeAddr: '//hubscan.vnt.link/account/'
+    nodesURL:
+      process.env.NODE_ENV === 'development'
+        ? 'http://192.168.9.99:8080/v1'
+        : 'https://hubscan.vnt.link:1443/v1',
+    nodeAddr:
+      process.env.NODE_ENV === 'development'
+        ? '//192.168.9.99/account/'
+        : '//hubscan.vnt.link/account/'
   },
   testnet: {
-    nodesURL: 'http://192.168.9.99:8080/v1',
-    rpcURL: 'http://47.102.157.204:8880',
-    nodeAddr: '//hubscan.vnt.link/account/'
+    // 浏览器后端接口，取超级节点数据
+    nodesURL:
+      process.env.NODE_ENV === 'development'
+        ? 'http://192.168.9.99:8080/v1'
+        : 'https://hubscan.vnt.link:1443/v1',
+    //表格中点击节点名称跳转地址的baseurl
+    nodeAddr:
+      process.env.NODE_ENV === 'development'
+        ? '//192.168.9.99/account/'
+        : '//hubscan.vnt.link/account/'
   }
 }
 

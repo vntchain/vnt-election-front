@@ -2,12 +2,7 @@ import { effects } from 'redux-sirius'
 import abi from 'utils/abi.json'
 import { txSteps } from 'constants/config'
 const { put, select } = effects
-/** 
- * {
-      err: null,
-      addr: null // null '0x122369F04f32269598789998de33e3d56E2C507a'
-    }
-*/
+
 export default {
   state: {
     accountAddr: null,
@@ -34,7 +29,6 @@ export default {
       }
     },
     clearState: state => {
-      // 需要获取一个对象中所有的键
       const newState = state
       for (let key in newState) {
         newState[key] = null
@@ -48,6 +42,7 @@ export default {
       const sendAddr = yield select(
         ({ account: { accountAddr } }) => accountAddr
       )
+      const chainId = yield select(({ fetchRPCData: { chainId } }) => chainId)
       const contract = window.vnt.core.contract(abi)
       let data
       try {
@@ -82,7 +77,6 @@ export default {
         })
         gasPriceResponse = yield gasPricePromise
         gasResponse = yield gasPromise
-        //console.log('估算燃气1111...',gasPriceResponse, gasResponse) // eslint-disable-line
         if (gasPriceResponse && gasPriceResponse.res) {
           gasPrice = gasPriceResponse.res.toNumber()
         }
@@ -97,7 +91,7 @@ export default {
         from: sendAddr.addr,
         to: '0x0000000000000000000000000000000000000009',
         data: data,
-        chainId: window.vnt.version.network,
+        chainId: chainId, // window.vnt.version.network,
         gasPrice: gasPrice || 30000000000000,
         gas: gas || 4000000,
         value: 0

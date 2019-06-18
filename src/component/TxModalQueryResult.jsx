@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState, Fragment, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
@@ -31,11 +31,10 @@ const requestType = {
   vote: 'onlyVote'
 }
 
-let timer
-
 function TxModalQueryResult(props) {
   const sendResult = props.sendResult
   const [queryResult, setQueryResult] = useState(false)
+  const timer = useRef(null)
   const handleReceipt = (funcName, receipt) => {
     if (!props.accountAddr.addr) {
       throw new Error(' no account addr!')
@@ -56,7 +55,6 @@ function TxModalQueryResult(props) {
         // 仅需要获取投票
         requestRPCData(props.accountAddr.addr, requestType.vote)
       }
-      console.log('拿到结果了，获取一下最新的节点信息') //eslint-disable-line
       // 再次获取最新的节点信息
       props.dispatch({
         type: 'dataRelayNew/fetchData',
@@ -82,11 +80,11 @@ function TxModalQueryResult(props) {
   const getTransactionReceipt = (tx, cb) => {
     window.vnt.core.getTransactionReceipt(tx, (err, receipt) => {
       if (!receipt && queryResult) {
-        timer = setTimeout(function() {
+        timer.current = setTimeout(function() {
           getTransactionReceipt(tx, cb)
         }, 2000)
       } else {
-        clearTimeout(timer)
+        clearTimeout(timer.current)
         setQueryResult(false)
         cb(receipt)
       }
@@ -95,6 +93,14 @@ function TxModalQueryResult(props) {
 
   const requestRPCData = (addr, type) => {
     if (type === requestType.vote) {
+      props.dispatch({
+        type: 'fetchRPCData/getRPCdata',
+        payload: {
+          addr,
+          method: 'core_getBalance',
+          field: 'balance'
+        }
+      })
       props.dispatch({
         type: 'fetchRPCData/getRPCdata',
         payload: {
@@ -161,7 +167,7 @@ function TxModalQueryResult(props) {
 
   const onCountDownFinish = () => {
     setQueryResult(false)
-    clearTimeout(timer)
+    clearTimeout(timer.current)
   }
 
   const onClickOk = () => {

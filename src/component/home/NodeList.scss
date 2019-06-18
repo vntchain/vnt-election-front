@@ -2,6 +2,11 @@
 
 .tableWithCount {
   min-height: 4rem;
+  :global {
+    a {
+      color: $theme-blue-color;
+    }
+  }
 }
 
 .voteBtn {
