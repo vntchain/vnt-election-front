@@ -6,7 +6,7 @@ import { Tooltip, Icon, Switch, Input, Button } from 'antd'
 import { format } from 'date-fns'
 import { calcVotes, sliceNum, lessThanOneDay } from 'utils/tools'
 import Margin from 'component/layout/Margin'
-import CountDown from 'component/CountDown'
+import CountDown from 'component/CountDownNew'
 
 import MessageConfirm from 'component/MessageConfirm'
 

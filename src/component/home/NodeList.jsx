@@ -14,7 +14,7 @@ import {
   forbiddenActionTime
 } from 'constants/config'
 import { getBaseParams, lessThanOneDay, getBasePath } from 'utils/tools'
-import CountDown from 'component/CountDown'
+import CountDown from 'component/CountDownNew'
 import MessageConfirm from 'component/MessageConfirm'
 
 import styles from './NodeList.scss'

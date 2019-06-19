@@ -47,3 +47,27 @@ export const sliceNum = num => {
 export const lessThanOneDay = oldTime => {
   return Date.now() - oldTime < forbiddenActionTime
 }
+
+export const formatTime = (ms, formatStyle) => {
+  let result = ''
+  switch (formatStyle) {
+    case 'HH:mm:ss': {
+      let hour = '' + Math.floor(ms / 3600000)
+      let min = '' + Math.floor((ms / 60000) % 60)
+      let sec = '' + Math.floor((ms / 1000) % 60)
+      hour = hour.length === 1 ? '0' + hour : hour
+      min = min.length === 1 ? '0' + min : min
+      sec = sec.length === 1 ? '0' + sec : sec
+      result = `${hour}:${min}:${sec}`
+      break
+    }
+    case 's': {
+      const sec = Math.floor(ms / 1000)
+      result = `${sec}`
+      break
+    }
+    default:
+      break
+  }
+  return result
+}
