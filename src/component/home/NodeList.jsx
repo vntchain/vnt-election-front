@@ -110,7 +110,7 @@ class NodeList extends React.Component {
       }
     })
     this.timerID = setInterval(() => {
-      console.log('定时去取的nodelist') //eslint-disable-line
+      //console.log('定时去取的nodelist') //eslint-disable-line
       this.props.dispatch({
         type: 'dataRelayNew/fetchData',
         payload: {
@@ -144,19 +144,17 @@ class NodeList extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    //console.log('测试voteDetail更改',prevProps.voteDetail,this.props.voteDetail) // eslint-disable-line
-    //console.log('测试网络更改',prevProps.nodeAddrBaseurl,this.props.nodeAddrBaseurl) // eslint-disable-line
     if (
       this.props.authStatus === walletState.authorized &&
       this.props.voteDetail !== prevProps.voteDetail
     ) {
-      console.log('vote发生变化',prevProps.voteDetail,this.props.voteDetail ) //eslint-disable-line
+      //console.log('vote发生变化',prevProps.voteDetail,this.props.voteDetail ) //eslint-disable-line
       this.setState({
         candidates: this.getNewVotesDetail(this.props.voteDetail)
       })
     }
     if (this.props.nodeAddrBaseurl !== prevProps.nodeAddrBaseurl) {
-      console.log('didUpdate 请求数据') //eslint-disable-line
+      //console.log('didUpdate 请求数据') //eslint-disable-line
       this.getNodesData()
     }
   }
@@ -378,17 +376,7 @@ class NodeList extends React.Component {
       // 确认投票按钮的样式
       const { useProxy, candidates, lastVoteTime } = voteDetail
       let confirmVoteBtnDom
-      if (useProxy) {
-        confirmVoteBtnDom = (
-          <div
-            className={`${styles['confirmVoteBtn']} ${styles['disabled']}`}
-            onClick={() => this.clickDisabledVoteBtn(true, false)}
-          >
-            <FormattedMessage id="nodeColumn7" label={true} />
-            <span>{`(${candidates.length}/${maximumVoteNum})`}</span>
-          </div>
-        )
-      } else if (lessThanOneDay(lastVoteTime)) {
+      if (lessThanOneDay(lastVoteTime)) {
         confirmVoteBtnDom = (
           <div
             className={`${styles['confirmVoteBtn']} ${styles['countDown']}`}
@@ -400,6 +388,16 @@ class NodeList extends React.Component {
               onFinish={this.onCountDownFinish}
               totalCountDownTime={forbiddenActionTime}
             />
+          </div>
+        )
+      } else if (useProxy) {
+        confirmVoteBtnDom = (
+          <div
+            className={`${styles['confirmVoteBtn']} ${styles['disabled']}`}
+            onClick={() => this.clickDisabledVoteBtn(true, false)}
+          >
+            <FormattedMessage id="nodeColumn7" label={true} />
+            <span>{`(${candidates.length}/${maximumVoteNum})`}</span>
           </div>
         )
       } else {

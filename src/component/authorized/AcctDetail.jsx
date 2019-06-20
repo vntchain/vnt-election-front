@@ -16,13 +16,16 @@ import styles from './Authorized.scss'
 
 const mapStateToProps = ({
   account: { balance, stake, myVotes },
-  fetchRPCData: { rpc }
+  fetchRPCData: { rpc },
+  intervalManager: { detailStakeTimer, detailVoteTimer }
 }) => {
   return {
     balance,
     stake,
     myVotes,
-    rpc
+    rpc,
+    detailStakeTimer,
+    detailVoteTimer
   }
 }
 
@@ -47,6 +50,8 @@ function AcctDetail(props) {
   const [modalID, setModalID] = useState('')
   const [addrErr, setAddrErr] = useState(false)
   const [settedProxyAddr, changeSettedProxyAddr] = useState('')
+  // const [showStakeCountDown, setShowStakeCountDown] = useState(false)
+  // const [showVoteCountDown, setShowVoteCountDown] = useState(false)
 
   const validateInput = e => {
     const addr = e.target.value.trim()
@@ -108,7 +113,7 @@ function AcctDetail(props) {
           })
         }
       } catch (e) {
-        console.log(e) // eslint-disable-line
+        //console.log(e) // eslint-disable-line
         throw new Error('get proxyVotes detail error!')
       }
     }
@@ -372,6 +377,73 @@ function AcctDetail(props) {
       setShowEstimation(false)
       setAddrErr(false)
       changeSettedProxyAddr('')
+      // for (let idx in newDetails) {
+      //   if (newDetails[idx] !== details[idx]) {
+      //     // if (
+      //     //   newDetails.hasStaked &&
+      //     //   lessThanOneDay(newDetails.lastStakeTime)
+      //     // ) {
+      //     //   setShowStakeCountDown(true)
+      //     //   props.dispatch({
+      //     //     type: 'intervalManager/newInterval',
+      //     //     payload: {
+      //     //       key: 'detailStakeTimer',
+      //     //       curTime: Math.floor(
+      //     //         (forbiddenActionTime +
+      //     //           newDetails.lastStakeTime -
+      //     //           Date.now()) /
+      //     //           1000
+      //     //       ),
+      //     //       callback: () => setShowStakeCountDown(false)
+      //     //     }
+      //     //   })
+      //     // } else {
+      //     //   setShowStakeCountDown(false)
+      //     //   if (props.detailStakeTimer && props.detailStakeTimer.timeId) {
+      //     //     props.dispatch({
+      //     //       type: 'intervalManager/clearInterval',
+      //     //       payload: {
+      //     //         keys: 'detailStakeTimer'
+      //     //       }
+      //     //     })
+      //     //   }
+      //     // }
+
+      //     // if (newDetails.hasVoted && lessThanOneDay(newDetails.lastVoteTime)) {
+      //     //   setShowVoteCountDown(true)
+      //     //   props.dispatch({
+      //     //     type: 'intervalManager/newInterval',
+      //     //     payload: {
+      //     //       key: 'detailVoteTimer',
+      //     //       curTime: Math.floor(
+      //     //         (forbiddenActionTime + newDetails.lastVoteTime - Date.now()) /
+      //     //           1000
+      //     //       ),
+      //     //       callback: () => setShowVoteCountDown(false)
+      //     //     }
+      //     //   })
+      //     // } else {
+      //     //   setShowVoteCountDown(false)
+      //     //   if (props.detailVoteTimer && props.detailVoteTimer.timeId) {
+      //     //     props.dispatch({
+      //     //       type: 'intervalManager/clearInterval',
+      //     //       payload: {
+      //     //         keys: 'detailVoteTimer'
+      //     //       }
+      //     //     })
+      //     //   }
+      //     // }
+
+      //     setDetails(newDetails)
+      //     // 此时清空内部状态？？？
+      //     setAmount('')
+      //     setEstimatedVotes(0)
+      //     setShowEstimation(false)
+      //     setAddrErr(false)
+      //     changeSettedProxyAddr('')
+      //     break
+      //   }
+      // }
     },
     [props.balance, props.stake, props.myVotes]
   )
@@ -386,12 +458,24 @@ function AcctDetail(props) {
     [details.stake]
   )
 
+  // useEffect(() => {
+  //   return () => {
+  //     props.dispatch({
+  //       type: 'intervalManager/clearIntervalAll',
+  //       payload: {
+  //         keys: ['detailStakeTimer', 'detailVoteTimer']
+  //       }
+  //     })
+  //   }
+  // }, [])
+
   const forceUpdate = useState(0)[1]
   const onCountDownFinish = () => {
     // 倒计时结束，强制渲染
-    console.log('倒计时结束...') // eslint-disable-line
+    //console.log('倒计时结束...') // eslint-disable-line
     forceUpdate()
   }
+
   return (
     <Fragment>
       <div className={styles.detail}>
@@ -487,6 +571,7 @@ function AcctDetail(props) {
             ) : details.hasStaked && lessThanOneDay(details.lastStakeTime) ? (
               <div className={`${styles['countDown']} ${styles['action']}`}>
                 <FormattedMessage id="htitle14" label={true} />
+                {/* <CountDown time={props.detailStakeTimer.time || 0} /> */}
                 <CountDown
                   time={details.lastStakeTime}
                   onFinish={onCountDownFinish}
@@ -546,6 +631,7 @@ function AcctDetail(props) {
                 {details.hasVoted && lessThanOneDay(details.lastVoteTime) ? (
                   <div className={styles.btnCountDown}>
                     <FormattedMessage id="htitle17" label={true} />
+                    {/* <CountDown time={props.detailVoteTimer.time || 0} /> */}
                     <CountDown
                       time={details.lastVoteTime}
                       onFinish={onCountDownFinish}

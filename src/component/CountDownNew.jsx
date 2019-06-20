@@ -9,7 +9,9 @@ class CountDownNew extends React.Component {
     super(props)
     this.timerId = null
     this.state = {
-      curTime: this.props.totalCountDownTime + this.props.time - Date.now() // 倒计时时长+开始倒计时的时间
+      curTime: Math.floor(
+        (this.props.totalCountDownTime + this.props.time - Date.now()) / 1000
+      ) // 取整为s
     }
   }
 
@@ -19,10 +21,17 @@ class CountDownNew extends React.Component {
   }
 
   startTimer = () => {
-    if (this.timerId) return
+    // if (this.timerId) {
+    //   return
+    // }
+    // console.log('____zzzz: ',this.state.curTime) //eslint-disable-line
+    let initTime = this.state.curTime
     this.timerId = setInterval(() => {
-      this.setState({ curTime: this.state.curTime - 1000 })
-      if (this.state.curTime < 1000) {
+      // console.log('____YYYY: ',this.state.curTime,initTime) //eslint-disable-line
+      this.setState({ curTime: initTime - 1 })
+      initTime = initTime - 1
+      if (initTime < 0) {
+        this.setState({ curTime: 0 })
         this.props.onFinish()
         clearInterval(this.timerId)
         this.timerId = null
@@ -40,9 +49,19 @@ class CountDownNew extends React.Component {
       prevProps.totalCountDownTime !== this.props.totalCountDownTime
     ) {
       console.log(prevProps,this.props,this.timerId) //eslint-disable-line
-      this.setState({
-        curTime: this.props.totalCountDownTime + this.props.time - Date.now()
-      })
+      clearInterval(this.timerId)
+      console.log('____ID: ',this.timerId) //eslint-disable-line
+      const deltaT =
+        this.props.totalCountDownTime + this.props.time - Date.now()
+      this.setState(
+        {
+          curTime: Math.floor(deltaT / 1000)
+        },
+        () => {
+          // console.log('____XXXX: ',this.state.curTime) //eslint-disable-line
+          this.startTimer()
+        }
+      )
     }
   }
 

@@ -49,10 +49,10 @@ function Authorized(props) {
     () => {
       clearInterval(timer.current)
       if (props.accountAddr.addr && props.rpc) {
-        console.log('acct或者rpc发生变化, addr=', props.accountAddr.addr, 'rpc=',props.rpc) //eslint-disable-line
+        //console.log('acct或者rpc发生变化, addr=', props.accountAddr.addr, 'rpc=',props.rpc) //eslint-disable-line
         requestRPCdataAll(props.accountAddr.addr)
         timer.current = setInterval(() => {
-          console.log('detail的定时刷新') //eslint-disable-line
+          //console.log('detail的定时刷新') //eslint-disable-line
           requestRPCdataAll(props.accountAddr.addr)
         }, pollingInterval * 1000)
       }
@@ -65,7 +65,7 @@ function Authorized(props) {
     if (window.vnt.logout) {
       try {
         window.vnt.logout((err, result) => {
-          console.log('调用了logout','err=',err,'result=',result) //eslint-disable-line
+          //console.log('调用了logout','err=',err,'result=',result) //eslint-disable-line
           if (!err && result) {
             props.dispatch({
               type: 'auth/setAuthStatus',

@@ -25,7 +25,7 @@ function Unauthorized(props) {
   const checkNetwork = () => {
     window.vnt.getNetworkUrl((err, result) => {
       // 需要判断result的值，同时修改nodeslist的后端接口，此时无法直接刷新页面，需要仅内部页面刷新
-      console.log(`network_change: err= ${err}, result=${JSON.stringify(result)}`) //eslint-disable-line
+      //console.log(`network_change: err= ${err}, result=${JSON.stringify(result)}`) //eslint-disable-line
       if (!err && result) {
         props.dispatch({
           type: 'fetchRPCData/setState',
@@ -61,7 +61,7 @@ function Unauthorized(props) {
         // 已经授权 去拿账号
         try {
           window.vnt.core.getCoinbase((err, acct) => {
-            console.log('获取账户： err=',err,'acct=',acct) // eslint-disable-line
+            //console.log('获取账户： err=',err,'acct=',acct) // eslint-disable-line
             if (!err) {
               props.dispatch({
                 type: 'account/setAccountAddr',
@@ -101,7 +101,7 @@ function Unauthorized(props) {
         try {
           getAuth()
         } catch (e) {
-          console.log(e.message) //eslint-disable-line
+          throw new Error(e.message) //eslint-disable-line
         }
       } else {
         // 未安装插件
@@ -119,7 +119,7 @@ function Unauthorized(props) {
 
   useEffect(() => {
     if (typeof window.vnt === 'undefined') {
-      console.log('未检测到钱包插件') // eslint-disable-line
+      //console.log('未检测到钱包插件') // eslint-disable-line
     } else {
       checkNetwork()
       // try {
