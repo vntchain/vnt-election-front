@@ -48,9 +48,9 @@ class CountDownNew extends React.Component {
       prevProps.time !== this.props.time ||
       prevProps.totalCountDownTime !== this.props.totalCountDownTime
     ) {
-      console.log(prevProps,this.props,this.timerId) //eslint-disable-line
+      //console.log(prevProps,this.props,this.timerId) //eslint-disable-line
       clearInterval(this.timerId)
-      console.log('____ID: ',this.timerId) //eslint-disable-line
+      //console.log('____ID: ',this.timerId) //eslint-disable-line
       const deltaT =
         this.props.totalCountDownTime + this.props.time - Date.now()
       this.setState(
