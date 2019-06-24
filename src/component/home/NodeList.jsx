@@ -280,6 +280,7 @@ class NodeList extends React.Component {
   }
 
   onCountDownFinish = () => {
+    console.log('nodelist 倒计时结束')  //eslint-disable-line
     this.forceUpdate()
   }
 
@@ -320,7 +321,10 @@ class NodeList extends React.Component {
     const finishFetching = nodeList && nodeList.hasOwnProperty('data')
 
     const renderVoteBtn = (value, record, index) => {
-      if (record.currentIndex === 1 && index === 19) {
+      if (
+        record.currentIndex === 1 &&
+        (index === 19 || (record.totalCnt === index && record.totalCnt < 19))
+      ) {
         return {
           children: '',
           props: {

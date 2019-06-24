@@ -335,7 +335,9 @@ function AcctDetail(props) {
           : 0
       // 是否产生过抵押
       newDetails.hasStaked =
-        stake && stake.data && stake.data.lastStakeTimeStamp ? true : false
+        stake && stake.data && stake.data.lastStakeTimeStamp
+          ? parseInt(stake.data.lastStakeTimeStamp) !== 0
+          : false
       // 上次抵押时间
       newDetails.lastStakeTime = newDetails.hasStaked
         ? parseInt(stake.data.lastStakeTimeStamp) * 1000
@@ -347,7 +349,9 @@ function AcctDetail(props) {
           : 0
       // 是否投过票
       newDetails.hasVoted =
-        myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp ? true : false
+        myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp
+          ? parseInt(myVotes.data.lastVoteTimeStamp) !== 0
+          : false
       // 上次投票时间
       newDetails.lastVoteTime = newDetails.hasVoted
         ? parseInt(myVotes.data.lastVoteTimeStamp) * 1000
@@ -370,80 +374,19 @@ function AcctDetail(props) {
         myVotes && myVotes.data && myVotes.data.proxyVoteCount
           ? parseInt(myVotes.data.proxyVoteCount)
           : 0
-      setDetails(newDetails)
-      // 此时清空内部状态？？？
-      setAmount('')
-      setEstimatedVotes(0)
-      setShowEstimation(false)
-      setAddrErr(false)
-      changeSettedProxyAddr('')
-      // for (let idx in newDetails) {
-      //   if (newDetails[idx] !== details[idx]) {
-      //     // if (
-      //     //   newDetails.hasStaked &&
-      //     //   lessThanOneDay(newDetails.lastStakeTime)
-      //     // ) {
-      //     //   setShowStakeCountDown(true)
-      //     //   props.dispatch({
-      //     //     type: 'intervalManager/newInterval',
-      //     //     payload: {
-      //     //       key: 'detailStakeTimer',
-      //     //       curTime: Math.floor(
-      //     //         (forbiddenActionTime +
-      //     //           newDetails.lastStakeTime -
-      //     //           Date.now()) /
-      //     //           1000
-      //     //       ),
-      //     //       callback: () => setShowStakeCountDown(false)
-      //     //     }
-      //     //   })
-      //     // } else {
-      //     //   setShowStakeCountDown(false)
-      //     //   if (props.detailStakeTimer && props.detailStakeTimer.timeId) {
-      //     //     props.dispatch({
-      //     //       type: 'intervalManager/clearInterval',
-      //     //       payload: {
-      //     //         keys: 'detailStakeTimer'
-      //     //       }
-      //     //     })
-      //     //   }
-      //     // }
 
-      //     // if (newDetails.hasVoted && lessThanOneDay(newDetails.lastVoteTime)) {
-      //     //   setShowVoteCountDown(true)
-      //     //   props.dispatch({
-      //     //     type: 'intervalManager/newInterval',
-      //     //     payload: {
-      //     //       key: 'detailVoteTimer',
-      //     //       curTime: Math.floor(
-      //     //         (forbiddenActionTime + newDetails.lastVoteTime - Date.now()) /
-      //     //           1000
-      //     //       ),
-      //     //       callback: () => setShowVoteCountDown(false)
-      //     //     }
-      //     //   })
-      //     // } else {
-      //     //   setShowVoteCountDown(false)
-      //     //   if (props.detailVoteTimer && props.detailVoteTimer.timeId) {
-      //     //     props.dispatch({
-      //     //       type: 'intervalManager/clearInterval',
-      //     //       payload: {
-      //     //         keys: 'detailVoteTimer'
-      //     //       }
-      //     //     })
-      //     //   }
-      //     // }
-
-      //     setDetails(newDetails)
-      //     // 此时清空内部状态？？？
-      //     setAmount('')
-      //     setEstimatedVotes(0)
-      //     setShowEstimation(false)
-      //     setAddrErr(false)
-      //     changeSettedProxyAddr('')
-      //     break
-      //   }
-      // }
+      for (let idx in newDetails) {
+        if (newDetails[idx] !== details[idx]) {
+          setDetails(newDetails)
+          // 此时清空内部状态？？？
+          setAmount('')
+          setEstimatedVotes(0)
+          setShowEstimation(false)
+          setAddrErr(false)
+          changeSettedProxyAddr('')
+          break
+        }
+      }
     },
     [props.balance, props.stake, props.myVotes]
   )
@@ -458,21 +401,10 @@ function AcctDetail(props) {
     [details.stake]
   )
 
-  // useEffect(() => {
-  //   return () => {
-  //     props.dispatch({
-  //       type: 'intervalManager/clearIntervalAll',
-  //       payload: {
-  //         keys: ['detailStakeTimer', 'detailVoteTimer']
-  //       }
-  //     })
-  //   }
-  // }, [])
-
   const forceUpdate = useState(0)[1]
   const onCountDownFinish = () => {
     // 倒计时结束，强制渲染
-    //console.log('倒计时结束...') // eslint-disable-line
+    console.log('倒计时结束...') // eslint-disable-line
     forceUpdate()
   }
 
@@ -571,7 +503,6 @@ function AcctDetail(props) {
             ) : details.hasStaked && lessThanOneDay(details.lastStakeTime) ? (
               <div className={`${styles['countDown']} ${styles['action']}`}>
                 <FormattedMessage id="htitle14" label={true} />
-                {/* <CountDown time={props.detailStakeTimer.time || 0} /> */}
                 <CountDown
                   time={details.lastStakeTime}
                   onFinish={onCountDownFinish}
@@ -631,7 +562,6 @@ function AcctDetail(props) {
                 {details.hasVoted && lessThanOneDay(details.lastVoteTime) ? (
                   <div className={styles.btnCountDown}>
                     <FormattedMessage id="htitle17" label={true} />
-                    {/* <CountDown time={props.detailVoteTimer.time || 0} /> */}
                     <CountDown
                       time={details.lastVoteTime}
                       onFinish={onCountDownFinish}

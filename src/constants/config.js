@@ -3,7 +3,7 @@ export const pageSize = 40
 
 export const maximumVoteNum = 30
 
-export const forbiddenActionTime = 86400000 //  86400000 24h 600000 10min
+export const forbiddenActionTime = 86400000 //  86400000 24h 600000 10min 180000 3min
 export const requestTxLimitTime = 10000 // 10s
 
 //console.log(process.env) //eslint-disable-line
