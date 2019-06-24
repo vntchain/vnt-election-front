@@ -8,10 +8,11 @@ class CountDownNew extends React.Component {
   constructor(props) {
     super(props)
     this.timerId = null
+    this.originLeftTime = Math.floor(
+      (this.props.totalCountDownTime + this.props.time - Date.now()) / 1000
+    )
     this.state = {
-      curTime: Math.floor(
-        (this.props.totalCountDownTime + this.props.time - Date.now()) / 1000
-      ) // 取整为s
+      curTime: this.originLeftTime
     }
   }
 
@@ -21,16 +22,11 @@ class CountDownNew extends React.Component {
   }
 
   startTimer = () => {
-    // if (this.timerId) {
-    //   return
-    // }
-    // console.log('____zzzz: ',this.state.curTime) //eslint-disable-line
-    let initTime = this.state.curTime
     this.timerId = setInterval(() => {
-      // console.log('____YYYY: ',this.state.curTime,initTime) //eslint-disable-line
-      this.setState({ curTime: initTime - 1 })
-      initTime = initTime - 1
-      if (initTime < 0) {
+      this.originLeftTime = this.originLeftTime - 1
+      this.setState({ curTime: this.originLeftTime })
+      if (this.originLeftTime < 0) {
+        this.originLeftTime = 0
         this.setState({ curTime: 0 })
         this.props.onFinish()
         clearInterval(this.timerId)
@@ -48,24 +44,14 @@ class CountDownNew extends React.Component {
       prevProps.time !== this.props.time ||
       prevProps.totalCountDownTime !== this.props.totalCountDownTime
     ) {
-      //console.log(prevProps,this.props,this.timerId) //eslint-disable-line
-      clearInterval(this.timerId)
-      //console.log('____ID: ',this.timerId) //eslint-disable-line
-      const deltaT =
-        this.props.totalCountDownTime + this.props.time - Date.now()
-      this.setState(
-        {
-          curTime: Math.floor(deltaT / 1000)
-        },
-        () => {
-          // console.log('____XXXX: ',this.state.curTime) //eslint-disable-line
-          this.startTimer()
-        }
+      this.originLeftTime = Math.floor(
+        (this.props.totalCountDownTime + this.props.time - Date.now()) / 1000
       )
+      this.setState({ curTime: this.originLeftTime })
     }
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     clearInterval(this.timerId)
     this.timerId = null
   }

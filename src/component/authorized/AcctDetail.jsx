@@ -47,8 +47,6 @@ function AcctDetail(props) {
   const [modalID, setModalID] = useState('')
   const [addrErr, setAddrErr] = useState(false)
   const [settedProxyAddr, changeSettedProxyAddr] = useState('')
-  // const [showStakeCountDown, setShowStakeCountDown] = useState(false)
-  // const [showVoteCountDown, setShowVoteCountDown] = useState(false)
 
   const validateInput = e => {
     const addr = e.target.value.trim()
