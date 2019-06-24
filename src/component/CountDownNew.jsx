@@ -51,7 +51,7 @@ class CountDownNew extends React.Component {
     }
   }
 
-  async componentWillUnmount() {
+  componentWillUnmount() {
     clearInterval(this.timerId)
     this.timerId = null
   }
