@@ -16,16 +16,13 @@ import styles from './Authorized.scss'
 
 const mapStateToProps = ({
   account: { balance, stake, myVotes },
-  fetchRPCData: { rpc },
-  intervalManager: { detailStakeTimer, detailVoteTimer }
+  fetchRPCData: { rpc }
 }) => {
   return {
     balance,
     stake,
     myVotes,
-    rpc,
-    detailStakeTimer,
-    detailVoteTimer
+    rpc
   }
 }
 
