@@ -6,23 +6,29 @@ import { Tooltip, Icon, Switch, Input, Button } from 'antd'
 import { format } from 'date-fns'
 import { calcVotes, sliceNum, lessThanOneDay } from 'utils/tools'
 import Margin from 'component/layout/Margin'
-import CountDown from 'component/CountDownNew'
+import CountDown from 'component/CountDownNewFormat'
 
 import MessageConfirm from 'component/MessageConfirm'
 
 import { rpcInstance } from 'utils/axios'
+import { intervalManagerApp } from 'utils/interval'
 
 import styles from './Authorized.scss'
 
+const intervalManagerInstance = new intervalManagerApp()
+
 const mapStateToProps = ({
   account: { balance, stake, myVotes },
-  fetchRPCData: { rpc }
+  fetchRPCData: { rpc },
+  intervalManager: { detailStakeTimer, detailVoteTimer }
 }) => {
   return {
     balance,
     stake,
     myVotes,
-    rpc
+    rpc,
+    detailStakeTimer,
+    detailVoteTimer
   }
 }
 
@@ -288,6 +294,17 @@ function AcctDetail(props) {
     }
   }
 
+  const storeIntervalData = (key, timerId, time) => {
+    props.dispatch({
+      type: 'intervalManager/setState',
+      payload: {
+        key,
+        timerId,
+        time
+      }
+    })
+  }
+
   useEffect(
     () => {
       if (details.useProxy && details.proxyAddr) {
@@ -372,6 +389,42 @@ function AcctDetail(props) {
 
       for (let idx in newDetails) {
         if (newDetails[idx] !== details[idx]) {
+          if (
+            newDetails.hasStaked &&
+            lessThanOneDay(newDetails.lastStakeTime)
+          ) {
+            // key, deadline, updateDataFn
+            intervalManagerInstance.newInterval(
+              'detailStakeTimer',
+              Math.floor(
+                (forbiddenActionTime + newDetails.lastStakeTime - Date.now()) /
+                  1000
+              ),
+              storeIntervalData
+            )
+          } else {
+            intervalManagerInstance.clearInterval(
+              'detailStakeTimer',
+              storeIntervalData
+            )
+          }
+
+          if (newDetails.hasVoted && lessThanOneDay(newDetails.lastVoteTime)) {
+            intervalManagerInstance.newInterval(
+              'detailVoteTimer',
+              Math.floor(
+                (forbiddenActionTime + newDetails.lastVoteTime - Date.now()) /
+                  1000
+              ),
+              storeIntervalData
+            )
+          } else {
+            intervalManagerInstance.clearInterval(
+              'detailVoteTimer',
+              storeIntervalData
+            )
+          }
+
           setDetails(newDetails)
           // 此时清空内部状态？？？
           setAmount('')
@@ -396,12 +449,12 @@ function AcctDetail(props) {
     [details.stake]
   )
 
-  const forceUpdate = useState(0)[1]
-  const onCountDownFinish = () => {
-    // 倒计时结束，强制渲染
-    console.log('倒计时结束...') // eslint-disable-line
-    forceUpdate()
-  }
+  // const forceUpdate = useState(0)[1]
+  // const onCountDownFinish = () => {
+  //   // 倒计时结束，强制渲染
+  //   console.log('倒计时结束...') // eslint-disable-line
+  //   forceUpdate()
+  // }
 
   return (
     <Fragment>
@@ -499,10 +552,15 @@ function AcctDetail(props) {
               <div className={`${styles['countDown']} ${styles['action']}`}>
                 <FormattedMessage id="htitle14" label={true} />
                 <CountDown
+                  time={
+                    (props.detailStakeTimer && props.detailStakeTimer.time) || 0
+                  }
+                />
+                {/* <CountDown
                   time={details.lastStakeTime}
                   onFinish={onCountDownFinish}
                   totalCountDownTime={forbiddenActionTime}
-                />
+                /> */}
               </div>
             ) : (
               <button
@@ -558,10 +616,16 @@ function AcctDetail(props) {
                   <div className={styles.btnCountDown}>
                     <FormattedMessage id="htitle17" label={true} />
                     <CountDown
+                      time={
+                        (props.detailVoteTimer && props.detailVoteTimer.time) ||
+                        0
+                      }
+                    />
+                    {/* <CountDown
                       time={details.lastVoteTime}
                       onFinish={onCountDownFinish}
                       totalCountDownTime={forbiddenActionTime}
-                    />
+                    /> */}
                   </div>
                 ) : (
                   <Button

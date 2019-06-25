@@ -10,11 +10,11 @@ import apis from 'constants/apis'
 import {
   walletState,
   maximumVoteNum,
-  txActions,
-  forbiddenActionTime
+  txActions
+  //  forbiddenActionTime
 } from 'constants/config'
 import { getBaseParams, lessThanOneDay, getBasePath } from 'utils/tools'
-import CountDown from 'component/CountDownNew'
+import CountDown from 'component/CountDownNewFormat'
 import MessageConfirm from 'component/MessageConfirm'
 
 import styles from './NodeList.scss'
@@ -23,13 +23,15 @@ const mapStateToProps = ({
   nodes: { nodes },
   auth: { authStatus },
   calculatedDetails: { stake },
-  dataRelayNew: { nodeAddrBaseurl }
+  dataRelayNew: { nodeAddrBaseurl },
+  intervalManager: { detailVoteTimer }
 }) => {
   return {
     nodes,
     authStatus,
     stake,
-    nodeAddrBaseurl
+    nodeAddrBaseurl,
+    detailVoteTimer
   }
 }
 
@@ -279,10 +281,10 @@ class NodeList extends React.Component {
     // this.setState({ candidates: result })
   }
 
-  onCountDownFinish = () => {
-    console.log('nodelist 倒计时结束')  //eslint-disable-line
-    this.forceUpdate()
-  }
+  // onCountDownFinish = () => {
+  //   console.log('nodelist 倒计时结束')  //eslint-disable-line
+  //   this.forceUpdate()
+  // }
 
   cancelMessageModal = () => {
     const newMessageDetail = {
@@ -388,10 +390,17 @@ class NodeList extends React.Component {
           >
             <FormattedMessage id="nodeColumn7" label={true} />
             <CountDown
+              time={
+                (this.props.detailVoteTimer &&
+                  this.props.detailVoteTimer.time) ||
+                0
+              }
+            />
+            {/* <CountDown
               time={lastVoteTime}
               onFinish={this.onCountDownFinish}
               totalCountDownTime={forbiddenActionTime}
-            />
+            /> */}
           </div>
         )
       } else if (useProxy) {
