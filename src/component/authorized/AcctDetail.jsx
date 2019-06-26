@@ -51,30 +51,24 @@ function AcctDetail(props) {
   const [amount, setAmount] = useState('')
   const [messageModal, showMessageModal] = useState(false)
   const [modalID, setModalID] = useState('')
-  const [addrErr, setAddrErr] = useState(false)
   const [settedProxyAddr, changeSettedProxyAddr] = useState('')
 
-  const validateInput = e => {
-    const addr = e.target.value.trim()
-    if (addr && (!window.vnt.isAddress(addr) || addr.length !== 42)) {
-      setAddrErr(true)
-    }
-  }
-
-  const approveSetProxyAddr = () => {
-    if (settedProxyAddr && !addrErr) {
+  const isAddrValid = addr => {
+    if (addr && addr.length === 42 && window.vnt.isAddress(addr)) {
       return true
     }
     return false
   }
 
   const handleInputProxyAddr = e => {
-    setAddrErr(false)
     changeSettedProxyAddr(e.target.value.trim())
   }
 
   const handleSetProxyAddr = async () => {
-    if (details.isProxy) {
+    if (!isAddrValid(settedProxyAddr)) {
+      showMessageModal(true)
+      setModalID('modal10')
+    } else if (details.isProxy) {
       showMessageModal(true)
       setModalID('modal6')
     } else if (details.stake === 0) {
@@ -118,7 +112,6 @@ function AcctDetail(props) {
         throw new Error('get proxyVotes detail error!')
       }
     }
-    // setAddrErr(false)
     // changeSettedProxyAddr('')
   }
 
@@ -430,7 +423,6 @@ function AcctDetail(props) {
           setAmount('')
           setEstimatedVotes(0)
           setShowEstimation(false)
-          setAddrErr(false)
           changeSettedProxyAddr('')
           break
         }
@@ -607,7 +599,6 @@ function AcctDetail(props) {
                   <FormattedMessage id="htitle7" />
                 </span>
                 <Input
-                  onBlur={validateInput}
                   onChange={handleInputProxyAddr}
                   value={settedProxyAddr}
                   placeholder={props.intl.messages['htitle18']}
@@ -628,11 +619,7 @@ function AcctDetail(props) {
                     /> */}
                   </div>
                 ) : (
-                  <Button
-                    disabled={!approveSetProxyAddr()}
-                    onClick={handleSetProxyAddr}
-                    type="primary"
-                  >
+                  <Button onClick={handleSetProxyAddr} type="primary">
                     <FormattedMessage id="htitle17" />
                   </Button>
                 )}
