@@ -153,8 +153,8 @@ function AcctDetail(props) {
         type: 'account/sendTx',
         payload: {
           funcName: txActions.stake,
-          needInput: true,
-          inputData: [amount]
+          needInput: false,
+          inputData: parseInt(amount, 10) * Math.pow(10, 18)
         },
         callback: () => handleTxSuccessResult(txActions.stake, amount)
       })
@@ -335,8 +335,12 @@ function AcctDetail(props) {
           : 0
       // 抵押VNT的数量
       newDetails.stake =
-        stake && stake.data && stake.data.stakeCount
-          ? parseInt(stake.data.stakeCount)
+        stake && stake.data
+          ? stake.data.vnt
+            ? parseInt(stake.data.vnt)
+            : stake.data.stakeCount
+              ? parseInt(stake.data.stakeCount)
+              : 0
           : 0
       // 是否产生过抵押
       newDetails.hasStaked =

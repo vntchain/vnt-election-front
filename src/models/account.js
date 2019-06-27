@@ -1,6 +1,6 @@
 import { effects } from 'redux-sirius'
 import abi from 'utils/abi.json'
-import { txSteps } from 'constants/config'
+import { txSteps, txActions } from 'constants/config'
 const { put, select } = effects
 
 export default {
@@ -94,7 +94,7 @@ export default {
         chainId: chainId, // window.vnt.version.network,
         gasPrice: gasPrice || 30000000000000,
         gas: gas || 4000000,
-        value: 0
+        value: funcName === txActions.stake ? inputData : 0
       }
       //console.log(options) // eslint-disable-line
       const promise = new Promise(resolve => {

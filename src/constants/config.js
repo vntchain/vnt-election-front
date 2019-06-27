@@ -51,7 +51,7 @@ export const txSteps = {
 }
 
 export const txActions = {
-  stake: 'stake',
+  stake: '$stake',
   unStake: 'unStake',
   setProxy: 'setProxy', //设置委托人
   cancelProxy: 'cancelProxy', // 取消委托
