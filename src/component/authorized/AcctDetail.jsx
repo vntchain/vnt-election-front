@@ -337,7 +337,7 @@ function AcctDetail(props) {
       newDetails.stake =
         stake && stake.data
           ? stake.data.vnt
-            ? parseInt(stake.data.vnt)
+            ? parseInt(stake.data.vnt) / Math.pow(10, 18)
             : stake.data.stakeCount
               ? parseInt(stake.data.stakeCount)
               : 0
