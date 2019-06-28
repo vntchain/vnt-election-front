@@ -497,11 +497,19 @@ class NodeList extends React.Component {
           }
         }
       }
+      let homeUrl = null
+      if (value.match(/^(https?:)?\/\//)) {
+        homeUrl = value
+      } else {
+        homeUrl = `//${value}`
+      }
       return {
-        children: (
-          <a href={`//${value}`} target="__blank">
+        children: value ? (
+          <a href={homeUrl} target="__blank">
             {value}
           </a>
+        ) : (
+          ''
         ),
         props: {}
       }
