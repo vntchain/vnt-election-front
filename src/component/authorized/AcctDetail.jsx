@@ -4,7 +4,7 @@ import { txActions, forbiddenActionTime } from 'constants/config'
 import { FormattedMessage, injectIntl } from '@translate'
 import { Tooltip, Icon, Switch, Input, Button } from 'antd'
 import { format } from 'date-fns'
-import { calcVotes, sliceNum, lessThanOneDay } from 'utils/tools'
+import { calcVotes, sliceNum, lessThanOneDay, setPrecision } from 'utils/tools'
 import Margin from 'component/layout/Margin'
 import CountDown from 'component/CountDownNewFormat'
 
@@ -331,7 +331,7 @@ function AcctDetail(props) {
       // 余额
       newDetails.balance =
         balance && balance.data
-          ? parseInt(balance.data, 16) / Math.pow(10, 18)
+          ? setPrecision(parseInt(balance.data, 16) / Math.pow(10, 18), 8)
           : 0
       // 抵押VNT的数量
       newDetails.stake =
@@ -457,7 +457,7 @@ function AcctDetail(props) {
       <div className={styles.detail}>
         <ul className={styles.wrap}>
           <li className={`${styles['item']} ${styles['item3']}`}>
-            <p>{`${details.balance}`.slice(0, 16)}</p>
+            <p>{details.balance}</p>
             <h5>
               <FormattedMessage id="htitle1" />
             </h5>

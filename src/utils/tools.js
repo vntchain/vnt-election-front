@@ -72,3 +72,8 @@ export const formatTime = (s, formatStyle) => {
   }
   return result
 }
+
+export const setPrecision = (num, precision) => {
+  const ratio = Math.pow(10, precision)
+  return Math.round(num * ratio) / ratio
+}
