@@ -5,10 +5,12 @@ import axios from 'utils/axios'
 import { netConfig } from 'constants/config'
 const { put, call, select } = effects
 
+const defaultNet = process.env.REACT_APP_DEFAULT_NET.trim()
+
 export default {
   state: {
-    nodesAxiosBaseUrl: netConfig.testnet.nodesURL,
-    nodeAddrBaseurl: netConfig.testnet.nodeAddr
+    nodesAxiosBaseUrl: netConfig[defaultNet].nodesURL,
+    nodeAddrBaseurl: netConfig[defaultNet].nodeAddr
   },
   reducers: {
     setState: (state, { payload }) => {
