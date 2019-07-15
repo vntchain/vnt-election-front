@@ -49,7 +49,7 @@ function Authorized(props) {
     () => {
       clearInterval(timer.current)
       if (props.accountAddr.addr && props.rpc) {
-        //console.log('acct或者rpc发生变化, addr=', props.accountAddr.addr, 'rpc=',props.rpc) //eslint-disable-line
+        // console.log('acct或者rpc发生变化, addr=', props.accountAddr.addr, 'rpc=',props.rpc) //eslint-disable-line
         requestRPCdataAll(props.accountAddr.addr)
         timer.current = setInterval(() => {
           //console.log('detail的定时刷新') //eslint-disable-line
@@ -77,7 +77,7 @@ function Authorized(props) {
           }
         })
       } catch (e) {
-        throw new Error(e.message)
+        console.error(e.message) // eslint-disable-line
       }
     }
   }, [])

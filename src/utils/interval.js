@@ -49,7 +49,7 @@ export class intervalManagerApp {
 
   clearIntervalAll(keys, updateDataFn) {
     if (!Array.isArray(keys)) {
-      throw new Error('keys is not array')
+      console.error('keys is not array') // eslint-disable-line
     }
     keys.map(k => {
       if (!this.intervals[k]) return

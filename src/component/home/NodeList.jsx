@@ -314,7 +314,7 @@ class NodeList extends React.Component {
         break
       }
       default:
-        throw new Error('undefined actions!')
+        console.error('undefined vote actions!') // eslint-disable-line
     }
   }
 

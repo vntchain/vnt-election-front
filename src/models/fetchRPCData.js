@@ -1,6 +1,12 @@
 import { effects } from 'redux-sirius'
 import { rpcInstance } from 'utils/axios'
+import { message } from 'antd'
 const { put, call, select } = effects
+
+message.config({
+  duration: 2,
+  maxCount: 3,
+});
 
 export default {
   state: {
@@ -47,8 +53,13 @@ export default {
           payload: result
         })
       } catch (e) {
-        console.log(e.message) //eslint-disable-line
-        throw new Error(e.message)
+        message.error(e.message) //eslint-disable-line
+        yield put({
+          type: 'account/clearField',
+          payload: {
+            field
+          }
+        })
       }
     })
   })

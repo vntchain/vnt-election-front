@@ -10,7 +10,7 @@ import {
 import { getBaseParams } from 'utils/tools'
 import { FormattedMessage } from '@translate'
 import CountDown from 'component/CountDown'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import apis from 'constants/apis'
 
 import styles from './Modal.scss'
@@ -37,7 +37,7 @@ function TxModalQueryResult(props) {
   const timer = useRef(null)
   const handleReceipt = (funcName, receipt) => {
     if (!props.accountAddr.addr) {
-      throw new Error(' no account addr!')
+      message.error('no account addr!') // eslint-disable-line
     }
     if (receipt.status == '0x1') {
       // 代表交易成功 此时需要去重新取rpc的数据
@@ -145,7 +145,7 @@ function TxModalQueryResult(props) {
             handleReceipt(sendResult.funcName, receipt)
           )
         } catch (e) {
-          throw new Error(e.message)
+          message.error(e.message) // eslint-disable-line
         }
       }
     },

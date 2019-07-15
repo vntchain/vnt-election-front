@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { txActions, forbiddenActionTime } from 'constants/config'
 import { FormattedMessage, injectIntl } from '@translate'
-import { Tooltip, Icon, Switch, Input, Button } from 'antd'
+import { Tooltip, Icon, Switch, Input, Button, message } from 'antd'
 import { format } from 'date-fns'
 import { calcVotes, sliceNum, lessThanOneDay, setPrecision } from 'utils/tools'
 import Margin from 'component/layout/Margin'
@@ -108,8 +108,7 @@ function AcctDetail(props) {
           })
         }
       } catch (e) {
-        //console.log(e) // eslint-disable-line
-        throw new Error('get proxyVotes detail error!')
+        message.error('get proxyVotes detail error!') // eslint-disable-line
       }
     }
     // changeSettedProxyAddr('')
@@ -211,7 +210,7 @@ function AcctDetail(props) {
       case txActions.stake: {
         // 此处最好再判断一下amount是否非法
         if (isNaN(amount)) {
-          throw new Error('invalid amount!')
+          message.error('invalid amount!') // eslint-disable-line
         }
         const deltaVnt = parseInt(amount, 10)
         const newBalance = details.balance - deltaVnt
@@ -283,7 +282,7 @@ function AcctDetail(props) {
         break
       }
       default:
-        throw new Error('undefined actions!')
+        message.error('undefined vote actions!') // eslint-disable-line
     }
   }
 

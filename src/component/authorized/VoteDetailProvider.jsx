@@ -16,7 +16,7 @@ function VoteDetailProvider(props) {
       case 'init':
         return { ...state, ...action.payload }
       default:
-        throw new Error()
+        console.error('undefined action type!') // eslint-disable-line
     }
   }
   const [state, dispatch] = useReducer(reducer, {

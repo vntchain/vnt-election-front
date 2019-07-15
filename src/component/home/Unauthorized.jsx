@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { FormattedMessage } from '@translate'
-import { Icon, Tooltip } from 'antd'
+import { Icon, Tooltip, message } from 'antd'
 
 import MessageConfirm from 'component/MessageConfirm'
 import { walletState, netConfig } from 'constants/config'
@@ -24,9 +24,9 @@ function Unauthorized(props) {
 
   const checkNetwork = () => {
     window.vnt.getNetworkUrl((err, result) => {
-      // 需要判断result的值，同时修改nodeslist的后端接口，此时无法直接刷新页面，需要仅内部页面刷新
-      //console.log(`network_change: err= ${err}, result=${JSON.stringify(result)}`) //eslint-disable-line
+      // 需要判断result的值，同时修改nodeslist的后端接口，此时无法直接刷新页面，需要仅内部页面刷新 
       if (!err && result) {
+        // console.warn(`network_change: err= ${err}, result=${JSON.stringify(result)}`) //eslint-disable-line
         props.dispatch({
           type: 'fetchRPCData/setState',
           payload: {
@@ -77,11 +77,11 @@ function Unauthorized(props) {
                   : walletState.unauthorized
               })
             } else {
-              throw new Error(err)
+              message.error(err) // eslint-disable-line
             }
           })
         } catch (e) {
-          throw new Error(e.message)
+          message.error(e.message) // eslint-disable-line
         }
       } else {
         // 没有授权 状态设置为已登录 未授权
@@ -97,11 +97,11 @@ function Unauthorized(props) {
     if (props.authStatus === walletState.uninstalled) {
       // 未安装，点击时则会再次去检测
       if (typeof window.vnt !== 'undefined') {
-        checkNetwork()
+        // checkNetwork()
         try {
           getAuth()
         } catch (e) {
-          throw new Error(e.message) //eslint-disable-line
+          message.error(e.message) // eslint-disable-line
         }
       } else {
         // 未安装插件
@@ -112,7 +112,7 @@ function Unauthorized(props) {
       try {
         getAuth()
       } catch (e) {
-        throw new Error(e.message) //eslint-disable-line
+        message.error(e.message) // eslint-disable-line
       }
     }
   }
@@ -122,11 +122,6 @@ function Unauthorized(props) {
       //console.log('未检测到钱包插件') // eslint-disable-line
     } else {
       checkNetwork()
-      // try {
-      //   getAuth()
-      // } catch (e) {
-      //   throw new Error(e.message) //eslint-disable-line
-      // }
     }
   }, [])
 

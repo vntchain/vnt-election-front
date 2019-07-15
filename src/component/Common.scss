@@ -5,10 +5,14 @@
     .ant-modal-body {
       font-size: 0.16rem;
       min-height: 0.6rem;
+      padding: 0.3rem;
       color: #fff;
-      background: $color-disable;
+      background: rgba(0, 0, 0, 0.75);
       border-radius: $border-radius-1;
       text-align: center;
+    }
+    .ant-modal-close .ant-modal-close-icon svg {
+      fill: rgba(255, 255, 255, 0.85);
     }
   }
 }

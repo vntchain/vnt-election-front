@@ -28,6 +28,13 @@ export default {
         [field]: data
       }
     },
+    clearField: (state, {payload}) => {
+      const { field } = payload
+      return {
+        ...state,
+        [field]: null
+      }
+    },
     clearState: state => {
       const newState = state
       for (let key in newState) {
@@ -51,7 +58,7 @@ export default {
           ? contract.packFunctionData(funcName, inputData)
           : contract.packFunctionData(funcName)
       } catch (e) {
-        throw new Error(e)
+        console.error(e.message) // eslint-disable-line
       }
       let gasPrice, gas
       try {
@@ -84,8 +91,7 @@ export default {
           gas = gasResponse.res
         }
       } catch (e) {
-        //console.log(e) // eslint-disable-line
-        throw new Error(e)
+        console.error(e.message) // eslint-disable-line
       }
       const options = {
         from: sendAddr.addr,
