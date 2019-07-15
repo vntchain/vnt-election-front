@@ -37,7 +37,7 @@ function TxModalQueryResult(props) {
   const timer = useRef(null)
   const handleReceipt = (funcName, receipt) => {
     if (!props.accountAddr.addr) {
-      message.error('no account addr!') // eslint-disable-line
+      message.error('no account addr!') 
     }
     if (receipt.status == '0x1') {
       // 代表交易成功 此时需要去重新取rpc的数据
@@ -145,7 +145,7 @@ function TxModalQueryResult(props) {
             handleReceipt(sendResult.funcName, receipt)
           )
         } catch (e) {
-          message.error(e.message) // eslint-disable-line
+          message.error(e.message) 
         }
       }
     },

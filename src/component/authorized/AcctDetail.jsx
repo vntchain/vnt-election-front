@@ -108,7 +108,7 @@ function AcctDetail(props) {
           })
         }
       } catch (e) {
-        message.error('get proxyVotes detail error!') // eslint-disable-line
+        message.error('get proxyVotes detail error!') 
       }
     }
     // changeSettedProxyAddr('')
@@ -210,7 +210,7 @@ function AcctDetail(props) {
       case txActions.stake: {
         // 此处最好再判断一下amount是否非法
         if (isNaN(amount)) {
-          message.error('invalid amount!') // eslint-disable-line
+          message.error('invalid amount!') 
         }
         const deltaVnt = parseInt(amount, 10)
         const newBalance = details.balance - deltaVnt
@@ -282,7 +282,7 @@ function AcctDetail(props) {
         break
       }
       default:
-        message.error('undefined vote actions!') // eslint-disable-line
+        message.error('undefined vote actions!') 
     }
   }
 

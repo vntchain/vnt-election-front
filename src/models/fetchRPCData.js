@@ -53,7 +53,7 @@ export default {
           payload: result
         })
       } catch (e) {
-        message.error(e.message) //eslint-disable-line
+        message.error(e.message) 
         yield put({
           type: 'account/clearField',
           payload: {

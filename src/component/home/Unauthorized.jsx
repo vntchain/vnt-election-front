@@ -77,11 +77,11 @@ function Unauthorized(props) {
                   : walletState.unauthorized
               })
             } else {
-              message.error(err) // eslint-disable-line
+              message.error(err)
             }
           })
         } catch (e) {
-          message.error(e.message) // eslint-disable-line
+          message.error(e.message)
         }
       } else {
         // 没有授权 状态设置为已登录 未授权
@@ -101,7 +101,7 @@ function Unauthorized(props) {
         try {
           getAuth()
         } catch (e) {
-          message.error(e.message) // eslint-disable-line
+          message.error(e.message) 
         }
       } else {
         // 未安装插件
@@ -112,7 +112,7 @@ function Unauthorized(props) {
       try {
         getAuth()
       } catch (e) {
-        message.error(e.message) // eslint-disable-line
+        message.error(e.message)
       }
     }
   }
