@@ -78,10 +78,7 @@ export default {
           yield call(callback, ns, result)
         }
       } catch (e) {
-        /* eslint-disable */
-        console.log('%c%s\n%crequest "%s" error', 'color: white; background: #029e74; font-size: 16px;', '________________________', 'color: #ff9200; background: #363636;', path)
-        console.log(e.message)
-        /* eslint-enable */
+        console.error(e.message) // eslint-disable-line
         yield put({
           type: `${ns}/setState`,
           payload: {

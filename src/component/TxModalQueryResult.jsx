@@ -39,8 +39,7 @@ function TxModalQueryResult(props) {
     if (!props.accountAddr.addr) {
       message.error('no account addr!') 
     }
-    if (receipt.status == '0x1') {
-      // 代表交易成功 此时需要去重新取rpc的数据
+    if (receipt.status == '0x1') {      
       props.dispatch({
         type: 'account/setSendResult',
         payload: {
@@ -55,15 +54,17 @@ function TxModalQueryResult(props) {
         // 仅需要获取投票
         requestRPCData(props.accountAddr.addr, requestType.vote)
       }
-      // 再次获取最新的节点信息
-      props.dispatch({
-        type: 'dataRelayNew/fetchData',
-        payload: {
-          path: `${apis.nodes}?${getBaseParams(props.nodePageIndex, pageSize)}`,
-          ns: 'nodes',
-          field: 'nodes'
-        }
-      })
+        // 再次获取最新的节点信息 等待2s再去取数据，确保浏览器后端数据拿到最新的
+      setTimeout(() => {
+        props.dispatch({
+          type: 'dataRelayNew/fetchData',
+          payload: {
+            path: `${apis.nodes}?${getBaseParams(props.nodePageIndex, pageSize)}`,
+            ns: 'nodes',
+            field: 'nodes'
+          }
+        })
+      }, 2000)
     } else {
       // 代表交易失败
       props.dispatch({
