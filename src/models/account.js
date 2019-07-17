@@ -75,7 +75,8 @@ export default {
             {
               from: sendAddr.addr,
               to: '0x0000000000000000000000000000000000000009',
-              data: data
+              data: data,
+              value: funcName === txActions.stake ? inputData : 0
             },
             (err, res) => {
               resolve({ err, res })
