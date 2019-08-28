@@ -77,3 +77,15 @@ export const setPrecision = (num, precision = 8) => {
   const ratio = Math.pow(10, precision)
   return Math.floor(num * ratio) / ratio
 }
+
+export const formatName = str => {
+  if(!str || typeof str !== 'string'){
+    return ''
+  }
+
+  let newStr = str
+  if(newStr.length > 15) {
+    newStr=newStr.slice(0,14)+'...'
+  }
+  return newStr
+}
