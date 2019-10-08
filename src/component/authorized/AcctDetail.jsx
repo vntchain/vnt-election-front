@@ -145,26 +145,23 @@ function AcctDetail(props) {
     }
   }
 
-  const handleFreeze = () => {
-    if (parseInt(amount, 10) == amount && parseInt(amount, 10) > 0) {
-      // 是整数,发送交易，显示模态框
-      props.dispatch({
-        type: 'account/sendTx',
-        payload: {
-          funcName: txActions.stake,
-          needInput: false,
-          inputData: parseInt(amount, 10) * Math.pow(10, 18)
-        },
-        callback: () => handleTxSuccessResult(txActions.stake, amount)
-      })
-    } else {
-      showMessageModal(true)
-      setModalID('modal1')
-    }
-    // setAmount('')
-    // setEstimatedVotes(0)
-    // setShowEstimation(false)
-  }
+  // const handleFreeze = () => {
+  //   if (parseInt(amount, 10) == amount && parseInt(amount, 10) > 0) {
+  //     // 是整数,发送交易，显示模态框
+  //     props.dispatch({
+  //       type: 'account/sendTx',
+  //       payload: {
+  //         funcName: txActions.stake,
+  //         needInput: false,
+  //         inputData: parseInt(amount, 10) * Math.pow(10, 18)
+  //       },
+  //       callback: () => handleTxSuccessResult(txActions.stake, amount)
+  //     })
+  //   } else {
+  //     showMessageModal(true)
+  //     setModalID('modal1')
+  //   }
+  // }
 
   const handleUnfreeze = () => {
     // 解抵押是全部解抵押
@@ -521,18 +518,18 @@ function AcctDetail(props) {
               </div>
               <input onChange={handleInputVNT} value={amount} />
             </div>
-            {details.balance > 0 ? (
+            {/* {details.balance > 0 ? (
               <button
                 className={`${styles['freeze']} ${styles['action']}`}
                 onClick={handleFreeze}
               >
                 <FormattedMessage id="htitle13" />
               </button>
-            ) : (
+            ) : ( */}
               <div className={`${styles['disable']} ${styles['action']}`}>
                 <FormattedMessage id="htitle13" />
               </div>
-            )}
+            {/* )} */}
           </li>
           <li className={`${styles['item']} ${styles['item2']}`}>
             <div className={styles.stakeCount}>
