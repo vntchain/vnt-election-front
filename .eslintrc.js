@@ -3,15 +3,13 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
-    jest: true,
+    jest: true
   },
   parser: "babel-eslint",
   parserOptions: {
     sourceType: "module"
   },
-  plugins: [
-    "react-hooks"
-  ],
+  plugins: ["react-hooks"],
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",

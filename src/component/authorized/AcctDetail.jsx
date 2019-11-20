@@ -108,7 +108,7 @@ function AcctDetail(props) {
           })
         }
       } catch (e) {
-        message.error('get proxyVotes detail error!') 
+        message.error('get proxyVotes detail error!')
       }
     }
     // changeSettedProxyAddr('')
@@ -145,23 +145,23 @@ function AcctDetail(props) {
     }
   }
 
-  // const handleFreeze = () => {
-  //   if (parseInt(amount, 10) == amount && parseInt(amount, 10) > 0) {
-  //     // 是整数,发送交易，显示模态框
-  //     props.dispatch({
-  //       type: 'account/sendTx',
-  //       payload: {
-  //         funcName: txActions.stake,
-  //         needInput: false,
-  //         inputData: parseInt(amount, 10) * Math.pow(10, 18)
-  //       },
-  //       callback: () => handleTxSuccessResult(txActions.stake, amount)
-  //     })
-  //   } else {
-  //     showMessageModal(true)
-  //     setModalID('modal1')
-  //   }
-  // }
+  const handleFreeze = () => {
+    if (parseInt(amount, 10) == amount && parseInt(amount, 10) > 0) {
+      // 是整数,发送交易，显示模态框
+      props.dispatch({
+        type: 'account/sendTx',
+        payload: {
+          funcName: txActions.stake,
+          needInput: false,
+          inputData: parseInt(amount, 10) * Math.pow(10, 18)
+        },
+        callback: () => handleTxSuccessResult(txActions.stake, amount)
+      })
+    } else {
+      showMessageModal(true)
+      setModalID('modal1')
+    }
+  }
 
   const handleUnfreeze = () => {
     // 解抵押是全部解抵押
@@ -207,7 +207,7 @@ function AcctDetail(props) {
       case txActions.stake: {
         // 此处最好再判断一下amount是否非法
         if (isNaN(amount)) {
-          message.error('invalid amount!') 
+          message.error('invalid amount!')
         }
         const deltaVnt = parseInt(amount, 10)
         const newBalance = details.balance - deltaVnt
@@ -279,7 +279,7 @@ function AcctDetail(props) {
         break
       }
       default:
-        message.error('undefined vote actions!') 
+        message.error('undefined vote actions!')
     }
   }
 
@@ -294,152 +294,140 @@ function AcctDetail(props) {
     })
   }
 
-  useEffect(
-    () => {
-      if (details.useProxy && details.proxyAddr) {
-        props.dispatch({
-          type: 'fetchRPCData/getRPCdata',
-          payload: {
-            addr: details.proxyAddr,
-            method: 'core_getVoter',
-            field: 'proxiedVotes'
-          }
-        })
-        props.dispatch({
-          type: 'account/setProxyAddr',
-          payload: details.proxyAddr
-        })
-      } else {
-        props.dispatch({
-          type: 'account/setProxiedVotes',
-          payload: null
-        })
-      }
-    },
-    [details.useProxy, details.proxyAddr]
-  )
-
-  useEffect(
-    () => {
-      //console.log('计算details: ', props) //eslint-disable-line
-      const { balance, myVotes, stake } = props
-      const newDetails = {}
-      // 余额
-      newDetails.balance =
-        balance && balance.data
-          ? setPrecision(parseInt(balance.data, 16) / Math.pow(10, 18), 8)
-          : 0
-      // 抵押VNT的数量
-      newDetails.stake =
-        stake && stake.data
-          ? stake.data.vnt
-            ? parseInt(stake.data.vnt) / Math.pow(10, 18)
-            : stake.data.stakeCount
-              ? parseInt(stake.data.stakeCount)
-              : 0
-          : 0
-      // 是否产生过抵押
-      newDetails.hasStaked =
-        stake && stake.data && stake.data.lastStakeTimeStamp
-          ? parseInt(stake.data.lastStakeTimeStamp) !== 0
-          : false
-      // 上次抵押时间
-      newDetails.lastStakeTime = newDetails.hasStaked
-        ? parseInt(stake.data.lastStakeTimeStamp) * 1000
-        : 0
-      // 票数
-      newDetails.votes =
-        myVotes && myVotes.data && myVotes.data.lastVoteCount
-          ? parseInt(myVotes.data.lastVoteCount)
-          : 0
-      // 是否投过票
-      newDetails.hasVoted =
-        myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp
-          ? parseInt(myVotes.data.lastVoteTimeStamp) !== 0
-          : false
-      // 上次投票时间
-      newDetails.lastVoteTime = newDetails.hasVoted
-        ? parseInt(myVotes.data.lastVoteTimeStamp) * 1000
-        : 0
-      // 是否使用代理
-      newDetails.useProxy =
-        myVotes &&
-        myVotes.data &&
-        myVotes.data.proxy &&
-        parseInt(myVotes.data.proxy, 16)
-          ? true
-          : false
-      // 代理地址
-      newDetails.proxyAddr = newDetails.useProxy ? myVotes.data.proxy : null
-      // 是否开启代理，即帮别人投票的功能
-      newDetails.isProxy =
-        (myVotes && myVotes.data && myVotes.data.isProxy) || false
-      // 帮别人投票的票数
-      newDetails.proxyVotes =
-        myVotes && myVotes.data && myVotes.data.proxyVoteCount
-          ? parseInt(myVotes.data.proxyVoteCount)
-          : 0
-
-      for (let idx in newDetails) {
-        if (newDetails[idx] !== details[idx]) {
-          if (
-            newDetails.hasStaked &&
-            lessThanOneDay(newDetails.lastStakeTime)
-          ) {
-            // key, deadline, updateDataFn
-            intervalManagerInstance.newInterval(
-              'detailStakeTimer',
-              Math.floor(
-                (forbiddenActionTime + newDetails.lastStakeTime - Date.now()) /
-                  1000
-              ),
-              storeIntervalData
-            )
-          } else {
-            intervalManagerInstance.clearInterval(
-              'detailStakeTimer',
-              storeIntervalData
-            )
-          }
-
-          if (newDetails.hasVoted && lessThanOneDay(newDetails.lastVoteTime)) {
-            intervalManagerInstance.newInterval(
-              'detailVoteTimer',
-              Math.floor(
-                (forbiddenActionTime + newDetails.lastVoteTime - Date.now()) /
-                  1000
-              ),
-              storeIntervalData
-            )
-          } else {
-            intervalManagerInstance.clearInterval(
-              'detailVoteTimer',
-              storeIntervalData
-            )
-          }
-
-          setDetails(newDetails)
-          // 此时清空内部状态？？？
-          setAmount('')
-          setEstimatedVotes(0)
-          setShowEstimation(false)
-          changeSettedProxyAddr('')
-          break
-        }
-      }
-    },
-    [props.balance, props.stake, props.myVotes]
-  )
-
-  useEffect(
-    () => {
+  useEffect(() => {
+    if (details.useProxy && details.proxyAddr) {
       props.dispatch({
-        type: 'calculatedDetails/setStake',
-        payload: details.stake
+        type: 'fetchRPCData/getRPCdata',
+        payload: {
+          addr: details.proxyAddr,
+          method: 'core_getVoter',
+          field: 'proxiedVotes'
+        }
       })
-    },
-    [details.stake]
-  )
+      props.dispatch({
+        type: 'account/setProxyAddr',
+        payload: details.proxyAddr
+      })
+    } else {
+      props.dispatch({
+        type: 'account/setProxiedVotes',
+        payload: null
+      })
+    }
+  }, [details.useProxy, details.proxyAddr])
+
+  useEffect(() => {
+    //console.log('计算details: ', props) //eslint-disable-line
+    const { balance, myVotes, stake } = props
+    const newDetails = {}
+    // 余额
+    newDetails.balance =
+      balance && balance.data
+        ? setPrecision(parseInt(balance.data, 16) / Math.pow(10, 18), 8)
+        : 0
+    // 抵押VNT的数量
+    newDetails.stake =
+      stake && stake.data
+        ? stake.data.vnt
+          ? parseInt(stake.data.vnt) / Math.pow(10, 18)
+          : stake.data.stakeCount
+          ? parseInt(stake.data.stakeCount)
+          : 0
+        : 0
+    // 是否产生过抵押
+    newDetails.hasStaked =
+      stake && stake.data && stake.data.lastStakeTimeStamp
+        ? parseInt(stake.data.lastStakeTimeStamp) !== 0
+        : false
+    // 上次抵押时间
+    newDetails.lastStakeTime = newDetails.hasStaked
+      ? parseInt(stake.data.lastStakeTimeStamp) * 1000
+      : 0
+    // 票数
+    newDetails.votes =
+      myVotes && myVotes.data && myVotes.data.lastVoteCount
+        ? parseInt(myVotes.data.lastVoteCount)
+        : 0
+    // 是否投过票
+    newDetails.hasVoted =
+      myVotes && myVotes.data && myVotes.data.lastVoteTimeStamp
+        ? parseInt(myVotes.data.lastVoteTimeStamp) !== 0
+        : false
+    // 上次投票时间
+    newDetails.lastVoteTime = newDetails.hasVoted
+      ? parseInt(myVotes.data.lastVoteTimeStamp) * 1000
+      : 0
+    // 是否使用代理
+    newDetails.useProxy =
+      myVotes &&
+      myVotes.data &&
+      myVotes.data.proxy &&
+      parseInt(myVotes.data.proxy, 16)
+        ? true
+        : false
+    // 代理地址
+    newDetails.proxyAddr = newDetails.useProxy ? myVotes.data.proxy : null
+    // 是否开启代理，即帮别人投票的功能
+    newDetails.isProxy =
+      (myVotes && myVotes.data && myVotes.data.isProxy) || false
+    // 帮别人投票的票数
+    newDetails.proxyVotes =
+      myVotes && myVotes.data && myVotes.data.proxyVoteCount
+        ? parseInt(myVotes.data.proxyVoteCount)
+        : 0
+
+    for (let idx in newDetails) {
+      if (newDetails[idx] !== details[idx]) {
+        if (newDetails.hasStaked && lessThanOneDay(newDetails.lastStakeTime)) {
+          // key, deadline, updateDataFn
+          intervalManagerInstance.newInterval(
+            'detailStakeTimer',
+            Math.floor(
+              (forbiddenActionTime + newDetails.lastStakeTime - Date.now()) /
+                1000
+            ),
+            storeIntervalData
+          )
+        } else {
+          intervalManagerInstance.clearInterval(
+            'detailStakeTimer',
+            storeIntervalData
+          )
+        }
+
+        if (newDetails.hasVoted && lessThanOneDay(newDetails.lastVoteTime)) {
+          intervalManagerInstance.newInterval(
+            'detailVoteTimer',
+            Math.floor(
+              (forbiddenActionTime + newDetails.lastVoteTime - Date.now()) /
+                1000
+            ),
+            storeIntervalData
+          )
+        } else {
+          intervalManagerInstance.clearInterval(
+            'detailVoteTimer',
+            storeIntervalData
+          )
+        }
+
+        setDetails(newDetails)
+        // 此时清空内部状态？？？
+        setAmount('')
+        setEstimatedVotes(0)
+        setShowEstimation(false)
+        changeSettedProxyAddr('')
+        break
+      }
+    }
+  }, [props.balance, props.stake, props.myVotes])
+
+  useEffect(() => {
+    props.dispatch({
+      type: 'calculatedDetails/setStake',
+      payload: details.stake
+    })
+  }, [details.stake])
 
   // const forceUpdate = useState(0)[1]
   // const onCountDownFinish = () => {
@@ -518,18 +506,18 @@ function AcctDetail(props) {
               </div>
               <input onChange={handleInputVNT} value={amount} />
             </div>
-            {/* {details.balance > 0 ? (
+            {details.balance > 0 ? (
               <button
                 className={`${styles['freeze']} ${styles['action']}`}
                 onClick={handleFreeze}
               >
                 <FormattedMessage id="htitle13" />
               </button>
-            ) : ( */}
+            ) : (
               <div className={`${styles['disable']} ${styles['action']}`}>
                 <FormattedMessage id="htitle13" />
               </div>
-            {/* )} */}
+            )}
           </li>
           <li className={`${styles['item']} ${styles['item2']}`}>
             <div className={styles.stakeCount}>
