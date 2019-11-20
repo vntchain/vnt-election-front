@@ -43,3 +43,5 @@ server {
 sudo nginx -s reload
 ```
 部署成功后，通过上述设置的域名即可访问页面。
+
+
