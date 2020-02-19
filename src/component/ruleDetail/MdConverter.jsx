@@ -1,30 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import marked from 'marked'
+import React, { useEffect, useState } from "react";
+import marked from "marked";
 
-import Prism from './prism'
-import './prism.css'
+import Prism from "./prism";
+import "./prism.css";
 
-import styles from './MdConverter.scss'
+import styles from "./MdConverter.scss";
+import { connect } from "react-redux";
 
-export default function MarkdownConverter(props) {
-  const [mdContent, setMdContent] = useState('')
-  const file = require(`../../assets/docs/${props.filePath}`)
+const mapStateToProps = ({ international: { language } }) => {
+  return {
+    language
+  };
+};
+export default connect(mapStateToProps)(function MarkdownConverter(props) {
+  const [mdContent, setMdContent] = useState("");
+  const language = props.language;
 
+  const file =
+    language === "zh"
+      ? require(`../../assets/docs/ruleDetails/ruleDetails.md`)
+      : require(`../../assets/docs/ruleDetails/ruleDetails.en.md`);
   useEffect(() => {
     fetch(file)
       .then(res => {
-        return res.text()
+        return res.text();
       })
       .then(text => {
-        setMdContent(marked(text))
-      })
-  }, [])
-  useEffect(
-    () => {
-      Prism.highlightAll()
-    },
-    [mdContent]
-  )
+        setMdContent(marked(text));
+      });
+  }, [language]);
+  useEffect(() => {
+    Prism.highlightAll();
+  }, [mdContent]);
 
   return (
     <div className={styles.container}>
@@ -33,5 +40,5 @@ export default function MarkdownConverter(props) {
         dangerouslySetInnerHTML={{ __html: mdContent }}
       />
     </div>
-  )
-}
+  );
+});

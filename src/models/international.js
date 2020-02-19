@@ -1,11 +1,15 @@
-// import { effect } from 'redux-sirius'
-//
-// const { put } = effect
-//
+// import { effects } from "redux-sirius";
+
+// const { put } = effects;
+
 export default {
   state: {
-    language: 'zh'
+    language: "zh"
   },
-  reducer: {},
-  effects: {}
-}
+  reducer: {
+    setLanguage: (state, { payload }) => ({
+      ...state,
+      language: payload
+    })
+  }
+};

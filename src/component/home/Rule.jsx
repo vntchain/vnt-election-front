@@ -1,10 +1,18 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { FormattedMessage } from '@translate'
-import styles from './Rule.scss'
-import r from 'constants/routes'
+import React from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-export default function Rule() {
+import { FormattedMessage } from "@translate";
+import styles from "./Rule.scss";
+import r from "constants/routes";
+const mapStateToProps = ({ international: { language } }) => {
+  return {
+    language
+  };
+};
+export default connect(mapStateToProps)(function Rule(props) {
+  const language = props.language;
+
   return (
     <div className={styles.rule}>
       <div className={styles.ruleTitle}>
@@ -31,10 +39,10 @@ export default function Rule() {
         </p>
       </div>
       <div className={styles.ruleMore}>
-        <Link to={r.ruleDetail} target="__blank">
+        <Link to={`${r.ruleDetail}?language=${language}`} target="__blank">
           <FormattedMessage id="rule5" />
         </Link>
       </div>
     </div>
-  )
-}
+  );
+});
