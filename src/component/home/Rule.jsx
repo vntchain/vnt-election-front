@@ -1,17 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-import { FormattedMessage } from "@translate";
-import styles from "./Rule.scss";
-import r from "constants/routes";
+import { FormattedMessage } from '@translate'
+import styles from './Rule.scss'
+import r from 'constants/routes'
 const mapStateToProps = ({ international: { language } }) => {
   return {
     language
-  };
-};
+  }
+}
 export default connect(mapStateToProps)(function Rule(props) {
-  const language = props.language;
+  const language = props.language
 
   return (
     <div className={styles.rule}>
@@ -44,5 +44,5 @@ export default connect(mapStateToProps)(function Rule(props) {
         </Link>
       </div>
     </div>
-  );
-});
+  )
+})

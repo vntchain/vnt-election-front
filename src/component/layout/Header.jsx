@@ -1,10 +1,10 @@
-import React from "react";
-import { FormattedMessage } from "@translate";
-import CommonPadding from "./CommonPadding";
+import React from 'react'
+import { FormattedMessage } from '@translate'
+import CommonPadding from './CommonPadding'
 
-import styles from "./Header.scss";
-import imgs from "utils/imgs";
-import LanguageSelect from "./LanguageSelect";
+import styles from './Header.scss'
+import imgs from 'utils/imgs'
+import LanguageSelect from './LanguageSelect'
 function Header() {
   return (
     <header className={styles.header}>
@@ -24,7 +24,7 @@ function Header() {
         </div>
       </CommonPadding>
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header

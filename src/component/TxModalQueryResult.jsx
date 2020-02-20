@@ -37,9 +37,9 @@ function TxModalQueryResult(props) {
   const timer = useRef(null)
   const handleReceipt = (funcName, receipt) => {
     if (!props.accountAddr.addr) {
-      message.error('no account addr!') 
+      message.error('no account addr!')
     }
-    if (receipt.status == '0x1') {      
+    if (receipt.status == '0x1') {
       props.dispatch({
         type: 'account/setSendResult',
         payload: {
@@ -54,12 +54,15 @@ function TxModalQueryResult(props) {
         // 仅需要获取投票
         requestRPCData(props.accountAddr.addr, requestType.vote)
       }
-        // 再次获取最新的节点信息 等待2s再去取数据，确保浏览器后端数据拿到最新的
+      // 再次获取最新的节点信息 等待2s再去取数据，确保浏览器后端数据拿到最新的
       setTimeout(() => {
         props.dispatch({
           type: 'dataRelayNew/fetchData',
           payload: {
-            path: `${apis.nodes}?${getBaseParams(props.nodePageIndex, pageSize)}`,
+            path: `${apis.nodes}?${getBaseParams(
+              props.nodePageIndex,
+              pageSize
+            )}`,
             ns: 'nodes',
             field: 'nodes'
           }
@@ -138,33 +141,23 @@ function TxModalQueryResult(props) {
     }
   }
 
-  useEffect(
-    () => {
-      if (queryResult) {
-        try {
-          getTransactionReceipt(sendResult.txHash, receipt =>
-            handleReceipt(sendResult.funcName, receipt)
-          )
-        } catch (e) {
-          message.error(e.message) 
-        }
+  useEffect(() => {
+    if (queryResult) {
+      try {
+        getTransactionReceipt(sendResult.txHash, receipt =>
+          handleReceipt(sendResult.funcName, receipt)
+        )
+      } catch (e) {
+        message.error(e.message)
       }
-    },
-    [queryResult]
-  )
+    }
+  }, [queryResult])
 
-  useEffect(
-    () => {
-      if (
-        sendResult &&
-        sendResult.txHash &&
-        sendResult.step === txSteps.query
-      ) {
-        setQueryResult(true)
-      }
-    },
-    [props.sendResult]
-  )
+  useEffect(() => {
+    if (sendResult && sendResult.txHash && sendResult.step === txSteps.query) {
+      setQueryResult(true)
+    }
+  }, [props.sendResult])
 
   const onCountDownFinish = () => {
     setQueryResult(false)

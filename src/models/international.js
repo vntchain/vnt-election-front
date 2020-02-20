@@ -4,7 +4,7 @@
 
 export default {
   state: {
-    language: "zh"
+    language: 'zh'
   },
   reducer: {
     setLanguage: (state, { payload }) => ({
@@ -12,4 +12,4 @@ export default {
       language: payload
     })
   }
-};
+}

@@ -10,16 +10,14 @@ const mapStateToProps = ({ account: { sendResult } }) => {
 }
 
 function ProvideModalData(props) {
+  1
   const { sendResult } = props
 
   const [showTxModal, setShowTxModal] = useState(false)
 
-  useEffect(
-    () => {
-      setShowTxModal(sendResult && sendResult.step ? true : false)
-    },
-    [sendResult]
-  )
+  useEffect(() => {
+    setShowTxModal(sendResult && sendResult.step ? true : false)
+  }, [sendResult])
 
   const clearResult = () => {
     setShowTxModal(false)

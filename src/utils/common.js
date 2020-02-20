@@ -1,16 +1,16 @@
 export function getQueryStringParams(query) {
   return query
     ? (/^[?#]/.test(query) ? query.slice(1) : query)
-        .split("&")
+        .split('&')
         .reduce((params, param) => {
-          const [key, value] = param.split("=");
+          const [key, value] = param.split('=')
           // eslint-disable-next-line no-param-reassign
           params[key] = value
-            ? decodeURIComponent(value.replace(/\+/g, " "))
-            : "";
-          return params;
+            ? decodeURIComponent(value.replace(/\+/g, ' '))
+            : ''
+          return params
         }, {})
-    : {};
+    : {}
 }
 
 export function urlParamsToString(params) {
@@ -19,7 +19,7 @@ export function urlParamsToString(params) {
       i === Object.keys(params).length - 1
         ? `${sum + key}=${params[key]}`
         : `${sum + key}=${params[key]}&`,
-    ""
-  );
-  return paramStr ? `?${paramStr}` : "";
+    ''
+  )
+  return paramStr ? `?${paramStr}` : ''
 }
