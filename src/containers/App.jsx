@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import { IntlProvider } from '@translate/index'
 import zhMessages from '@translate/locale/zh'
 import enMessages from '@translate/locale/en'
+import createHistory from 'history/createBrowserHistory'
+import { getQueryStringParams, urlParamsToString } from '../utils/common'
 
 import Header from 'component/layout/Header'
 import Margin from 'component/layout/Margin'
@@ -13,6 +15,7 @@ import Home from 'containers/Home'
 import RuleDetail from 'containers/RuleDetail'
 
 import r from 'constants/routes'
+const history = createHistory()
 
 const intlMessages = {
   zh: zhMessages,
@@ -24,6 +27,30 @@ class App extends Component {
     super(props)
   }
 
+  componentDidMount() {
+    const originPush = history.push
+
+    const { language } = getQueryStringParams(window.location.search)
+    const navigatorLang = (
+      navigator.language || navigator.browserLanguage
+    ).split('-')[0]
+    if (language) {
+      this.props.dispatch({
+        type: 'international/setLanguage',
+        payload: language
+      })
+      history.push = (...args) => {
+        const qs = getQueryStringParams(window.location.search)
+        const path = `${args[0]}${urlParamsToString(qs)}`
+        return originPush(path, args[1])
+      }
+    } else {
+      this.props.dispatch({
+        type: 'international/setLanguage',
+        payload: navigatorLang
+      })
+    }
+  }
   render() {
     const { language } = this.props.international
     return (

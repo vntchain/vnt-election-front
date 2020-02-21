@@ -13,7 +13,12 @@ import {
   txActions
   //  forbiddenActionTime
 } from 'constants/config'
-import { getBaseParams, lessThanOneDay, getBasePath, formatName } from 'utils/tools'
+import {
+  getBaseParams,
+  lessThanOneDay,
+  getBasePath,
+  formatName
+} from 'utils/tools'
 import CountDown from 'component/CountDownNewFormat'
 import MessageConfirm from 'component/MessageConfirm'
 

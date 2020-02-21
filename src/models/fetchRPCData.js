@@ -5,8 +5,8 @@ const { put, call, select } = effects
 
 message.config({
   duration: 2,
-  maxCount: 3,
-});
+  maxCount: 3
+})
 
 export default {
   state: {
@@ -53,7 +53,7 @@ export default {
           payload: result
         })
       } catch (e) {
-        message.error(e.message) 
+        message.error(e.message)
         yield put({
           type: 'account/clearField',
           payload: {

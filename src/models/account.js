@@ -28,7 +28,7 @@ export default {
         [field]: data
       }
     },
-    clearField: (state, {payload}) => {
+    clearField: (state, { payload }) => {
       const { field } = payload
       return {
         ...state,

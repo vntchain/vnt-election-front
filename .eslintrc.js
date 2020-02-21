@@ -21,8 +21,7 @@ module.exports = {
       "error",
       {
         singleQuote: true,
-        semi: false,
-        requirePragma: true
+        semi: false
       }
     ],
     "react/prop-types": 0,

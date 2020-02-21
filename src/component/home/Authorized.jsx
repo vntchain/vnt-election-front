@@ -45,21 +45,18 @@ function Authorized(props) {
     })
   }
 
-  useEffect(
-    () => {
-      clearInterval(timer.current)
-      if (props.accountAddr.addr && props.rpc) {
-        // console.log('acct或者rpc发生变化, addr=', props.accountAddr.addr, 'rpc=',props.rpc) //eslint-disable-line
+  useEffect(() => {
+    clearInterval(timer.current)
+    if (props.accountAddr.addr && props.rpc) {
+      // console.log('acct或者rpc发生变化, addr=', props.accountAddr.addr, 'rpc=',props.rpc) //eslint-disable-line
+      requestRPCdataAll(props.accountAddr.addr)
+      timer.current = setInterval(() => {
+        //console.log('detail的定时刷新') //eslint-disable-line
         requestRPCdataAll(props.accountAddr.addr)
-        timer.current = setInterval(() => {
-          //console.log('detail的定时刷新') //eslint-disable-line
-          requestRPCdataAll(props.accountAddr.addr)
-        }, pollingInterval * 1000)
-      }
-      return () => clearInterval(timer.current)
-    },
-    [props.accountAddr.addr, props.rpc]
-  )
+      }, pollingInterval * 1000)
+    }
+    return () => clearInterval(timer.current)
+  }, [props.accountAddr.addr, props.rpc])
 
   useEffect(() => {
     if (window.vnt.logout) {

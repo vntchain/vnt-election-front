@@ -24,7 +24,7 @@ function Unauthorized(props) {
 
   const checkNetwork = () => {
     window.vnt.getNetworkUrl((err, result) => {
-      // 需要判断result的值，同时修改nodeslist的后端接口，此时无法直接刷新页面，需要仅内部页面刷新 
+      // 需要判断result的值，同时修改nodeslist的后端接口，此时无法直接刷新页面，需要仅内部页面刷新
       if (!err && result) {
         // console.warn(`network_change: err= ${err}, result=${JSON.stringify(result)}`) //eslint-disable-line
         props.dispatch({
@@ -101,7 +101,7 @@ function Unauthorized(props) {
         try {
           getAuth()
         } catch (e) {
-          message.error(e.message) 
+          message.error(e.message)
         }
       } else {
         // 未安装插件
