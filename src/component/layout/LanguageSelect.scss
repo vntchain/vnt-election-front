@@ -31,7 +31,7 @@
 }
 
 .nav-arrow::before {
-  content: "";
+  content: '';
   position: absolute;
   height: 7px;
   width: 7px;
@@ -55,6 +55,7 @@
   text-align: center;
   font-size: 14px;
   border-bottom: 1px solid #d8d8d8;
+  margin: 0 16px;
 }
 
 .popover-list-item:last-child {

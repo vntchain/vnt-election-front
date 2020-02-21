@@ -27,11 +27,13 @@ class App extends Component {
     super(props)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const originPush = history.push
 
     const { language } = getQueryStringParams(window.location.search)
-
+    const navigatorLang = (
+      navigator.language || navigator.browserLanguage
+    ).split('-')[0]
     if (language) {
       this.props.dispatch({
         type: 'international/setLanguage',
@@ -42,6 +44,11 @@ class App extends Component {
         const path = `${args[0]}${urlParamsToString(qs)}`
         return originPush(path, args[1])
       }
+    } else {
+      this.props.dispatch({
+        type: 'international/setLanguage',
+        payload: navigatorLang
+      })
     }
   }
   render() {
