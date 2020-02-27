@@ -33,7 +33,7 @@ export default {
   nodeVoteBtn: 'Vote',
   nodeText: '------ The top 19 nodes are VNT super nodes ------',
 
-  acctText: 'My Address',
+  acctText: 'My Address：',
   htitle1: 'My VNT Balance',
   htitle2: 'Freeze VNT ',
   htitle3: 'Votes',
