@@ -27,17 +27,17 @@
 
 &nbsp;&nbsp;&nbsp;Use the base year and use the year as the cycle. To use relative attenuation, you need to use the base year and use the same baseline to calculate the attenuation. You can use the year that the network was online, such as 2018:
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula1.png" width = "300"  alt="formula1">
+  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula1-en.png" width = "300"  alt="formula1">
 </div>
 
 &nbsp;&nbsp;&nbsp;Supports non-period multiple attenuation. For example, it is June 2018, and the number of votes should be:
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula2.jpeg" width = "300"  alt="formula2">
+  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula2-en.jpeg" width = "300"  alt="formula2">
 </div>
 
 &nbsp;&nbsp;&nbsp;Definition **eraTimeStamp** is the starting year of the half-life, and it is set to 00:00:00 on January 1, 2019, which is 1546272000, in seconds. We use 52 weeks as the half-life period, that is, **`52*7*24*3600`** seconds. The number of weeks elapsed from the start of the current year divided by 52 gives the half-life coefficient α. The formula is as follows:
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula3.jpeg" width = "500"  alt="formula3">
+  <img src="https://raw.githubusercontent.com/vntchain/statics/master/vote/formula3-en.jpeg" width = "500"  alt="formula3">
 </div>
 
 <br>

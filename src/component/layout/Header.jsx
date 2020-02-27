@@ -11,7 +11,6 @@ function Header() {
       <CommonPadding>
         <div className={styles.headerCont}>
           <LanguageSelect></LanguageSelect>
-
           <img src={imgs.logo} alt="logo" className={styles.headerLogo} />
           <img
             src={imgs.headerPic}
